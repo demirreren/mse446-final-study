@@ -1,993 +1,789 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSE 446 Final Exam Mastery</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>MSE 446 Final Exam Study System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0a0a0f;
-  --surface: #13131a;
-  --surface2: #1a1a24;
-  --border: #2a2a3a;
-  --text: #e8e8f0;
-  --text-dim: #8888a0;
-  --accent: #6c63ff;
-  --accent2: #ff6b6b;
-  --accent3: #4ecdc4;
-  --accent4: #ffe66d;
-  --accent5: #ff9f43;
-  --correct: #4ecdc4;
-  --wrong: #ff6b6b;
+:root{
+  --bg:#0c0e14;--bg2:#14171f;--bg3:#1c2030;--bg4:#262b3d;
+  --text:#e8ebf4;--text2:#8892b0;
+  --accent:#7b93ff;--accent2:#5a6fef;--accent-glow:rgba(123,147,255,.12);
+  --green:#5bf0a0;--red:#ff6b7a;--orange:#ffb054;--yellow:#ffe066;
+  --border:rgba(255,255,255,.06);--card:#14171f;
+  --code-bg:#0e1019;
+  --shadow:0 2px 12px rgba(0,0,0,.3),0 8px 32px rgba(0,0,0,.2);
+  --radius:14px;--sidebar-w:260px;--header-h:60px
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
-.app { max-width: 960px; margin: 0 auto; padding: 20px; }
-.header { text-align: center; padding: 30px 0; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
-.header h1 { font-family: 'DM Serif Display', serif; font-size: 2.4em; background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
-.header p { color: var(--text-dim); font-size: 0.95em; }
-.countdown { color: var(--accent2); font-weight: 700; font-size: 1.1em; margin-top: 8px; }
-.stats-bar { display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
-.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 18px; text-align: center; min-width: 100px; }
-.stat-value { font-size: 1.5em; font-weight: 700; color: var(--accent); }
-.stat-label { font-size: 0.75em; color: var(--text-dim); }
-.nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 25px; }
-.nav-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; font-family: inherit; }
-.nav-btn:hover { border-color: var(--accent); background: var(--surface2); }
-.nav-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-.mode-tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); flex-wrap: wrap; }
-.mode-tab { flex: 1; padding: 10px; text-align: center; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; font-size: 0.85em; transition: all 0.2s; min-width: 90px; }
-.mode-tab.active { background: var(--accent); color: white; }
-.content-area { min-height: 400px; }
-.topic-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 25px; margin-bottom: 20px; }
-.topic-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.5em; margin-bottom: 15px; color: var(--accent3); }
-.topic-card h3 { font-size: 1.1em; margin: 18px 0 10px; color: var(--accent4); }
-.topic-card h4 { font-size: 0.95em; margin: 14px 0 8px; color: var(--accent5); }
-.topic-card p, .topic-card li { color: var(--text); margin-bottom: 8px; font-size: 0.92em; }
-.topic-card ul, .topic-card ol { padding-left: 20px; }
-.formula-box { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.88em; color: var(--accent3); overflow-x: auto; }
-.key-point { background: rgba(108, 99, 255, 0.1); border: 1px solid rgba(108, 99, 255, 0.3); padding: 10px 14px; border-radius: 8px; margin: 10px 0; font-size: 0.9em; }
-.warning-box { background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3); padding: 10px 14px; border-radius: 8px; margin: 10px 0; font-size: 0.9em; }
-.diagram-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 12px 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.82em; overflow-x: auto; white-space: pre; line-height: 1.4; color: var(--accent3); }
-.question-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 25px; margin-bottom: 20px; }
-.question-card .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.q-number { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.85em; }
-.q-topic { font-size: 0.75em; padding: 4px 10px; background: var(--surface2); border-radius: 20px; color: var(--text-dim); }
-.q-text { font-size: 1em; margin-bottom: 18px; line-height: 1.7; }
-.options { display: flex; flex-direction: column; gap: 8px; }
-.option { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s; background: var(--surface2); }
-.option:hover { border-color: var(--accent); }
-.option.selected { border-color: var(--accent); background: rgba(108, 99, 255, 0.15); }
-.option.correct { border-color: var(--correct); background: rgba(78, 205, 196, 0.15); }
-.option.wrong { border-color: var(--wrong); background: rgba(255, 107, 107, 0.15); }
-.option-letter { min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85em; border: 1px solid var(--border); flex-shrink: 0; }
-.option.correct .option-letter { background: var(--correct); border-color: var(--correct); color: #000; }
-.option.wrong .option-letter { background: var(--wrong); border-color: var(--wrong); color: #000; }
-.option-text { font-size: 0.9em; padding-top: 3px; }
-.explanation { margin-top: 15px; padding: 15px; background: rgba(78, 205, 196, 0.08); border: 1px solid rgba(78, 205, 196, 0.25); border-radius: 10px; font-size: 0.88em; line-height: 1.7; display: none; }
-.explanation.visible { display: block; }
-.btn { padding: 10px 22px; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.9em; transition: all 0.2s; }
-.btn-primary { background: var(--accent); color: white; }
-.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn-row { display: flex; gap: 10px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
-.progress-bar { width: 100%; height: 6px; background: var(--surface2); border-radius: 3px; margin: 15px 0; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 3px; transition: width 0.4s ease; }
-.flashcard { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 40px 30px; text-align: center; min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
-.flashcard:hover { border-color: var(--accent); }
-.flashcard .fc-label { font-size: 0.75em; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
-.flashcard .fc-content { font-size: 1.2em; line-height: 1.8; max-width: 700px; }
-.flashcard .fc-content.answer { color: var(--accent3); font-size: 1em; }
-.fc-counter { text-align: center; color: var(--text-dim); font-size: 0.85em; margin-bottom: 15px; }
-.results-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 40px; text-align: center; }
-.results-card h2 { font-family: 'DM Serif Display', serif; font-size: 2em; margin-bottom: 10px; }
-.score-big { font-size: 4em; font-weight: 700; margin: 20px 0; }
-.score-big.good { color: var(--correct); }
-.score-big.ok { color: var(--accent4); }
-.score-big.bad { color: var(--wrong); }
-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88em; }
-th, td { padding: 8px 12px; border: 1px solid var(--border); text-align: left; }
-th { background: var(--surface2); color: var(--accent3); }
-.step-box { background: rgba(78, 205, 196, 0.06); border: 1px solid rgba(78, 205, 196, 0.2); border-radius: 8px; padding: 12px 14px; margin: 8px 0; font-size: 0.9em; }
-.step-num { display: inline-block; background: var(--accent); color: white; width: 24px; height: 24px; border-radius: 50%; text-align: center; line-height: 24px; font-size: 0.8em; font-weight: 700; margin-right: 8px; }
-code { font-family: 'JetBrains Mono', monospace; background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; color: var(--accent3); }
-@media (max-width: 600px) {
-  .header h1 { font-size: 1.6em; }
-  .stats-bar { gap: 8px; }
-  .stat { min-width: 80px; padding: 8px 12px; }
-  .nav-btn { font-size: 0.78em; padding: 6px 12px; }
-  .diagram-box { font-size: 0.7em; }
+[data-theme="light"]{
+  --bg:#f4f5f9;--bg2:#ffffff;--bg3:#eceef5;--bg4:#dfe2ed;
+  --text:#1a1e2e;--text2:#636d8c;
+  --accent:#4f63e8;--accent2:#3a4ed0;--accent-glow:rgba(79,99,232,.08);
+  --green:#1aad5c;--red:#d93848;--orange:#d98a20;--yellow:#b89a00;
+  --border:rgba(0,0,0,.06);--card:#ffffff;
+  --code-bg:#f0f1f7;
+  --shadow:0 2px 8px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06)
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow:hidden;height:100vh;font-size:15px;letter-spacing:-.01em}
+::-webkit-scrollbar{width:7px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:10px}::-webkit-scrollbar-thumb:hover{background:var(--text2)}
+::selection{background:var(--accent);color:#fff}
+button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+code,pre{font-family:'JetBrains Mono','SF Mono',Consolas,monospace}
+
+.header{position:fixed;top:0;left:0;right:0;height:var(--header-h);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(16px);background:rgba(20,23,31,.85)}
+[data-theme="light"] .header{background:rgba(255,255,255,.85)}
+.header h1{font-size:17px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
+.header-right{display:flex;align-items:center;gap:12px}
+.theme-toggle{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--bg3);transition:all .25s;border:1px solid var(--border)}
+.theme-toggle:hover{background:var(--bg4);transform:scale(1.05)}
+.menu-btn{display:none;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center;font-size:20px;background:var(--bg3);border:1px solid var(--border)}
+
+.sidebar{position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:20px 0;z-index:90;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sidebar .nav-group{margin-bottom:12px}
+.sidebar .nav-label{padding:8px 24px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);opacity:.6}
+.sidebar .nav-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;border-left:3px solid transparent;margin:1px 0}
+.sidebar .nav-item:hover{background:var(--accent-glow);color:var(--text)}
+.sidebar .nav-item.active{background:var(--accent-glow);color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.sidebar .nav-item .icon{width:22px;text-align:center;font-size:17px;opacity:.8}
+
+.main{position:fixed;top:var(--header-h);left:var(--sidebar-w);right:0;bottom:0;overflow-y:auto;padding:36px 40px;transition:left .3s cubic-bezier(.4,0,.2,1)}
+.main-inner{max-width:960px;margin:0 auto}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;box-shadow:var(--shadow)}
+.card h2{font-size:24px;margin-bottom:18px;color:var(--text);font-weight:800;letter-spacing:-.03em;line-height:1.3}
+.card h3{font-size:17px;margin:28px 0 12px;color:var(--accent);font-weight:700;letter-spacing:-.01em}
+.card h3:first-child{margin-top:0}
+.card p{margin-bottom:10px;color:var(--text);line-height:1.75}
+.card ul,.card ol{margin:10px 0 14px 0;padding-left:24px}
+.card li{padding:4px 0;line-height:1.7}
+.card li+li{margin-top:2px}
+.card strong{font-weight:700}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:10px;font-size:14px;font-weight:600;transition:all .2s;letter-spacing:-.01em;border:1px solid transparent}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(123,147,255,.25)}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(123,147,255,.35)}
+.btn-secondary{background:var(--bg3);color:var(--text);border-color:var(--border)}
+.btn-secondary:hover{background:var(--bg4);border-color:rgba(255,255,255,.1)}
+.btn-success{background:var(--green);color:#000;box-shadow:0 2px 12px rgba(91,240,160,.2)}
+.btn-danger{background:var(--red);color:#fff;box-shadow:0 2px 12px rgba(255,107,122,.2)}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:8px}
+
+.progress-bar{height:7px;background:var(--bg3);border-radius:10px;overflow:hidden}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:10px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+pre.code-block{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:20px 22px;overflow-x:auto;font-size:13.5px;line-height:1.75;margin:14px 0;tab-size:2;white-space:pre-wrap}
+code.inline{background:var(--code-bg);padding:3px 8px;border-radius:6px;font-size:13px;border:1px solid var(--border);font-weight:500}
+
+.exam-callout{background:var(--accent-glow);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 10px 10px 0;margin:16px 0;font-size:14px;line-height:1.7}
+.exam-callout::before{content:"KEY EXAM POINT";display:block;font-size:10px;font-weight:800;color:var(--accent);margin-bottom:6px;letter-spacing:1px}
+
+.warning-callout{background:rgba(255,107,122,.06);border-left:4px solid var(--red);padding:16px 20px;border-radius:0 10px 10px 0;margin:16px 0;font-size:14px;line-height:1.7}
+.warning-callout::before{content:"WATCH OUT";display:block;font-size:10px;font-weight:800;color:var(--red);margin-bottom:6px;letter-spacing:1px}
+
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0;font-size:13.5px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:var(--bg3);padding:10px 16px;text-align:left;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:1px solid var(--border)}
+.compare-table th+th{border-left:1px solid var(--border)}
+.compare-table td{padding:10px 16px;border-bottom:1px solid var(--border)}
+.compare-table td+td{border-left:1px solid var(--border)}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:nth-child(even) td{background:rgba(123,147,255,.03)}
+
+.flashcard-container{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px 0}
+.flashcard{width:100%;max-width:620px;min-height:300px;perspective:1200px;cursor:pointer}
+.flashcard-inner{position:relative;width:100%;min-height:300px;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;top:0;left:0;right:0;min-height:300px;backface-visibility:hidden;border-radius:var(--radius);padding:36px 32px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.flashcard-front{background:var(--bg3);border:1px solid var(--border);box-shadow:var(--shadow)}
+.flashcard-back{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;transform:rotateY(180deg);box-shadow:0 8px 32px rgba(123,147,255,.3)}
+.flashcard-front p{font-size:19px;font-weight:600;letter-spacing:-.01em;line-height:1.6}
+.flashcard-back p{font-size:16px;line-height:1.8}
+.flashcard-topic{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;opacity:.5;margin-bottom:16px;font-weight:700}
+.flashcard-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.flashcard-progress{font-size:14px;color:var(--text2);font-weight:500}
+
+.quiz-option{display:block;width:100%;text-align:left;padding:14px 20px;margin:8px 0;border-radius:10px;border:1.5px solid var(--border);background:var(--bg3);font-size:14.5px;transition:all .2s;font-weight:500;line-height:1.6}
+.quiz-option:hover{border-color:var(--accent);background:var(--accent-glow);transform:translateX(4px)}
+.quiz-option.selected{border-color:var(--accent);background:var(--accent-glow)}
+.quiz-option.correct{border-color:var(--green);background:rgba(91,240,160,.08)}
+.quiz-option.incorrect{border-color:var(--red);background:rgba(255,107,122,.08)}
+.quiz-explanation{margin-top:16px;padding:16px 20px;background:var(--bg3);border-radius:10px;font-size:14px;line-height:1.75;border:1px solid var(--border)}
+.quiz-score{font-size:56px;font-weight:900;color:var(--accent);text-align:center;letter-spacing:-.04em}
+.quiz-score-sub{text-align:center;color:var(--text2);margin-bottom:24px;font-size:16px}
+
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:24px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 20px;font-size:13.5px;font-weight:600;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;letter-spacing:-.01em}
+.tab:hover{color:var(--text);background:var(--accent-glow);border-radius:8px 8px 0 0}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.topic-chip{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:var(--bg3);transition:all .2s;letter-spacing:-.01em}
+.topic-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.topic-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 12px rgba(123,147,255,.3)}
+.topic-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.dash-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.dash-card h4{font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.dash-card .big-num{font-size:40px;font-weight:900;color:var(--accent);letter-spacing:-.04em}
+.topic-mastery{display:flex;align-items:center;gap:14px;padding:10px 0}
+.topic-mastery .label{flex:1;font-size:14px;font-weight:500}
+.topic-mastery .bar{flex:2}
+.topic-mastery .pct{width:48px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.weak-area{background:rgba(255,107,122,.06);border:1px solid rgba(255,107,122,.2);border-radius:10px;padding:14px 18px;margin:8px 0;font-size:14px}
+.strong-area{background:rgba(91,240,160,.06);border:1px solid rgba(91,240,160,.2);border-radius:10px;padding:14px 18px;margin:8px 0;font-size:14px}
+
+.exam-format-banner{background:var(--accent-glow);border:1px solid rgba(123,147,255,.15);border-radius:var(--radius);padding:24px;margin-bottom:24px;font-size:14px;line-height:1.7}
+.exam-format-banner h3{color:var(--accent);margin-bottom:8px;font-weight:700}
+.exam-format-banner .fmt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
+.exam-format-banner .fmt-item{text-align:center;padding:12px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)}
+.exam-format-banner .fmt-item .num{font-size:28px;font-weight:900;color:var(--accent);letter-spacing:-.03em}
+.exam-format-banner .fmt-item .lbl{font-size:12px;color:var(--text2);margin-top:2px}
+
+.mock-timer{position:sticky;top:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 24px;margin:-36px -40px 28px;display:flex;align-items:center;justify-content:space-between;z-index:10;backdrop-filter:blur(12px);background:rgba(20,23,31,.9)}
+[data-theme="light"] .mock-timer{background:rgba(255,255,255,.9)}
+.mock-timer .time{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.mock-timer .time.warning{color:var(--orange)}
+.mock-timer .time.danger{color:var(--red)}
+
+.diagram{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:20px 22px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;margin:14px 0;white-space:pre;color:var(--accent)}
+
+.fade-in{animation:fadeIn .35s cubic-bezier(.4,0,.2,1)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .main{left:0;padding:24px 20px}.menu-btn{display:flex}
+  .mock-timer{margin:-24px -20px 20px}.card{padding:20px}
+  .dash-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <h1>MSE 446 Final Exam Mastery</h1>
-    <p>Post-Midterm Topics &mdash; Neural Networks, PCA, Clustering, SVM</p>
-    <div class="countdown" id="countdown"></div>
-    <div class="stats-bar">
-      <div class="stat"><div class="stat-value" id="score">0</div><div class="stat-label">Correct</div></div>
-      <div class="stat"><div class="stat-value" id="attempted">0</div><div class="stat-label">Attempted</div></div>
-      <div class="stat"><div class="stat-value" id="accuracy">--</div><div class="stat-label">Accuracy</div></div>
-      <div class="stat"><div class="stat-value" id="streak">0</div><div class="stat-label">Streak</div></div>
-    </div>
-  </div>
-  <div class="mode-tabs">
-    <button class="mode-tab active" onclick="setMode('learn')">Learn</button>
-    <button class="mode-tab" onclick="setMode('practice')">Practice</button>
-    <button class="mode-tab" onclick="setMode('flashcards')">Flashcards</button>
-    <button class="mode-tab" onclick="setMode('exam')">Mock Exam</button>
-    <button class="mode-tab" onclick="setMode('conceptual')">Conceptual</button>
-  </div>
-  <div class="nav" id="topicNav"></div>
-  <div class="content-area" id="content"></div>
-</div>
-<script>
-const examDate = new Date('2026-04-15T09:00:00');
-function updateCountdown(){const now=new Date();const diff=examDate-now;if(diff<=0){document.getElementById('countdown').textContent='Exam day is here! You got this!';return;}const d=Math.floor(diff/86400000);const h=Math.floor((diff%86400000)/3600000);const m=Math.floor((diff%3600000)/60000);document.getElementById('countdown').textContent=`${d}d ${h}h ${m}m until exam`;}
-updateCountdown();setInterval(updateCountdown,60000);
 
-const topics=[
-{id:'pca',name:'Principal Component Analysis',short:'PCA'},
-{id:'kmeans',name:'K-Means Clustering',short:'K-Means'},
-{id:'hierarchical',name:'Hierarchical Clustering',short:'Hierarch.'},
-{id:'nn',name:'Neural Networks',short:'NN'},
-{id:'svm',name:'Support Vector Machines',short:'SVM'}
+<header class="header">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+    <h1>MSE 446 Study System</h1>
+  </div>
+  <div class="header-right">
+    <span id="streakDisplay" style="font-size:13px;color:var(--text2)"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">&#9790;</button>
+  </div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="nav-group">
+    <div class="nav-label">Home</div>
+    <div class="nav-item" data-page="dashboard" onclick="navigate('dashboard')"><span class="icon">&#9636;</span>Dashboard</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Study</div>
+    <div class="nav-item" data-page="guide" onclick="navigate('guide')"><span class="icon">&#128214;</span>Study Guide</div>
+    <div class="nav-item" data-page="flashcards" onclick="navigate('flashcards')"><span class="icon">&#127183;</span>Flashcards</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Practice</div>
+    <div class="nav-item" data-page="quiz" onclick="navigate('quiz')"><span class="icon">&#10004;</span>Quizzes</div>
+    <div class="nav-item" data-page="mock" onclick="navigate('mock')"><span class="icon">&#128221;</span>Mock Exams</div>
+  </div>
+</nav>
+
+<main class="main" id="main">
+  <div class="main-inner" id="content"></div>
+</main>
+
+<script>
+const TOPICS=[
+{id:'pca',name:'PCA',full:'Principal Component Analysis'},
+{id:'kmeans',name:'K-Means',full:'K-Means Clustering'},
+{id:'hierarchical',name:'Hierarchical',full:'Hierarchical Clustering'},
+{id:'nn',name:'Neural Networks',full:'Neural Networks'},
+{id:'svm',name:'SVM',full:'Support Vector Machines'}
 ];
 
-const learnContent={
-
-pca:`<div class="topic-card"><h2>Principal Component Analysis (PCA)</h2>
-
+const GUIDE={
+pca:`<h2>Principal Component Analysis (PCA)</h2>
 <h3>What is PCA?</h3>
-<p>PCA is a <strong>dimensionality reduction</strong> method that produces a low-dimensional representation of a dataset derived from a high-dimensional dataset. It finds a sequence of <strong>linear combinations</strong> of the variables that have <strong>maximal variance</strong> and are <strong>mutually uncorrelated</strong>.</p>
-
-<div class="key-point"><strong>PCA vs Clustering:</strong><br>
-&bull; PCA looks for a low-dimensional representation that explains a good fraction of the <strong>variance</strong>.<br>
-&bull; Clustering looks for <strong>homogeneous subgroups</strong> among the observations.</div>
-
+<p>PCA is a <strong>dimensionality reduction</strong> method that produces a low-dimensional representation of a dataset. It finds <strong>linear combinations</strong> of variables with <strong>maximal variance</strong> that are <strong>mutually uncorrelated</strong>.</p>
+<div class="exam-callout">PCA looks for directions of <strong>maximum variance</strong>. Clustering looks for <strong>homogeneous subgroups</strong>. Know the difference.</div>
 <h3>First Principal Component</h3>
-<div class="formula-box">Z<sub>1</sub> = &phi;<sub>11</sub>X<sub>1</sub> + &phi;<sub>21</sub>X<sub>2</sub> + ... + &phi;<sub>p1</sub>X<sub>p</sub><br><br>
-subject to: &Sigma;<sub>j=1</sub><sup>p</sup> &phi;<sub>j1</sub>&sup2; = 1 &nbsp;(normalization constraint)</div>
-<ul>
-<li>The <strong>loadings</strong> &phi;<sub>11</sub>, ..., &phi;<sub>p1</sub> define the direction in feature space with <strong>maximum variance</strong>.</li>
-<li>The constraint ensures loadings sum of squares = 1 (otherwise we could make variance arbitrarily large).</li>
-<li>The <strong>scores</strong> z<sub>i1</sub> are the projections of observations onto this direction.</li>
-</ul>
+<pre class="code-block">Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ
 
-<h3>Optimization Problem</h3>
-<div class="formula-box">max<sub>&phi;<sub>11</sub>,...,&phi;<sub>p1</sub></sub> (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> (&Sigma;<sub>j=1</sub><sup>p</sup> &phi;<sub>j1</sub>x<sub>ij</sub>)&sup2;<br><br>
-subject to: &Sigma;<sub>j=1</sub><sup>p</sup> &phi;<sub>j1</sub>&sup2; = 1</div>
-<p>Solved via <strong>eigenvalue decomposition</strong> (or SVD) of the covariance matrix.</p>
+subject to: Σ φⱼ₁² = 1  (normalization constraint)
 
+• Loadings φ₁₁,...,φₚ₁ define the direction of maximum variance
+• Scores z_i1 are the projections onto this direction
+• Solved via eigenvalue decomposition of the covariance matrix</pre>
 <h3>Further Principal Components</h3>
 <ul>
-<li>The 2nd PC has maximal variance among all linear combinations <strong>uncorrelated with Z<sub>1</sub></strong>.</li>
-<li>Uncorrelated with Z<sub>1</sub> &hArr; direction &phi;<sub>2</sub> is <strong>orthogonal (perpendicular)</strong> to &phi;<sub>1</sub>.</li>
-<li>Maximum number of PCs: min(n-1, p).</li>
+<li>PC2 maximizes variance among all directions <strong>orthogonal to PC1</strong></li>
+<li>Uncorrelated with Z₁ ⇔ direction φ₂ is <strong>perpendicular</strong> to φ₁</li>
+<li>Max PCs = <strong>min(n−1, p)</strong></li>
 </ul>
-
-<div class="diagram-box">
-     PC2 (less variance)
-      ^
-      |     * *
-      |   *  /  *        PC1 direction (most variance)
-      |  * /     *       ---->
-      | */    *
-      |/ *  *
-------+-----------> PC1
+<div class="diagram">     PC2 (less variance)
+      ↑
+      |     · ·
+      |   ·  ╱  ·        PC1 direction (most variance)
+      |  · ╱     ·       ──────→
+      | ·╱    ·
+      |╱ ·  ·
+──────┼──────────→ PC1
       |
-   Original axes are X1, X2
-   PCA rotates to new axes PC1, PC2
-   maximizing variance along PC1
-</div>
-
+   PCA rotates axes to maximize
+   variance along PC1, then PC2, etc.</div>
 <h3>Step-by-Step PCA Process</h3>
-<div class="step-box"><span class="step-num">1</span><strong>Standardize the data</strong> &mdash; PCA is sensitive to variance. Variables with large ranges dominate. Standardize so each has mean=0, std=1.</div>
-<div class="step-box"><span class="step-num">2</span><strong>Compute the covariance matrix</strong> &mdash; Find relationships between variables. Cov(X<sub>i</sub>, X<sub>j</sub>) measures how they co-vary.</div>
-<div class="step-box"><span class="step-num">3</span><strong>Compute eigenvalues and eigenvectors</strong> &mdash; Eigenvalues = variance explained by each PC. Eigenvectors = loading directions.</div>
-<div class="step-box"><span class="step-num">4</span><strong>Choose number of PCs (feature vector)</strong> &mdash; Look at PVE and scree plot. Keep PCs that explain most variance.</div>
-<div class="step-box"><span class="step-num">5</span><strong>Project data onto chosen PCs</strong> &mdash; Multiply original data by the feature vector to get new coordinates.</div>
-
+<ol>
+<li><strong>Standardize</strong> — PCA is variance-sensitive. Scale so each feature has mean=0, std=1.</li>
+<li><strong>Covariance matrix</strong> — Compute relationships between variables.</li>
+<li><strong>Eigenvalues & eigenvectors</strong> — Eigenvalues = variance per PC. Eigenvectors = loading directions.</li>
+<li><strong>Choose # PCs</strong> — Use PVE and scree plot (look for "elbow").</li>
+<li><strong>Project data</strong> — Multiply original data by the feature vector.</li>
+</ol>
 <h3>Proportion of Variance Explained (PVE)</h3>
-<div class="formula-box">PVE<sub>m</sub> = Var(Z<sub>m</sub>) / &Sigma;<sub>j=1</sub><sup>p</sup> Var(X<sub>j</sub>) = &Sigma;<sub>i=1</sub><sup>n</sup> z<sub>im</sub>&sup2; / &Sigma;<sub>j=1</sub><sup>p</sup> &Sigma;<sub>i=1</sub><sup>n</sup> x<sub>ij</sub>&sup2;<br><br>
-&bull; PVE is between 0 and 1<br>
-&bull; All PVEs sum to 1<br>
-&bull; Cumulative PVE tells you how much total variance is captured</div>
+<pre class="code-block">PVEₘ = λₘ / Σλⱼ  =  Var(Zₘ) / Total Variance
 
-<div class="key-point"><strong>Scree Plot:</strong> Plot PVE vs component number. Look for an "elbow" &mdash; the point where additional components add little variance. Retain components before the elbow.</div>
-
+• PVE is between 0 and 1
+• All PVEs sum to 1
+• Scree plot: PVE vs component number — look for "elbow"</pre>
+<div class="exam-callout">PVE = eigenvalue / sum of ALL eigenvalues. Cumulative PVE tells you total variance captured by first m components.</div>
 <h3>Worked Example: PCA Computation</h3>
-<div class="key-point"><strong>Dataset:</strong> 3 observations, 2 features:<br>
-(2,3), (3,4), (4,5)<br><br>
-<strong>Step 1: Center the data</strong> (subtract means)<br>
-Mean X<sub>1</sub> = 3, Mean X<sub>2</sub> = 4<br>
-Centered: (-1,-1), (0,0), (1,1)<br><br>
-<strong>Step 2: Covariance matrix (using 1/n)</strong><br>
-Var(X<sub>1</sub>) = (1+0+1)/3 = 2/3<br>
-Var(X<sub>2</sub>) = (1+0+1)/3 = 2/3<br>
-Cov(X<sub>1</sub>,X<sub>2</sub>) = (1+0+1)/3 = 2/3<br>
-&Sigma; = [[2/3, 2/3], [2/3, 2/3]]<br><br>
-<strong>Step 3: Eigenvalues</strong><br>
-det(&Sigma; - &lambda;I) = (2/3-&lambda;)&sup2; - (2/3)&sup2; = 0<br>
-&lambda;&sup2; - (4/3)&lambda; = 0 &rarr; &lambda;(&lambda; - 4/3) = 0<br>
-&lambda;<sub>1</sub> = 4/3, &lambda;<sub>2</sub> = 0<br><br>
-<strong>Step 4: PVE</strong><br>
-PVE<sub>1</sub> = (4/3) / (4/3 + 0) = <strong>100%</strong><br>
-PC1 captures ALL the variance (data is perfectly correlated).<br><br>
-<strong>Step 5: Eigenvector for &lambda;<sub>1</sub></strong><br>
-&phi;<sub>1</sub> = (1/&radic;2, 1/&radic;2)<br>
-PC1 = (1/&radic;2)(X<sub>1</sub> + X<sub>2</sub>)</div>
+<pre class="code-block">Data: (2,3), (3,4), (4,5)  — 3 obs, 2 features
 
-<h3>Worked Example 2: Cold Chain Logistics</h3>
-<div class="key-point"><strong>Data:</strong> Temperature Deviation and Delay<br>
-(-2,1), (-1,2), (1,3), (2,4)<br><br>
-<strong>Center:</strong> Mean Temp=0, Mean Delay=2.5<br>
-Centered: (-2,-1.5), (-1,-0.5), (1,0.5), (2,1.5)<br><br>
-<strong>Covariance matrix (1/n):</strong><br>
-Var(X<sub>1</sub>) = 2.5, Var(X<sub>2</sub>) = 1.25, Cov = 1.75<br>
-&Sigma; = [[2.5, 1.75], [1.75, 1.25]]<br><br>
-<strong>Eigenvalues:</strong> &lambda;<sub>1</sub> &asymp; 3.733, &lambda;<sub>2</sub> &asymp; 0.017<br>
-PVE<sub>1</sub> = 3.733/3.75 &asymp; <strong>99.5%</strong><br><br>
-<strong>Eigenvector:</strong> &phi;<sub>1</sub> &asymp; (1/&radic;2)(1, 1)<br>
-PC1 combines both variables equally &mdash; single underlying factor affecting shipment quality.</div>
+Step 1: Center (subtract means: X̄₁=3, X̄₂=4)
+  Centered: (-1,-1), (0,0), (1,1)
 
-<h3>Worked Example 3: Route Optimization</h3>
-<div class="key-point"><strong>Given:</strong> PC1 loadings: Z<sub>1</sub> = 0.6X<sub>1</sub> + 0.6X<sub>2</sub> + 0.529X<sub>3</sub><br>
-Eigenvalues: &lambda;<sub>1</sub>=5.5, &lambda;<sub>2</sub>=1.2, &lambda;<sub>3</sub>=0.3<br><br>
-Total variance = 5.5 + 1.2 + 0.3 = <strong>7.0</strong><br>
-PVE<sub>1</sub> = 5.5/7.0 = <strong>78.6%</strong><br>
-PVE<sub>2</sub> = 1.2/7.0 = <strong>17.1%</strong><br>
-PVE<sub>3</sub> = 0.3/7.0 = <strong>4.3%</strong><br>
-Cumulative PVE (PC1+PC2) = <strong>95.7%</strong> &rarr; retain 2 components</div>
+Step 2: Covariance matrix (1/n)
+  Var(X₁) = (1+0+1)/3 = 2/3
+  Var(X₂) = (1+0+1)/3 = 2/3
+  Cov = (1+0+1)/3 = 2/3
+  Σ = [[2/3, 2/3], [2/3, 2/3]]
 
-<h3>Python Implementation</h3>
-<div class="formula-box">from sklearn.preprocessing import StandardScaler<br>
-from sklearn.decomposition import PCA<br><br>
-scaler = StandardScaler()<br>
-X_scaled = scaler.fit_transform(X)<br><br>
-pca = PCA(n_components=2)<br>
-X_pca = pca.fit_transform(X_scaled)<br><br>
-print(pca.explained_variance_ratio_)  # PVE per component<br>
-print(pca.components_)  # loading vectors</div>
+Step 3: Eigenvalues
+  det(Σ − λI) = (2/3−λ)² − (2/3)² = 0
+  λ₁ = 4/3,  λ₂ = 0
 
-<div class="warning-box"><strong>Key Exam Points:</strong><br>
-&bull; Always standardize before PCA (unless told otherwise)<br>
-&bull; PVE = eigenvalue / sum of all eigenvalues<br>
-&bull; PCs are orthogonal (uncorrelated) by construction<br>
-&bull; Scaling matters: different scales &rarr; different PCs</div>
-</div>`,
+Step 4: PVE
+  PVE₁ = (4/3)/(4/3) = 100%  ← perfect correlation!
 
-kmeans:`<div class="topic-card"><h2>K-Means Clustering</h2>
+Step 5: Eigenvector for λ₁
+  φ₁ = (1/√2, 1/√2)
+  PC1 = (1/√2)(X₁ + X₂)</pre>
+<h3>Worked Example: Route Optimization</h3>
+<pre class="code-block">Given: Z₁ = 0.6X₁ + 0.6X₂ + 0.529X₃
+Eigenvalues: λ₁=5.5, λ₂=1.2, λ₃=0.3
 
-<h3>What is K-Means?</h3>
-<p>K-means is a <strong>centroid-based</strong> algorithm that partitions n observations into K clusters by minimizing <strong>within-cluster variation</strong>. The user specifies K in advance.</p>
+Total variance = 5.5 + 1.2 + 0.3 = 7.0
+PVE₁ = 5.5/7.0 = 78.6%
+PVE₂ = 1.2/7.0 = 17.1%
+PVE₃ = 0.3/7.0 = 4.3%
+Cumulative (PC1+PC2) = 95.7% → retain 2 components</pre>
+<h3>Python</h3>
+<pre class="code-block">from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+pca.explained_variance_ratio_  # PVE per component
+pca.components_                # loading vectors</pre>
+<div class="warning-callout">Always standardize before PCA unless told otherwise. Different scales → different PCs. The intercept is not meaningful in PCA.</div>`,
+
+kmeans:`<h2>K-Means Clustering</h2>
+<h3>Core Idea</h3>
+<p>K-means partitions n observations into K clusters by minimizing <strong>within-cluster variation (WCV)</strong>. You must specify K in advance.</p>
 <h3>Mathematical Formulation</h3>
-<div class="formula-box"><strong>Objective:</strong> min<sub>C<sub>1</sub>,...,C<sub>K</sub></sub> &Sigma;<sub>k=1</sub><sup>K</sup> WCV(C<sub>k</sub>)<br><br>
-<strong>Within-cluster variation (Euclidean):</strong><br>
-WCV(C<sub>k</sub>) = (1/|C<sub>k</sub>|) &Sigma;<sub>i,i'&isin;C<sub>k</sub></sub> &Sigma;<sub>j=1</sub><sup>p</sup> (x<sub>ij</sub> - x<sub>i'j</sub>)&sup2;<br><br>
-<strong>Equivalent form:</strong><br>
-WCV(C<sub>k</sub>) = 2 &Sigma;<sub>i&isin;C<sub>k</sub></sub> &Sigma;<sub>j=1</sub><sup>p</sup> (x<sub>ij</sub> - x&#772;<sub>kj</sub>)&sup2;</div>
+<pre class="code-block">Objective: min  Σₖ WCV(Cₖ)
 
-<h3>Two Key Properties of Clusters</h3>
-<ul>
-<li>C<sub>1</sub> &cup; C<sub>2</sub> &cup; ... &cup; C<sub>K</sub> = {1,...,n} &mdash; every observation belongs to <strong>at least one</strong> cluster</li>
-<li>C<sub>k</sub> &cap; C<sub>k'</sub> = &empty; for all k &ne; k' &mdash; clusters are <strong>non-overlapping</strong></li>
-</ul>
+WCV(Cₖ) = (1/|Cₖ|) Σᵢ,ᵢ'∈Cₖ Σⱼ (xᵢⱼ − xᵢ'ⱼ)²
 
+Equivalent: WCV(Cₖ) = 2 Σᵢ∈Cₖ ||xᵢ − x̄ₖ||²
+
+Two properties:
+1. C₁ ∪ C₂ ∪ ... ∪ Cₖ = {1,...,n}  (every obs in a cluster)
+2. Cₖ ∩ Cₖ' = ∅ for k ≠ k'       (non-overlapping)</pre>
 <h3>Algorithm</h3>
-<div class="step-box"><span class="step-num">1</span><strong>Initialize:</strong> Randomly assign each observation to one of K clusters.</div>
-<div class="step-box"><span class="step-num">2</span><strong>Iterate until convergence:</strong><br>
-&nbsp;&nbsp;<strong>(a)</strong> Compute the <strong>centroid</strong> of each cluster (vector of feature means).<br>
-&nbsp;&nbsp;<strong>(b)</strong> <strong>Reassign</strong> each observation to the cluster whose centroid is closest (Euclidean distance).</div>
+<ol>
+<li><strong>Initialize:</strong> Randomly assign each observation to one of K clusters</li>
+<li><strong>Iterate until convergence:</strong><br>(a) Compute the <strong>centroid</strong> of each cluster (vector of feature means)<br>(b) <strong>Reassign</strong> each observation to the cluster with nearest centroid (Euclidean distance)</li>
+</ol>
+<div class="exam-callout"><strong>Guaranteed</strong> to decrease the objective at each step. <strong>NOT guaranteed</strong> to find the global minimum — depends on initialization. Solution: run multiple times with different starts, keep lowest WCV.</div>
+<h3>Worked Example</h3>
+<pre class="code-block">Points: A(1,1), B(1.5,2), C(3,4), D(5,7).  K=2.
 
-<div class="diagram-box">
-  K-Means Algorithm (K=2):
+Initial clusters: C₁={A,B}, C₂={C,D}
 
-  Step 1: Random assignment     Step 2a: Compute centroids     Step 2b: Reassign
-  
-  * A  o B  o B  * A           * A  o B  o B  * A             o B  o B  o B  * A
-  * A  o B  * A  o B           [+] centroid A  [x] centroid B  o B  * A  * A  * A
-  * A  * A  o B  o B                                           * A  * A  o B  o B
+Centroids:
+  μ₁ = ((1+1.5)/2, (1+2)/2) = (1.25, 1.5)
+  μ₂ = ((3+5)/2, (4+7)/2)   = (4, 5.5)
 
-  Legend: * = cluster A, o = cluster B, [+]/[x] = centroids
-  
-  Repeat 2a &rarr; 2b until no assignments change
-</div>
+Reassign (Euclidean distances):
+  d(A, μ₁) = √0.3125 = 0.559    d(A, μ₂) = √29.25 = 5.408  → A stays C₁
+  d(B, μ₁) = 0.559               d(B, μ₂) = 4.301            → B stays C₁
+  d(C, μ₁) = 3.051               d(C, μ₂) = 1.803            → C stays C₂
+  d(D, μ₁) = 6.657               d(D, μ₂) = 1.803            → D stays C₂
 
-<h3>Important Properties</h3>
-<ul>
-<li>Algorithm is <strong>guaranteed to decrease</strong> the objective at each step.</li>
-<li>However, it is <strong>NOT guaranteed to find the global minimum</strong> (depends on initialization).</li>
-<li><strong>Solution:</strong> Run K-means multiple times with different random starts, pick the result with the <strong>lowest total WCV</strong>.</li>
-</ul>
+No changes → converged!
 
-<h3>Worked Example (from lecture)</h3>
-<div class="key-point"><strong>Points:</strong> A(1,1), B(1.5,2), C(3,4), D(5,7). K=2.<br><br>
-<strong>Initial clusters:</strong> C<sub>1</sub>={A,B}, C<sub>2</sub>={C,D}<br><br>
-<strong>Centroids:</strong><br>
-&mu;<sub>1</sub> = ((1+1.5)/2, (1+2)/2) = <strong>(1.25, 1.5)</strong><br>
-&mu;<sub>2</sub> = ((3+5)/2, (4+7)/2) = <strong>(4, 5.5)</strong><br><br>
-<strong>Reassign (compute distances):</strong><br>
-d(A, &mu;<sub>1</sub>) = &radic;(0.0625+0.25) = 0.559<br>
-d(A, &mu;<sub>2</sub>) = &radic;(9+20.25) = 5.408 &rarr; A stays in C<sub>1</sub><br>
-d(B, &mu;<sub>1</sub>) = 0.559, d(B, &mu;<sub>2</sub>) = 4.301 &rarr; B stays in C<sub>1</sub><br>
-d(C, &mu;<sub>1</sub>) = 3.051, d(C, &mu;<sub>2</sub>) = 1.803 &rarr; C stays in C<sub>2</sub><br>
-d(D, &mu;<sub>1</sub>) = 6.657, d(D, &mu;<sub>2</sub>) = 1.803 &rarr; D stays in C<sub>2</sub><br><br>
-<strong>No assignments changed &rarr; converged!</strong><br><br>
-<strong>Final WCV:</strong><br>
-Cluster 1: 0.3125 + 0.3125 = 0.625<br>
-Cluster 2: 3.25 + 3.25 = 6.5<br>
-Total WCV = <strong>7.125</strong></div>
+Final WCV:
+  Cluster 1: 0.3125 + 0.3125 = 0.625
+  Cluster 2: 3.25 + 3.25 = 6.5
+  Total WCV = 7.125</pre>
+<h3>Python</h3>
+<pre class="code-block">from sklearn.cluster import KMeans
 
-<h3>Python Implementation</h3>
-<div class="formula-box">from sklearn.cluster import KMeans<br><br>
-kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)<br>
-kmeans.fit(X)<br>
-labels = kmeans.labels_<br>
-centroids = kmeans.cluster_centers_<br>
-inertia = kmeans.inertia_  # total WCV</div>
-</div>`,
+kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)
+kmeans.fit(X)
+labels = kmeans.labels_
+centroids = kmeans.cluster_centers_
+inertia = kmeans.inertia_  # total WCV</pre>`,
 
-hierarchical:`<div class="topic-card"><h2>Hierarchical Clustering</h2>
-
-<h3>What is it?</h3>
-<p>Hierarchical clustering does <strong>NOT require specifying K in advance</strong>. It produces a tree-like structure called a <strong>dendrogram</strong> that shows all possible clusterings from 1 to n clusters.</p>
-
+hierarchical:`<h2>Hierarchical Clustering</h2>
+<h3>Key Advantage</h3>
+<p>Does <strong>NOT require specifying K</strong> in advance. Produces a <strong>dendrogram</strong> — cut at any height to get desired number of clusters.</p>
 <h3>Agglomerative (Bottom-Up) Algorithm</h3>
-<div class="step-box"><span class="step-num">1</span>Start with each observation in its own cluster (n clusters).</div>
-<div class="step-box"><span class="step-num">2</span>Find the two most similar (closest) clusters and merge them.</div>
-<div class="step-box"><span class="step-num">3</span>Repeat until all observations are in a single cluster.</div>
+<ol>
+<li>Start with each observation in its own cluster (n clusters)</li>
+<li>Find the two <strong>most similar</strong> (closest) clusters → merge them</li>
+<li>Repeat until all observations are in a single cluster</li>
+</ol>
+<div class="diagram">  Dendrogram Example:
 
-<div class="diagram-box">
-  Dendrogram Example:
-  
   Height
   11.31 |         _____|_____
         |        |           |
    1.41 |    ___|___     ___|___
         |   |       |   |       |
         |   A       B   C       D
-        
-  Cut at height 5 &rarr; 2 clusters: {A,B} and {C,D}
-  Cut at height 1 &rarr; 4 clusters: {A},{B},{C},{D}
-  
-  Lower merge height = more similar observations
-</div>
 
+  Cut at height 5 → 2 clusters: {A,B} and {C,D}
+  Lower merge height = more similar observations</div>
 <h3>Linkage Criteria</h3>
-<p>When merging clusters with multiple observations, we need a way to measure distance between clusters:</p>
-<table>
+<table class="compare-table">
 <tr><th>Linkage</th><th>Distance Between Clusters</th><th>Properties</th></tr>
-<tr><td><strong>Single</strong></td><td>Minimum distance between any pair</td><td>Can create long, chain-like clusters</td></tr>
-<tr><td><strong>Complete</strong></td><td>Maximum distance between any pair</td><td>Compact, spherical clusters</td></tr>
-<tr><td><strong>Average</strong></td><td>Average of all pairwise distances</td><td>Compromise between single and complete</td></tr>
-<tr><td><strong>Centroid</strong></td><td>Distance between cluster centroids</td><td>Less common</td></tr>
-<tr><td><strong>Ward</strong></td><td>Minimizes sum of squared distances within clusters</td><td>Similar to K-means objective</td></tr>
+<tr><td><strong>Single</strong></td><td>Minimum pairwise distance</td><td>Can chain; elongated clusters</td></tr>
+<tr><td><strong>Complete</strong></td><td>Maximum pairwise distance</td><td>Compact, spherical clusters</td></tr>
+<tr><td><strong>Average</strong></td><td>Average of all pairwise distances</td><td>Compromise</td></tr>
+<tr><td><strong>Ward</strong></td><td>Min increase in total within-cluster variance</td><td>Similar to K-means objective</td></tr>
 </table>
+<h3>Worked Example (Complete Linkage)</h3>
+<pre class="code-block">Points: A(1,1), B(2,2), C(8,8), D(9,9)
 
-<div class="diagram-box">
-  Linkage Illustrations:
-  
-  Single Linkage:          Complete Linkage:        Average Linkage:
-  
-  Cluster A   Cluster B    Cluster A   Cluster B    Cluster A   Cluster B
-   *  *        *  *         *  *        *  *         *  *        *  *
-   *  *  &lt;--&gt;  *  *         *  *  &lt;===&gt;  *  *         *--*--+--+--*--*
-   *  *     |  *  *         *  *        *  *         *  *  mean  *  *
-         min distance           max distance          avg all pairs
-</div>
+Pairwise distances:
+  d(A,B) = √2 ≈ 1.41     d(C,D) = √2 ≈ 1.41
+  d(A,C) = 7√2 ≈ 9.90    d(A,D) = 8√2 ≈ 11.31
+  d(B,C) = 6√2 ≈ 8.49    d(B,D) = 7√2 ≈ 9.90
 
-<h3>Worked Example: Complete Linkage</h3>
-<div class="key-point"><strong>Points:</strong> A(1,1), B(2,2), C(8,8), D(9,9)<br><br>
-<strong>Pairwise distances:</strong><br>
-d(A,B) = &radic;2 &asymp; 1.41<br>
-d(C,D) = &radic;2 &asymp; 1.41<br>
-d(A,C) = 7&radic;2 &asymp; 9.90<br>
-d(A,D) = 8&radic;2 &asymp; 11.31<br>
-d(B,C) = 6&radic;2 &asymp; 8.49<br>
-d(B,D) = 7&radic;2 &asymp; 9.90<br><br>
-<strong>Merge sequence:</strong><br>
-1. Merge A&B at height &radic;2 &asymp; 1.41 (smallest distance)<br>
-2. Merge C&D at height &radic;2 &asymp; 1.41<br>
-3. Merge {A,B} and {C,D} at height max(d(A,C),d(A,D),d(B,C),d(B,D)) = 11.31<br><br>
-<strong>Cutting at h=5:</strong> 2 clusters {A,B} and {C,D}</div>
+Merge sequence:
+  1. Merge A & B at height √2 ≈ 1.41
+  2. Merge C & D at height √2 ≈ 1.41
+  3. Merge {A,B} & {C,D} at height max(9.9, 11.31, 8.49, 9.9) = 11.31
 
-<h3>Dendrogram Interpretation</h3>
-<ul>
-<li>The <strong>height of fusion</strong> indicates how different the merged clusters are.</li>
-<li>Low fusion height = very similar observations.</li>
-<li>Cut the dendrogram at a specific height to get a specific number of clusters.</li>
-<li>Observations that fuse at the bottom are most similar to each other.</li>
-</ul>
-
-<h3>K-Means vs Hierarchical Clustering</h3>
-<table>
+Cut at h=5 → 2 clusters: {A,B} and {C,D}</pre>
+<h3>K-Means vs Hierarchical</h3>
+<table class="compare-table">
 <tr><th>Property</th><th>K-Means</th><th>Hierarchical</th></tr>
 <tr><td>Specify K?</td><td>Yes, in advance</td><td>No (choose after via dendrogram)</td></tr>
 <tr><td>Deterministic?</td><td>No (random init)</td><td>Yes (for same linkage)</td></tr>
-<tr><td>Scalability</td><td>Better for large n</td><td>O(n&sup2;) or O(n&sup3;) memory/time</td></tr>
-<tr><td>Cluster shape</td><td>Spherical/convex</td><td>Arbitrary (depends on linkage)</td></tr>
-</table>
+<tr><td>Scalability</td><td>Better for large n</td><td>O(n²) or O(n³)</td></tr>
+<tr><td>Cluster shape</td><td>Spherical</td><td>Arbitrary (depends on linkage)</td></tr>
+</table>`,
 
-<h3>Python Implementation</h3>
-<div class="formula-box">from scipy.cluster.hierarchy import dendrogram, linkage, fcluster<br>
-import matplotlib.pyplot as plt<br><br>
-Z = linkage(X, method='complete')  # complete linkage<br>
-dendrogram(Z)<br>
-plt.show()<br><br>
-clusters = fcluster(Z, t=2, criterion='maxclust')  # cut into 2 clusters</div>
-</div>`,
+nn:`<h2>Neural Networks</h2>
+<h3>Architecture</h3>
+<div class="diagram">  Neural Network:
 
-nn:`<div class="topic-card"><h2>Neural Networks</h2>
+   Input Layer    Hidden Layer(s)    Output Layer
 
-<h3>Architecture Overview</h3>
-<p>Neural networks consist of layers of interconnected nodes (neurons), inspired by the brain's structure.</p>
+    x₁ ──────╲      h₁  ╲
+               ╲  ╱       ╲
+    x₂ ────────╳─────── h₂ ───╳────── ŷ
+               ╱  ╲       ╱
+    x₃ ──────╱      h₃  ╱
 
-<div class="diagram-box">
-  Neural Network Architecture:
-  
-  Input Layer    Hidden Layer(s)    Output Layer
-  
-   x&#8321; &mdash;&mdash;&mdash;\\      h&#8321;  \\
-              \\  /     \\
-   x&#8322; &mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash; h&#8322; &mdash;&mdash;+&mdash;&mdash;&mdash; y&#770;
-              /  \\     /
-   x&#8323; &mdash;&mdash;&mdash;/      h&#8323;  /
-  
-  Each connection has a weight w
-  Each neuron applies: output = g(w&#8321;x&#8321; + w&#8322;x&#8322; + ... + b)
-  where g() is the activation function
-</div>
-
-<h3>Three Types of Layers</h3>
+  Each connection has weight w
+  Each neuron: output = g(Σwᵢxᵢ + b)
+  g() = activation function</div>
 <ul>
-<li><strong>Input Layer:</strong> Receives the raw data features. No computation, just passes values forward.</li>
-<li><strong>Hidden Layer(s):</strong> Processes information using weights, biases, and activation functions. Where the "learning" happens.</li>
-<li><strong>Output Layer:</strong> Produces the final prediction/classification.</li>
+<li><strong>Input Layer:</strong> receives raw features, no computation</li>
+<li><strong>Hidden Layer(s):</strong> weights + biases + activation functions — the "learning"</li>
+<li><strong>Output Layer:</strong> final prediction or classification</li>
 </ul>
-
 <h3>Single Neuron Computation</h3>
-<div class="formula-box"><strong>Step 1: Weighted sum</strong><br>
-z = w<sub>1</sub>x<sub>1</sub> + w<sub>2</sub>x<sub>2</sub> + ... + w<sub>n</sub>x<sub>n</sub> + b<br>
-&nbsp;&nbsp;= &Sigma;w<sub>i</sub>x<sub>i</sub> + b &nbsp; (bias + sum of inputs &times; weights)<br><br>
-<strong>Step 2: Apply activation function</strong><br>
-output = g(z)</div>
+<pre class="code-block">Step 1: Weighted sum
+  z = w₁x₁ + w₂x₂ + ... + wₙxₙ + b
 
-<h3>Role of Bias</h3>
-<p>The bias allows the neuron to produce a meaningful output even when all inputs are zero. It shifts the activation function left or right, providing flexibility.</p>
-<div class="formula-box">Output = g(Bias + &Sigma;(Inputs &times; Weights))</div>
+Step 2: Activation function
+  output = g(z)
 
-<h3>Activation Functions &mdash; MUST KNOW ALL</h3>
-<table>
-<tr><th>Function</th><th>Formula</th><th>Range</th><th>Use Case</th></tr>
-<tr><td><strong>Sigmoid</strong></td><td>g(z) = 1/(1+e<sup>-z</sup>)</td><td>(0, 1)</td><td>Binary classification output</td></tr>
-<tr><td><strong>Tanh</strong></td><td>g(z) = (e<sup>z</sup>-e<sup>-z</sup>)/(e<sup>z</sup>+e<sup>-z</sup>)</td><td>(-1, 1)</td><td>Hidden layers (zero-centered)</td></tr>
-<tr><td><strong>ReLU</strong></td><td>g(z) = max(0, z)</td><td>[0, &infin;)</td><td>Hidden layers (most popular)</td></tr>
-<tr><td><strong>Leaky ReLU</strong></td><td>g(z) = max(0.1z, z)</td><td>(-&infin;, &infin;)</td><td>Avoids dying ReLU</td></tr>
-<tr><td><strong>Softmax</strong></td><td>e<sup>z<sub>k</sub></sup>/&Sigma;e<sup>z<sub>j</sub></sup></td><td>(0,1), sum=1</td><td>Multi-class output</td></tr>
+The bias b allows output even when all inputs are zero.</pre>
+<h3>Activation Functions</h3>
+<table class="compare-table">
+<tr><th>Function</th><th>Formula</th><th>Range</th><th>Use</th><th>Issue</th></tr>
+<tr><td><strong>Sigmoid</strong></td><td>1/(1+e⁻ᶻ)</td><td>(0,1)</td><td>Binary output</td><td>Vanishing gradient</td></tr>
+<tr><td><strong>Tanh</strong></td><td>(eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ)</td><td>(−1,1)</td><td>Hidden layers</td><td>Vanishing gradient</td></tr>
+<tr><td><strong>ReLU</strong></td><td>max(0, z)</td><td>[0,∞)</td><td>Hidden layers ★</td><td>Dying ReLU</td></tr>
+<tr><td><strong>Leaky ReLU</strong></td><td>max(0.1z, z)</td><td>(−∞,∞)</td><td>Hidden layers</td><td>Slightly complex</td></tr>
+<tr><td><strong>Softmax</strong></td><td>eᶻᵏ/Σeᶻʲ</td><td>(0,1), sum=1</td><td>Multi-class output</td><td>Costly for many classes</td></tr>
 </table>
+<div class="diagram">  Activation Function Shapes:
 
-<div class="diagram-box">
-  Activation Function Shapes:
-  
-  Sigmoid:        Tanh:           ReLU:           Leaky ReLU:
-       ___            ___           /              /
-      /               /            /              /
-  ___/            ___/         ___/           ___/
-  0 to 1          -1 to 1      0 if z&lt;0       0.1z if z&lt;0
-  
-  Sigmoid/Tanh: vanishing gradient problem for deep networks
-  ReLU: fast, but "dying ReLU" (stuck at 0 for negative inputs)
-  Leaky ReLU: fixes dying ReLU by allowing small negative gradient
-</div>
-
-<h3>Practical Considerations</h3>
-<ul>
-<li><strong>Vanishing Gradients:</strong> Sigmoid and tanh can make gradients very small in deep networks &rarr; slow/stuck training. ReLU mitigates this.</li>
-<li><strong>Dying ReLU:</strong> If a neuron always outputs 0 (negative z), it stops learning. Leaky ReLU fixes this.</li>
-<li><strong>Exploding Gradients:</strong> Gradients become too large, causing unstable training. Proper initialization and batch normalization help.</li>
-</ul>
-
+  Sigmoid:        Tanh:           ReLU:         Leaky ReLU:
+       ___            ___           ╱              ╱
+      ╱               ╱            ╱              ╱
+  ___╱            ___╱         ___╱           ___╱
+  0 to 1          -1 to 1      0 if z&lt;0       0.1z if z&lt;0</div>
+<div class="exam-callout"><strong>Vanishing gradients:</strong> Sigmoid/tanh squash gradients → near 0 for deep nets → slow training. ReLU fixes this. <strong>Dying ReLU:</strong> neuron stuck at 0 forever. Leaky ReLU fixes this.</div>
 <h3>Forward Propagation</h3>
-<p>Data flows through the network layer by layer:</p>
-<div class="step-box"><span class="step-num">1</span>Input features enter the input layer.</div>
-<div class="step-box"><span class="step-num">2</span>For each hidden neuron: compute z = &Sigma;w<sub>i</sub>x<sub>i</sub> + b, then apply activation: h = g(z).</div>
-<div class="step-box"><span class="step-num">3</span>Hidden outputs become inputs to the next layer.</div>
-<div class="step-box"><span class="step-num">4</span>Output layer produces the final prediction.</div>
-
+<ol>
+<li>Input features enter the input layer</li>
+<li>For each hidden neuron: compute z = Σwᵢxᵢ + b, then h = g(z)</li>
+<li>Hidden outputs become inputs to next layer</li>
+<li>Output layer produces final prediction</li>
+</ol>
 <h3>Backpropagation</h3>
-<p>After forward propagation, the network compares its prediction to the true answer using a <strong>loss function</strong>, then adjusts weights by propagating the error backward using the <strong>chain rule</strong>.</p>
+<pre class="code-block">After forward pass, compare prediction to truth via loss function.
+Propagate error backward using the chain rule:
 
-<div class="diagram-box">
-  Forward &amp; Backward Flow:
-  
-  Input &rarr; Hidden &rarr; Output &rarr; Loss(y, y&#770;)
-                                        |
-  &larr;&larr;&larr;&larr;&larr; Backpropagate gradients &larr;&larr;&larr;&larr;&larr;
-  
-  Update: w = w - &eta; &middot; &part;Loss/&part;w
-  where &eta; is the learning rate
-</div>
+  ∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w
 
-<h3>Chain Rule in Backpropagation</h3>
-<div class="formula-box">&part;Loss/&part;w = &part;Loss/&part;y&#770; &middot; &part;y&#770;/&part;z &middot; &part;z/&part;w<br><br>
-This chain allows computing gradients for weights in ANY layer,<br>
-no matter how deep the network.</div>
-
+Update weights: w = w − η · ∂Loss/∂w
+  η = learning rate</pre>
 <h3>Worked Example: Forward Propagation</h3>
-<div class="key-point"><strong>Network:</strong> 2 inputs, 2 hidden neurons (sigmoid), 1 output (sigmoid)<br>
-<strong>Inputs:</strong> x<sub>1</sub>=1, x<sub>2</sub>=2<br>
-<strong>Weights (input&rarr;hidden):</strong> w<sub>11</sub>=0.5, w<sub>12</sub>=-0.5, w<sub>21</sub>=0.3, w<sub>22</sub>=0.8<br>
-<strong>Hidden bias:</strong> b<sub>h</sub>=0.1<br>
-<strong>Weights (hidden&rarr;output):</strong> w<sub>31</sub>=1.0, w<sub>32</sub>=-1.0<br>
-<strong>Output bias:</strong> b<sub>o</sub>=0.2<br><br>
+<pre class="code-block">Network: 2 inputs, 2 hidden (sigmoid), 1 output (sigmoid)
+Inputs: x₁=1, x₂=2
 
-<strong>Hidden Layer:</strong><br>
-z<sub>h1</sub> = w<sub>11</sub>&middot;x<sub>1</sub> + w<sub>21</sub>&middot;x<sub>2</sub> + b<sub>h</sub> = 0.5(1) + 0.3(2) + 0.1 = <strong>1.2</strong><br>
-h<sub>1</sub> = sigmoid(1.2) = 1/(1+e<sup>-1.2</sup>) &asymp; <strong>0.769</strong><br><br>
-z<sub>h2</sub> = w<sub>12</sub>&middot;x<sub>1</sub> + w<sub>22</sub>&middot;x<sub>2</sub> + b<sub>h</sub> = -0.5(1) + 0.8(2) + 0.1 = <strong>1.2</strong><br>
-h<sub>2</sub> = sigmoid(1.2) &asymp; <strong>0.769</strong><br><br>
+Weights (input→hidden): w₁₁=0.5, w₁₂=−0.5, w₂₁=0.3, w₂₂=0.8
+Hidden bias: bₕ=0.1
+Weights (hidden→output): w₃₁=1.0, w₃₂=−1.0
+Output bias: bₒ=0.2
 
-<strong>Output Layer:</strong><br>
-z<sub>o</sub> = w<sub>31</sub>&middot;h<sub>1</sub> + w<sub>32</sub>&middot;h<sub>2</sub> + b<sub>o</sub> = 1.0(0.769) + (-1.0)(0.769) + 0.2 = <strong>0.2</strong><br>
-y&#770; = sigmoid(0.2) = 1/(1+e<sup>-0.2</sup>) &asymp; <strong>0.550</strong></div>
+Hidden Layer:
+  z_h1 = 0.5(1) + 0.3(2) + 0.1 = 1.2
+  h₁ = sigmoid(1.2) = 1/(1+e⁻¹·²) ≈ 0.769
 
-<h3>Loss Functions</h3>
-<ul>
-<li><strong>MSE (regression):</strong> L = (1/n)&Sigma;(y<sub>i</sub> - y&#770;<sub>i</sub>)&sup2;</li>
-<li><strong>Cross-entropy (classification):</strong> L = -&Sigma;[y<sub>i</sub>log(y&#770;<sub>i</sub>) + (1-y<sub>i</sub>)log(1-y&#770;<sub>i</sub>)]</li>
-</ul>
+  z_h2 = −0.5(1) + 0.8(2) + 0.1 = 1.2
+  h₂ = sigmoid(1.2) ≈ 0.769
 
-<h3>Key Terminology</h3>
-<table>
-<tr><th>Term</th><th>Meaning</th></tr>
-<tr><td>Perceptron</td><td>Single-layer neural network (basic building block)</td></tr>
-<tr><td>MLP</td><td>Multi-Layer Perceptron (multiple hidden layers)</td></tr>
-<tr><td>Deep Learning</td><td>Networks with many hidden layers</td></tr>
-<tr><td>Epoch</td><td>One complete pass through the training data</td></tr>
-<tr><td>Batch size</td><td>Number of samples processed before updating weights</td></tr>
-<tr><td>Learning rate (&eta;)</td><td>Step size for weight updates (too high: unstable; too low: slow)</td></tr>
-</table>
+Output Layer:
+  z_o = 1.0(0.769) + (−1.0)(0.769) + 0.2 = 0.2
+  ŷ = sigmoid(0.2) ≈ 0.550</pre>
+<div class="exam-callout">Be able to perform forward propagation <strong>by hand</strong>. Know all 5 activation functions and their properties. Understand backpropagation conceptually (chain rule).</div>`,
 
-<div class="warning-box"><strong>Exam Focus:</strong> Be able to perform forward propagation by hand. Know all activation functions and their properties. Understand the concept of backpropagation (chain rule) even if you don't compute full derivatives.</div>
-</div>`,
+svm:`<h2>Support Vector Machines (SVM)</h2>
+<h3>Core Idea</h3>
+<p>Find the <strong>optimal separating hyperplane</strong> between two classes that <strong>maximizes the margin</strong> (distance to nearest points).</p>
+<h3>Hyperplane</h3>
+<pre class="code-block">β₀ + β₁X₁ + β₂X₂ + ... + βₚXₚ = 0
 
-svm:`<div class="topic-card"><h2>Support Vector Machines (SVM)</h2>
+• In 2D: a line      • In 3D: a plane      • In pD: (p−1)-dimensional
+• β = (β₁,...,βₚ) is the normal vector (perpendicular to hyperplane)
+• f(X) > 0 → one side,  f(X) < 0 → other side
 
-<h3>Core Idea: Geometric Classification</h3>
-<p>SVM finds the <strong>optimal separating hyperplane</strong> between two classes that <strong>maximizes the margin</strong> (distance to the nearest points).</p>
+Distance from point x to hyperplane:
+  d = |f(x)| / ||β|| = |β₀ + β·x| / √(Σβⱼ²)</pre>
+<div class="diagram">  Maximal Margin Classifier:
 
-<h3>What is a Hyperplane?</h3>
-<div class="formula-box">&beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + ... + &beta;<sub>p</sub>X<sub>p</sub> = 0<br><br>
-&bull; In 2D: a line<br>
-&bull; In 3D: a plane<br>
-&bull; In pD: a (p-1)-dimensional subspace<br><br>
-&bull; &beta; = (&beta;<sub>1</sub>, ..., &beta;<sub>p</sub>) is the normal vector (perpendicular to hyperplane)<br>
-&bull; If &beta;<sub>0</sub> = 0, passes through origin</div>
+  Class +1          | margin |          Class −1
+    ∗               |________|               ○
+    ∗ ∗         SV→ | hyper- | ←SV         ○ ○
+    ∗   ∗           | plane  |           ○   ○
+    ∗     ∗     SV→ |________| ←SV     ○     ○
 
-<h3>Separating Hyperplanes</h3>
-<div class="formula-box">f(X) = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + ... + &beta;<sub>p</sub>X<sub>p</sub><br><br>
-&bull; f(X) > 0 for points on one side<br>
-&bull; f(X) < 0 for points on the other side<br>
-&bull; If y<sub>i</sub> &isin; {+1, -1}, then y<sub>i</sub>&middot;f(x<sub>i</sub>) > 0 &rArr; correctly classified</div>
-
-<h3>Perpendicular Distance from Hyperplane</h3>
-<div class="formula-box">distance = |f(x)| / ||&beta;|| = |&beta;<sub>0</sub> + &beta;<sub>1</sub>x<sub>1</sub> + ... + &beta;<sub>p</sub>x<sub>p</sub>| / &radic;(&beta;<sub>1</sub>&sup2; + ... + &beta;<sub>p</sub>&sup2;)</div>
-
-<div class="diagram-box">
-  Maximal Margin Classifier:
-  
-  Class +1          |  margin  |          Class -1
-    *               | ________ |               o
-    * *         SV &rarr;|/ hyper- \\|&larr; SV         o o
-    *   *           | plane    |           o   o
-    *     *     SV &rarr;|__________|&larr; SV     o     o
-    *               |  margin  |               o
-    
   SV = Support Vectors (points on margin boundary)
-  The hyperplane is positioned to MAXIMIZE margin width
-</div>
-
+  Hyperplane maximizes margin width</div>
 <h3>Maximal Margin Classifier</h3>
-<div class="formula-box"><strong>Optimization:</strong><br>
-maximize M<br>
-subject to: &Sigma;<sub>j=1</sub><sup>p</sup> &beta;<sub>j</sub>&sup2; = 1<br>
-&nbsp;&nbsp;&nbsp;&nbsp;y<sub>i</sub>(&beta;<sub>0</sub> + &beta;<sub>1</sub>x<sub>i1</sub> + ... + &beta;<sub>p</sub>x<sub>ip</sub>) &ge; M &nbsp; for all i = 1,...,n</div>
-<p>M is the margin. We maximize the distance from the closest points to the hyperplane.</p>
-
+<pre class="code-block">maximize M
+subject to: Σβⱼ² = 1
+  yᵢ(β₀ + β₁xᵢ₁ + ... + βₚxᵢₚ) ≥ M  for all i</pre>
 <h3>Support Vector Classifier (Soft Margin)</h3>
-<p>When data isn't perfectly separable (or is noisy), allow some violations using <strong>slack variables</strong> &xi;<sub>i</sub>:</p>
-<div class="formula-box"><strong>Optimization:</strong><br>
-maximize M<br>
-subject to: &Sigma;&beta;<sub>j</sub>&sup2; = 1<br>
-&nbsp;&nbsp;y<sub>i</sub>(&beta;<sub>0</sub> + &beta;<sub>1</sub>x<sub>i1</sub> + ... + &beta;<sub>p</sub>x<sub>ip</sub>) &ge; M(1 - &xi;<sub>i</sub>)<br>
-&nbsp;&nbsp;&xi;<sub>i</sub> &ge; 0, &nbsp; &Sigma;&xi;<sub>i</sub> &le; C</div>
-
-<h3>Slack Variable Interpretation &mdash; MUST KNOW</h3>
-<table>
-<tr><th>&xi;<sub>i</sub> value</th><th>Where is the point?</th><th>Correctly classified?</th></tr>
-<tr><td>&xi;<sub>i</sub> = 0</td><td>On or outside the margin</td><td>Yes (correct side)</td></tr>
-<tr><td>0 < &xi;<sub>i</sub> < 1</td><td>Inside the margin (violator)</td><td>Yes (correct side, but within margin)</td></tr>
-<tr><td>&xi;<sub>i</sub> = 1</td><td>Exactly on the hyperplane</td><td>On the boundary</td></tr>
-<tr><td>&xi;<sub>i</sub> > 1</td><td>Wrong side of hyperplane</td><td><strong>Misclassified!</strong></td></tr>
+<p>Allow violations via <strong>slack variables</strong> ξᵢ:</p>
+<pre class="code-block">maximize M
+subject to: Σβⱼ² = 1
+  yᵢ(β₀ + β·xᵢ) ≥ M(1 − ξᵢ)
+  ξᵢ ≥ 0,  Σξᵢ ≤ C</pre>
+<h3>Slack Variable Interpretation — MUST KNOW</h3>
+<table class="compare-table">
+<tr><th>ξᵢ value</th><th>Location</th><th>Classified?</th></tr>
+<tr><td>ξᵢ = 0</td><td>On or outside margin</td><td>Correctly classified</td></tr>
+<tr><td>0 &lt; ξᵢ &lt; 1</td><td>Inside margin (violator)</td><td>Correct side, within margin</td></tr>
+<tr><td>ξᵢ = 1</td><td>On the hyperplane</td><td>On boundary</td></tr>
+<tr><td><strong>ξᵢ &gt; 1</strong></td><td><strong>Wrong side</strong></td><td><strong>MISCLASSIFIED</strong></td></tr>
 </table>
-
-<div class="key-point"><strong>C is a regularization parameter (budget):</strong><br>
-&bull; <strong>Large C:</strong> Few violations allowed &rarr; narrow margin &rarr; low bias, high variance<br>
-&bull; <strong>Small C:</strong> Many violations allowed &rarr; wide margin &rarr; high bias, low variance<br>
-&bull; C controls the bias-variance tradeoff</div>
-
+<div class="exam-callout"><strong>C is a budget:</strong> Large C → few violations, narrow margin (low bias, high variance). Small C → many violations, wide margin (high bias, low variance).</div>
 <h3>Worked Example: Soft Margin</h3>
-<div class="key-point"><strong>Given trained SVM values:</strong><br>
-Obs 1: y=+1, f(x)=1.8 &rarr; y&middot;f(x)=1.8 &gt; 1 &rarr; <strong>outside margin</strong> (&xi;=0)<br>
-Obs 2: y=+1, f(x)=0.6 &rarr; y&middot;f(x)=0.6, 0&lt;0.6&lt;1 &rarr; <strong>inside margin</strong> (&xi;=0.4)<br>
-Obs 3: y=+1, f(x)=-0.4 &rarr; y&middot;f(x)=-0.4 &lt; 0 &rarr; <strong>misclassified!</strong> (&xi;=1.4)<br>
-Obs 4: y=-1, f(x)=-1.5 &rarr; y&middot;f(x)=1.5 &gt; 1 &rarr; <strong>outside margin</strong> (&xi;=0)<br>
-Obs 5: y=-1, f(x)=-0.7 &rarr; y&middot;f(x)=0.7, 0&lt;0.7&lt;1 &rarr; <strong>inside margin</strong> (&xi;=0.3)</div>
+<pre class="code-block">Obs 1: y=+1, f(x)=1.8 → y·f(x)=1.8 > 1 → outside margin (ξ=0)
+Obs 2: y=+1, f(x)=0.6 → y·f(x)=0.6     → inside margin  (ξ=0.4)
+Obs 3: y=+1, f(x)=−0.4→ y·f(x)=−0.4 < 0 → MISCLASSIFIED  (ξ=1.4)
+Obs 4: y=−1, f(x)=−1.5→ y·f(x)=1.5 > 1 → outside margin (ξ=0)
+Obs 5: y=−1, f(x)=−0.7→ y·f(x)=0.7     → inside margin  (ξ=0.3)</pre>
+<h3>Worked Example: Distance to Hyperplane</h3>
+<pre class="code-block">Hyperplane: 3X₁ + 4X₂ − 12 = 0   ||β|| = √(9+16) = 5
 
-<h3>Worked Example: Hyperplane Distance</h3>
-<div class="key-point"><strong>Hyperplane:</strong> 3X<sub>1</sub> + 4X<sub>2</sub> - 12 = 0<br>
-||&beta;|| = &radic;(9+16) = 5<br><br>
-d(2,1) = |6+4-12|/5 = 2/5 = <strong>0.4</strong><br>
-d(3,2) = |9+8-12|/5 = 5/5 = <strong>1.0</strong><br>
-d(1,2) = |3+8-12|/5 = 1/5 = <strong>0.2</strong><br><br>
-If margin width = 1, half-margin = 0.5:<br>
-&bull; (2,1): 0.4 &lt; 0.5 &rarr; inside margin<br>
-&bull; (1,2): 0.2 &lt; 0.5 &rarr; inside margin<br>
-&bull; (3,2): 1.0 &gt; 0.5 &rarr; outside margin</div>
+d(2,1) = |6+4−12|/5 = 2/5 = 0.4
+d(3,2) = |9+8−12|/5 = 5/5 = 1.0
+d(1,2) = |3+8−12|/5 = 1/5 = 0.2
 
-<h3>Kernel Functions &mdash; Non-linear SVMs</h3>
-<p>When data can't be separated by a linear boundary, <strong>kernels</strong> project data to a higher-dimensional space where linear separation IS possible.</p>
-
-<table>
-<tr><th>Kernel</th><th>Formula / Idea</th><th>Properties</th></tr>
-<tr><td><strong>Linear</strong></td><td>K(x,x') = x&middot;x'</td><td>Flat hyperplane, fast, simple</td></tr>
-<tr><td><strong>Polynomial</strong></td><td>K(x,x') = (1 + x&middot;x')<sup>d</sup></td><td>d=degree. d=1 is linear. Higher d = more complex boundary</td></tr>
-<tr><td><strong>RBF (Radial)</strong></td><td>K(x<sub>i</sub>,x<sub>i'</sub>) = exp(-&gamma;&Sigma;(x<sub>ij</sub>-x<sub>i'j</sub>)&sup2;)</td><td>Infinite-dimensional feature space. Distance-based.</td></tr>
+If margin width=1, half-margin=0.5:
+  (2,1): 0.4 < 0.5 → inside margin
+  (1,2): 0.2 < 0.5 → inside margin
+  (3,2): 1.0 > 0.5 → outside margin</pre>
+<h3>Kernel Functions</h3>
+<table class="compare-table">
+<tr><th>Kernel</th><th>Formula</th><th>Properties</th></tr>
+<tr><td><strong>Linear</strong></td><td>K(x,x') = x·x'</td><td>Flat hyperplane, fast</td></tr>
+<tr><td><strong>Polynomial</strong></td><td>K(x,x') = (1+x·x')ᵈ</td><td>d=degree, curves</td></tr>
+<tr><td><strong>RBF</strong></td><td>K(xᵢ,xᵢ') = exp(−γΣ(xᵢⱼ−xᵢ'ⱼ)²)</td><td>∞-dimensional, distance-based</td></tr>
 </table>
+<div class="diagram">  Kernel Trick:
 
-<div class="diagram-box">
-  Feature Expansion / Kernel Trick:
-  
-  Original 1D (not separable):    Projected to 2D (separable!):
-  
-  o o o * * * o o o              o     o  o
-  &lt;---&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;---&gt;               o  *  *  * o
-  Can't draw a point to separate    ___/  *  *  \\___   
-                                    Line separates!
-  Transformation: y = x&sup2;
-  Maps 1D &rarr; 2D where linear separation exists
-</div>
+  Original 1D (not separable):     Projected to 2D (separable!):
 
+  ○ ○ ○ ∗ ∗ ∗ ○ ○ ○              ○     ○  ○
+  ←─────────────────→               ○  ∗  ∗  ∗ ○
+  Can't separate!                    ▔▔╱  ∗  ∗  ╲▔▔
+                                     Line separates!
+  Transformation: y = x²
+  Linear in transformed space = nonlinear in original</div>
 <h3>RBF Kernel: Worked Example</h3>
-<div class="key-point"><strong>Given:</strong> x<sub>1</sub>=(1,2), x<sub>2</sub>=(3,4), x<sub>3</sub>=(2,3), &gamma;=0.5<br><br>
-||x<sub>1</sub>-x<sub>2</sub>||&sup2; = (1-3)&sup2;+(2-4)&sup2; = 4+4 = <strong>8</strong><br>
-||x<sub>1</sub>-x<sub>3</sub>||&sup2; = (1-2)&sup2;+(2-3)&sup2; = 1+1 = <strong>2</strong><br><br>
-K(x<sub>1</sub>,x<sub>2</sub>) = e<sup>-0.5&times;8</sup> = e<sup>-4</sup> &asymp; <strong>0.0183</strong> (very low similarity)<br>
-K(x<sub>1</sub>,x<sub>3</sub>) = e<sup>-0.5&times;2</sup> = e<sup>-1</sup> &asymp; <strong>0.3679</strong> (higher similarity)<br><br>
-<strong>Interpretation:</strong> K=1 &rarr; identical points. K&rarr;0 &rarr; far apart.<br>
-<strong>&gamma; effect:</strong> Higher &gamma; &rarr; faster decay &rarr; more localized influence &rarr; more complex boundary &rarr; risk of overfitting</div>
+<pre class="code-block">x₁=(1,2), x₂=(3,4), x₃=(2,3),  γ=0.5
 
-<h3>Feature Expansion Example</h3>
-<div class="key-point"><strong>Transformation:</strong> Z<sub>1</sub>=X<sub>1</sub>&sup2;, Z<sub>2</sub>=X<sub>2</sub>&sup2;<br>
-Linear boundary in Z-space: Z<sub>1</sub>+Z<sub>2</sub>=4 &rarr; X<sub>1</sub>&sup2;+X<sub>2</sub>&sup2;=4<br>
-This is a <strong>circle</strong> in the original space! Linear in transformed space = nonlinear in original space.</div>
+||x₁−x₂||² = (1−3)²+(2−4)² = 8
+||x₁−x₃||² = (1−2)²+(2−3)² = 2
 
+K(x₁,x₂) = e^(−0.5×8) = e^(−4) ≈ 0.0183  (low similarity)
+K(x₁,x₃) = e^(−0.5×2) = e^(−1) ≈ 0.3679  (higher similarity)
+
+Higher γ → faster decay → more localized → more complex boundary → overfit risk</pre>
 <h3>Multiclass SVM</h3>
-<table>
-<tr><th>Method</th><th>Classifiers</th><th>How</th></tr>
-<tr><td><strong>OVR (One-vs-Rest)</strong></td><td>K classifiers</td><td>Each class vs all others. Pick highest confidence.</td></tr>
-<tr><td><strong>OVO (One-vs-One)</strong></td><td>K(K-1)/2</td><td>Every pair. Majority vote wins.</td></tr>
+<table class="compare-table">
+<tr><th>Method</th><th># Classifiers</th><th>How</th></tr>
+<tr><td><strong>OVR</strong> (One-vs-Rest)</td><td>K</td><td>Each class vs all others. Highest confidence wins.</td></tr>
+<tr><td><strong>OVO</strong> (One-vs-One)</td><td>K(K−1)/2</td><td>Every pair. Majority vote wins.</td></tr>
 </table>
-
-<div class="key-point"><strong>OVR Example (3 classes):</strong><br>
-Model 1: Apple vs (Banana+Orange) &rarr; score 0.80<br>
-Model 2: Banana vs (Apple+Orange) &rarr; score 0.10<br>
-Model 3: Orange vs (Apple+Banana) &rarr; score 0.20<br>
-Predict: Apple (highest score)<br><br>
-<strong>OVO Example (3 classes):</strong> 3 choose 2 = 3 classifiers<br>
-A vs B &rarr; A, A vs C &rarr; A, B vs C &rarr; B<br>
-Votes: A=2, B=1, C=0 &rarr; Predict: Apple</div>
-
 <h3>SVM vs Logistic Regression</h3>
 <ul>
-<li>When classes are (nearly) <strong>separable</strong>, SVM does better than LR.</li>
-<li>When not, LR (with ridge penalty) and SVM are very similar.</li>
-<li>If you need <strong>probability estimates</strong>, use LR.</li>
-<li>For <strong>nonlinear boundaries</strong>, kernel SVMs are popular.</li>
-<li>SVM works well when <strong>p &gt; n</strong> (more features than observations).</li>
+<li>Classes (nearly) <strong>separable</strong> → SVM better</li>
+<li>Need <strong>probabilities</strong> → use LR</li>
+<li><strong>p > n</strong> (more features than obs) → SVM works well</li>
+<li>Nonlinear boundaries → kernel SVMs</li>
 </ul>
+<h3>Python</h3>
+<pre class="code-block">from sklearn.svm import SVC, LinearSVC
 
-<h3>Python Implementation</h3>
-<div class="formula-box">from sklearn.svm import SVC, LinearSVC<br><br>
-# Linear SVM<br>
-model = LinearSVC()  # fast, linear only<br>
-model = SVC(kernel='linear')  # slower, same result<br><br>
-# Polynomial kernel<br>
-model = SVC(kernel='poly', degree=3)<br><br>
-# RBF kernel<br>
-model = SVC(kernel='rbf', gamma=0.5, C=1.0)<br><br>
-# Multiclass<br>
-from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier<br>
-ovr = OneVsRestClassifier(SVC(kernel='linear'))<br>
-ovo = OneVsOneClassifier(SVC(kernel='linear'))</div>
-</div>`
+model = LinearSVC()              # fast, linear only
+model = SVC(kernel='poly', degree=3)
+model = SVC(kernel='rbf', gamma=0.5, C=1.0)
+
+# Multiclass
+from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier
+ovr = OneVsRestClassifier(SVC(kernel='linear'))
+ovo = OneVsOneClassifier(SVC(kernel='linear'))</pre>`
 };
 
-const allQuestions=[
-{topic:'pca',q:'What is the first step before applying PCA?',opts:['Compute eigenvalues','Standardize/normalize the data','Find the covariance matrix','Choose the number of components'],ans:1,expl:'PCA is sensitive to variance differences between features. Standardizing ensures no variable dominates due to scale.'},
-{topic:'pca',q:'Eigenvalues of a covariance matrix are &lambda;<sub>1</sub>=5.5, &lambda;<sub>2</sub>=1.2, &lambda;<sub>3</sub>=0.3. What is PVE for PC1?',opts:['78.6%','17.1%','95.7%','4.3%'],ans:0,expl:'PVE<sub>1</sub> = 5.5/(5.5+1.2+0.3) = 5.5/7.0 = 0.786 = 78.6%'},
-{topic:'pca',q:'After PCA, the second principal component is:',opts:['The direction with minimum variance','The direction with maximum variance orthogonal to PC1','A random direction','Always equal to PC1'],ans:1,expl:'PC2 maximizes variance subject to being uncorrelated (orthogonal) with PC1.'},
-{topic:'pca',q:'What is the maximum number of principal components for a dataset with n=50 observations and p=4 features?',opts:['50','4','3','min(49,4)=4'],ans:3,expl:'Maximum PCs = min(n-1, p) = min(49, 4) = 4.'},
-{topic:'pca',q:'The scree plot shows PVE vs component number. How do you choose the number of PCs?',opts:['Always use all PCs','Use only PC1','Look for an elbow where additional PCs add little variance','Choose the PC with lowest PVE'],ans:2,expl:'The elbow point indicates diminishing returns. Components after the elbow contribute little additional explained variance.'},
-{topic:'pca',q:'In PCA, what does the loading vector represent?',opts:['The eigenvalues','The direction in feature space along which data vary the most','The projected data points','The original data'],ans:1,expl:'The loading vector defines the direction (linear combination weights) of each principal component.'},
-{topic:'pca',q:'Dataset: Temp and Humidity perfectly correlated. After PCA, how many PCs needed?',opts:['2','1','0','3'],ans:1,expl:'If features are perfectly correlated, one PC captures 100% of variance. The second eigenvalue is 0.'},
-{topic:'pca',q:'Covariance matrix &Sigma; = [[4,3],[3,9]]. Eigenvalue equation gives &lambda;&sup2; - 13&lambda; + 27 = 0. What are the eigenvalues?',opts:['10.4 and 2.6','6.5 and 6.5','4 and 9','13 and 0'],ans:0,expl:'Using quadratic formula: &lambda; = (13&plusmn;&radic;(169-108))/2 = (13&plusmn;&radic;61)/2 &asymp; 10.4 and 2.6'},
-{topic:'kmeans',q:'K-means is guaranteed to find the global minimum. True or false?',opts:['True','False &mdash; it only finds a local minimum','True if K=2','True with enough iterations'],ans:1,expl:'K-means converges to a local minimum that depends on initialization. Run multiple times with different starting points.'},
-{topic:'kmeans',q:'In K-means, what does the centroid represent?',opts:['The median of the cluster','The mode of the cluster','The vector of feature means for observations in the cluster','The closest point to all others'],ans:2,expl:'The centroid is the mean of all observations in the cluster for each feature dimension.'},
-{topic:'kmeans',q:'Given points A(1,1), B(2,2) in cluster 1. What is the centroid?',opts:['(1,1)','(1.5,1.5)','(2,2)','(3,3)'],ans:1,expl:'Centroid = ((1+2)/2, (1+2)/2) = (1.5, 1.5).'},
-{topic:'kmeans',q:'K-means requires specifying K in advance. Which alternative does NOT?',opts:['Random Forest','Hierarchical Clustering','Logistic Regression','Linear SVM'],ans:1,expl:'Hierarchical clustering produces a dendrogram allowing any K to be chosen after the fact by cutting at different heights.'},
-{topic:'kmeans',q:'Two properties of K-means cluster sets: (1) every obs belongs to at least one cluster, and (2):',opts:['Clusters can overlap','Clusters are non-overlapping','Clusters must have equal size','Outliers are excluded'],ans:1,expl:'K-means produces non-overlapping partitions: C<sub>k</sub> &cap; C<sub>k\'</sub> = &empty;'},
-{topic:'kmeans',q:'How does K-means handle the problem of local minima?',opts:['It uses gradient descent','Run the algorithm multiple times with different random starts','Increase K until convergence','Use hierarchical clustering first'],ans:1,expl:'The standard approach: run K-means with multiple random initializations and keep the result with lowest total within-cluster variation.'},
-{topic:'hierarchical',q:'In complete linkage, the distance between two clusters is:',opts:['Minimum pairwise distance','Maximum pairwise distance','Average pairwise distance','Centroid distance'],ans:1,expl:'Complete linkage = max distance between any pair of observations from the two clusters. Produces compact clusters.'},
-{topic:'hierarchical',q:'In a dendrogram, lower fusion height means:',opts:['More different clusters','More similar observations being merged','Worse clustering','Random assignment'],ans:1,expl:'Observations that merge at low heights are very similar. Height represents dissimilarity.'},
-{topic:'hierarchical',q:'Given d(A,B)=1.41, d(C,D)=1.41, d(A,C)=9.9, d(B,D)=9.9. Complete linkage distance between {A,B} and {C,D}?',opts:['1.41','9.9','Maximum of all cross-cluster distances','Need more info'],ans:2,expl:'Complete linkage = max of all pairwise distances between the two clusters = max(d(A,C), d(A,D), d(B,C), d(B,D)).'},
-{topic:'hierarchical',q:'Cutting a dendrogram at a higher height results in:',opts:['More clusters','Fewer clusters','Same number of clusters','No clusters'],ans:1,expl:'Higher cut = fewer, larger clusters. Lower cut = more, smaller clusters.'},
-{topic:'hierarchical',q:'Which linkage type can produce long, chain-like clusters?',opts:['Complete','Average','Single','Ward'],ans:2,expl:'Single linkage uses minimum distance, allowing chains where clusters are linked by single close pairs, forming elongated shapes.'},
-{topic:'nn',q:'What activation function outputs values between 0 and 1?',opts:['ReLU','Tanh','Sigmoid','Leaky ReLU'],ans:2,expl:'Sigmoid: g(z) = 1/(1+e^(-z)). Output range is (0,1). Used for binary classification output layers.'},
-{topic:'nn',q:'ReLU activation function: g(z) = max(0,z). What is g(-3)?',opts:['3','0','-3','0.1'],ans:1,expl:'ReLU outputs 0 for any negative input. g(-3) = max(0,-3) = 0.'},
-{topic:'nn',q:'What is the "dying ReLU" problem?',opts:['ReLU outputs explode to infinity','Neurons get stuck outputting 0 for all inputs','ReLU is too slow','Network becomes too deep'],ans:1,expl:'If weights cause z to always be negative, ReLU always outputs 0 and gradient is 0, so the neuron stops learning permanently.'},
-{topic:'nn',q:'Leaky ReLU differs from ReLU by:',opts:['Having a maximum output','Allowing a small non-zero gradient for negative inputs','Being differentiable everywhere','Having no parameters'],ans:1,expl:'Leaky ReLU: g(z) = max(0.1z, z). For z<0, output is 0.1z instead of 0, keeping the gradient alive.'},
-{topic:'nn',q:'Which activation function converts outputs to probabilities summing to 1?',opts:['Sigmoid','ReLU','Tanh','Softmax'],ans:3,expl:'Softmax: e^(z_k)/&Sigma;e^(z_j). Outputs sum to 1. Used for multi-class classification output layer.'},
-{topic:'nn',q:'In forward propagation, what is computed first for each neuron?',opts:['The gradient','The activation function','The weighted sum z = &Sigma;w<sub>i</sub>x<sub>i</sub> + b','The loss'],ans:2,expl:'First compute weighted sum z, then apply activation function g(z). The loss comes after the entire forward pass.'},
-{topic:'nn',q:'Backpropagation uses which mathematical rule?',opts:['Product rule','Quotient rule','Chain rule','Power rule'],ans:2,expl:'Backpropagation computes gradients layer by layer using the chain rule: &part;Loss/&part;w = &part;Loss/&part;y&#770; &middot; &part;y&#770;/&part;z &middot; &part;z/&part;w'},
-{topic:'nn',q:'Given x<sub>1</sub>=1, x<sub>2</sub>=2, weights w<sub>1</sub>=0.5, w<sub>2</sub>=0.3, bias=0.1. What is z?',opts:['0.9','1.2','1.5','0.6'],ans:1,expl:'z = 0.5(1) + 0.3(2) + 0.1 = 0.5 + 0.6 + 0.1 = 1.2'},
-{topic:'nn',q:'Sigmoid and tanh functions suffer from what problem in deep networks?',opts:['Dying neurons','Vanishing gradients','Computational expense','Memory overflow'],ans:1,expl:'For very large or very small z, sigmoid/tanh gradients approach 0, making weight updates negligible in early layers.'},
-{topic:'nn',q:'What is the role of bias in a neural network?',opts:['To prevent overfitting','To shift the activation function, enabling output even when inputs are zero','To reduce the number of weights','To normalize the inputs'],ans:1,expl:'Bias allows the neuron to produce non-zero output even when all inputs are zero, adding flexibility to the model.'},
-{topic:'svm',q:'In SVM, what is the margin?',opts:['The error rate','The distance between the closest data points of opposite classes to the hyperplane','The number of support vectors','The kernel parameter'],ans:1,expl:'The margin is the distance from the decision boundary (hyperplane) to the nearest data points. SVM maximizes this.'},
-{topic:'svm',q:'Support vectors are:',opts:['All training points','Points farthest from the hyperplane','Points on or within the margin boundary that influence the hyperplane position','Outliers'],ans:2,expl:'Support vectors are the critical points closest to the boundary. Removing them would change the hyperplane.'},
-{topic:'svm',q:'In soft-margin SVM, if &xi;<sub>i</sub> > 1 for observation i, then:',opts:['The point is correctly classified','The point is on the margin','The point is misclassified','The point is a support vector'],ans:2,expl:'&xi;<sub>i</sub> > 1 means the point is on the wrong side of the hyperplane &mdash; it is misclassified.'},
-{topic:'svm',q:'Increasing C in SVM (penalty parameter):',opts:['Allows more margin violations (wider margin)','Penalizes violations more (narrower margin, fewer violations)','Has no effect','Always improves accuracy'],ans:1,expl:'Larger C = heavier penalty for violations = fewer violations tolerated = narrower margin. Small C = wider, more forgiving margin.'},
-{topic:'svm',q:'The RBF kernel: K(x<sub>i</sub>,x<sub>j</sub>) = exp(-&gamma;||x<sub>i</sub>-x<sub>j</sub>||&sup2;). Increasing &gamma; causes:',opts:['Smoother boundary','More complex, localized boundary (risk of overfitting)','No change','Always better accuracy'],ans:1,expl:'Higher &gamma; = faster exponential decay = each point has very local influence = more complex/wiggly boundary = risk of overfitting.'},
-{topic:'svm',q:'For OVR (One-vs-Rest) classification with 5 classes, how many binary classifiers are needed?',opts:['5','10','25','4'],ans:0,expl:'OVR: K classifiers, one per class (class k vs all others). For 5 classes: 5 classifiers.'},
-{topic:'svm',q:'For OVO (One-vs-One) classification with 5 classes, how many binary classifiers?',opts:['5','10','20','25'],ans:1,expl:'OVO: K(K-1)/2 = 5(4)/2 = 10 classifiers, one for each pair of classes.'},
-{topic:'svm',q:'Hyperplane: 2X<sub>1</sub> + X<sub>2</sub> - 5 = 0. Point (1,3). What is f(x)?',opts:['0','1','2','-1'],ans:0,expl:'f(1,3) = 2(1) + 3 - 5 = 2 + 3 - 5 = 0. The point lies exactly on the hyperplane.'},
-{topic:'svm',q:'When is SVM preferred over logistic regression?',opts:['When you need probability estimates','When classes are nearly separable','When you have very few features','When data is time-series'],ans:1,expl:'SVM excels when classes are (nearly) separable. For probability estimates, logistic regression is preferred.'},
-{topic:'svm',q:'What does the kernel trick allow SVM to do?',opts:['Speed up training','Find nonlinear boundaries without explicitly computing high-dimensional features','Reduce the number of support vectors','Perform regression'],ans:1,expl:'The kernel computes inner products in a high-dimensional space without explicitly mapping data there, enabling nonlinear boundaries.'},
-{topic:'pca',q:'Z<sub>1</sub> = 0.6X<sub>1</sub> + 0.6X<sub>2</sub> + 0.529X<sub>3</sub>. All loadings are positive. What does PC1 represent?',opts:['Contrast between features','Overall magnitude across all features','Random noise','Only X<sub>1</sub>'],ans:1,expl:'All positive loadings mean PC1 increases when ALL original variables increase. It represents overall "size" or effort.'},
-{topic:'nn',q:'A single-layer perceptron can solve which type of problem?',opts:['Any classification','Only linearly separable problems','Any regression','Only non-linear problems'],ans:1,expl:'A single-layer perceptron (no hidden layers) can only learn linear decision boundaries. Multiple layers are needed for non-linear patterns.'},
-{topic:'svm',q:'Geometric margin is invariant to the scale of &beta;. Why do we add the constraint ||&beta;||=1?',opts:['To make the problem unique and well-defined','To reduce computation','To ensure all points are classified','To make C unnecessary'],ans:0,expl:'Without fixing ||&beta;||, we could multiply &beta; by any constant without changing the hyperplane, making M unbounded. The constraint makes the optimization well-posed.'},
-{topic:'kmeans',q:'K-means uses which distance metric by default?',opts:['Manhattan','Cosine','Euclidean','Mahalanobis'],ans:2,expl:'K-means uses Euclidean distance to assign observations to the nearest centroid.'},
-{topic:'pca',q:'If all eigenvalues are equal, what does this mean?',opts:['Data is perfectly correlated','No direction has more variance than others; PCA is not useful for reduction','Data has no variance','The covariance matrix is singular'],ans:1,expl:'Equal eigenvalues mean variance is spread equally in all directions. No single direction captures more information, so dimensionality reduction loses information uniformly.'},
-{topic:'nn',q:'What is the difference between a perceptron and an MLP?',opts:['Perceptron has no activation; MLP does','Perceptron has no hidden layers; MLP has one or more','Perceptron is for regression; MLP is for classification','No difference'],ans:1,expl:'MLP (Multi-Layer Perceptron) has hidden layers between input and output, allowing it to learn non-linear patterns that a single-layer perceptron cannot.'},
-{topic:'svm',q:'LinearSVC() vs SVC(kernel="linear") in sklearn:',opts:['Identical in every way','Different optimizers; LinearSVC is faster','SVC is always better','LinearSVC supports kernels'],ans:1,expl:'LinearSVC uses liblinear (fast, linear only). SVC uses libsvm (slower, supports all kernels). Results may differ slightly due to different optimization.'},
-{topic:'hierarchical',q:'Ward linkage minimizes:',opts:['Maximum distance','Minimum distance','Total within-cluster sum of squares','Average distance'],ans:2,expl:'Ward linkage merges clusters that result in the minimum increase in total within-cluster variance. Similar philosophy to K-means.'},
-{topic:'nn',q:'Tanh function range is (-1, 1). Why is this preferred over sigmoid in hidden layers?',opts:['It is faster to compute','Its output is zero-centered, which helps optimization','It never saturates','It has larger gradients everywhere'],ans:1,expl:'Zero-centered outputs mean that gradients don\'t have a systematic bias toward one direction, improving convergence.'},
+const FLASHCARDS=[
+{t:'pca',q:'What is PCA?',a:'Dimensionality reduction method that finds linear combinations of variables with maximal variance, mutually uncorrelated. Solved via eigendecomposition of covariance matrix.'},
+{t:'pca',q:'PCA: First principal component formula',a:'Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ, subject to Σφⱼ₁² = 1 (normalization constraint)'},
+{t:'pca',q:'PCA: How to compute PVE',a:'PVEₘ = λₘ / Σλⱼ (eigenvalue / sum of all eigenvalues). PVEs sum to 1.'},
+{t:'pca',q:'PCA: Maximum number of PCs',a:'min(n−1, p) where n = observations, p = features'},
+{t:'pca',q:'PCA: 5 steps in order',a:'1. Standardize  2. Covariance matrix  3. Eigenvalues/eigenvectors  4. Choose # PCs (scree plot)  5. Project data'},
+{t:'pca',q:'PCA: Why standardize first?',a:'PCA is variance-sensitive. Without standardizing, features with larger scales dominate the principal components.'},
+{t:'pca',q:'PCA: What is orthogonality constraint?',a:'Each PC must be uncorrelated (perpendicular) to all previous PCs. PC2 direction is orthogonal to PC1.'},
+{t:'pca',q:'PCA vs Clustering: what is the difference?',a:'PCA finds directions of maximum variance (dimensionality reduction). Clustering finds homogeneous subgroups in the data.'},
+{t:'kmeans',q:'K-Means: objective function',a:'Minimize Σₖ WCV(Cₖ) = Σₖ (1/|Cₖ|) Σᵢ,ᵢ\' ||xᵢ − xᵢ\'||². Equivalently, minimize sum of squared distances to centroids.'},
+{t:'kmeans',q:'K-Means: algorithm steps',a:'1. Random assignment to K clusters  2a. Compute centroids (feature means)  2b. Reassign to nearest centroid  Repeat until convergence.'},
+{t:'kmeans',q:'K-Means: does it find global minimum?',a:'NO. Only guaranteed to find a local minimum. Run multiple times with different random starts, keep lowest WCV.'},
+{t:'kmeans',q:'K-Means: two cluster set properties',a:'1. Every observation belongs to at least one cluster (union = all obs)  2. Non-overlapping (intersection = empty)'},
+{t:'kmeans',q:'K-Means: what is the centroid?',a:'The vector of feature means for all observations in the cluster. The "center" of the cluster.'},
+{t:'hierarchical',q:'Hierarchical clustering: key advantage',a:'Does NOT require specifying K in advance. Produces a dendrogram — cut at any height for desired number of clusters.'},
+{t:'hierarchical',q:'Agglomerative algorithm steps',a:'1. Each obs is its own cluster  2. Merge two closest clusters  3. Repeat until single cluster  Bottom-up approach.'},
+{t:'hierarchical',q:'4 linkage types',a:'Single (min distance), Complete (max distance), Average (mean of all pairs), Ward (min within-cluster variance increase)'},
+{t:'hierarchical',q:'Dendrogram interpretation',a:'Height = dissimilarity at merge. Lower merge = more similar. Cut at height h to get clusters.'},
+{t:'hierarchical',q:'Complete linkage: how computed?',a:'Maximum of all pairwise distances between observations in two clusters. Produces compact, spherical clusters.'},
+{t:'hierarchical',q:'Single linkage: what problem?',a:'Can produce long, chain-like clusters (chaining effect). One close pair can link otherwise distant groups.'},
+{t:'nn',q:'NN: Sigmoid function',a:'g(z) = 1/(1+e⁻ᶻ), range (0,1). Binary classification output. Suffers vanishing gradient in deep nets.'},
+{t:'nn',q:'NN: Tanh function',a:'g(z) = (eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ), range (−1,1). Zero-centered (better for hidden layers). Vanishing gradient issue.'},
+{t:'nn',q:'NN: ReLU function',a:'g(z) = max(0, z), range [0,∞). Most popular for hidden layers. Fixes vanishing gradient. Issue: dying ReLU.'},
+{t:'nn',q:'NN: Leaky ReLU',a:'g(z) = max(0.1z, z). Allows small gradient for negative z, preventing dying ReLU problem.'},
+{t:'nn',q:'NN: Softmax function',a:'g(zₖ) = eᶻᵏ / Σeᶻʲ. Outputs sum to 1 (probabilities). Used for multi-class classification output layer.'},
+{t:'nn',q:'NN: forward propagation',a:'z = Σwᵢxᵢ + b (weighted sum + bias), then output = g(z) (activation). Layer by layer, input → output.'},
+{t:'nn',q:'NN: backpropagation',a:'Compute loss, propagate error backward using chain rule. ∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w. Update: w = w − η·∂L/∂w'},
+{t:'nn',q:'NN: vanishing gradient problem',a:'Sigmoid/tanh gradients approach 0 for large |z|. Makes weight updates negligible in early layers of deep networks. ReLU fixes this.'},
+{t:'nn',q:'NN: dying ReLU problem',a:'If weights cause z to always be negative, ReLU always outputs 0 and gradient is 0. Neuron stops learning permanently. Fix: Leaky ReLU.'},
+{t:'nn',q:'NN: role of bias',a:'Allows neuron to produce non-zero output even when all inputs are zero. Shifts activation function left/right.'},
+{t:'nn',q:'NN: which activation for binary output?',a:'Sigmoid (output in (0,1), interpretable as probability).'},
+{t:'nn',q:'NN: which activation for multi-class output?',a:'Softmax (outputs sum to 1, each represents class probability).'},
+{t:'svm',q:'SVM: what is the margin?',a:'Distance from decision boundary (hyperplane) to the nearest data points of either class. SVM maximizes this.'},
+{t:'svm',q:'SVM: what are support vectors?',a:'Points on or within the margin boundary that directly influence the hyperplane position. Removing them changes the boundary.'},
+{t:'svm',q:'SVM: distance from point to hyperplane',a:'d = |f(x)| / ||β|| = |β₀ + β·x| / √(Σβⱼ²)'},
+{t:'svm',q:'SVM: slack variable interpretation (ξ>1)',a:'ξ=0: outside margin. 0<ξ<1: inside margin (correct side). ξ=1: on hyperplane. ξ>1: MISCLASSIFIED.'},
+{t:'svm',q:'SVM: C parameter effect',a:'Large C → few violations, narrow margin (low bias, high variance). Small C → many violations, wide margin (high bias, low variance).'},
+{t:'svm',q:'SVM: three kernel types',a:'Linear: K=x·x\'. Polynomial: K=(1+x·x\')ᵈ. RBF: K=exp(−γ||x−x\'||²).'},
+{t:'svm',q:'SVM: RBF γ effect',a:'High γ → localized influence, complex/wiggly boundary, overfit risk. Low γ → broad influence, smoother boundary.'},
+{t:'svm',q:'SVM: OVR classifiers for K classes',a:'K classifiers (one per class vs all others). Pick highest confidence.'},
+{t:'svm',q:'SVM: OVO classifiers for K classes',a:'K(K−1)/2 classifiers (one per pair). Majority vote wins.'},
+{t:'svm',q:'SVM: when better than logistic regression?',a:'When classes are (nearly) separable. When p > n (more features than observations). For nonlinear boundaries (kernel SVM).'},
+{t:'svm',q:'SVM: maximal margin optimization',a:'max M  s.t. ||β||=1,  yᵢ(f(xᵢ)) ≥ M  for all i'},
+{t:'svm',q:'SVM: soft margin optimization',a:'max M  s.t. ||β||=1,  yᵢ(f(xᵢ)) ≥ M(1−ξᵢ),  ξᵢ≥0,  Σξᵢ≤C'},
 ];
 
-const flashcards=[
-{front:'PCA: First principal component formula',back:'Z<sub>1</sub> = &phi;<sub>11</sub>X<sub>1</sub> + &phi;<sub>21</sub>X<sub>2</sub> + ... + &phi;<sub>p1</sub>X<sub>p</sub><br>Subject to &Sigma;&phi;<sub>j1</sub>&sup2; = 1'},
-{front:'PCA: Proportion of Variance Explained',back:'PVE<sub>m</sub> = &lambda;<sub>m</sub> / &Sigma;&lambda;<sub>j</sub> (eigenvalue / total eigenvalues)'},
-{front:'PCA: Maximum number of PCs',back:'min(n-1, p)'},
-{front:'PCA: 5 Steps',back:'1. Standardize<br>2. Covariance matrix<br>3. Eigenvalues/vectors<br>4. Choose # PCs (scree plot)<br>5. Project data'},
-{front:'PCA: Why standardize?',back:'PCA is variance-sensitive. Without standardizing, variables with large scales dominate the PCs.'},
-{front:'K-Means: Objective function',back:'Minimize &Sigma;<sub>k</sub> WCV(C<sub>k</sub>) = &Sigma;<sub>k</sub> (1/|C<sub>k</sub>|) &Sigma; ||x<sub>i</sub>-x<sub>i\'</sub>||&sup2;'},
-{front:'K-Means: Algorithm steps',back:'1. Random init assignments<br>2a. Compute centroids<br>2b. Reassign to nearest centroid<br>Repeat until convergence'},
-{front:'K-Means: Global optimum?',back:'NO. Only guaranteed local minimum. Run multiple times with different starts.'},
-{front:'Hierarchical: 4 linkage types',back:'Single (min), Complete (max), Average (mean), Ward (min variance)'},
-{front:'Hierarchical: Reading a dendrogram',back:'Height = dissimilarity at merge. Cut at height h to get clusters. Lower merge = more similar.'},
-{front:'K-Means vs Hierarchical',back:'K-Means: specify K, random init, scalable. Hierarchical: no K needed, deterministic, O(n&sup2;+) memory.'},
-{front:'NN: Sigmoid function',back:'g(z) = 1/(1+e<sup>-z</sup>), range (0,1). Binary classification output. Vanishing gradient issue.'},
-{front:'NN: Tanh function',back:'g(z) = (e<sup>z</sup>-e<sup>-z</sup>)/(e<sup>z</sup>+e<sup>-z</sup>), range (-1,1). Zero-centered. Hidden layers.'},
-{front:'NN: ReLU function',back:'g(z) = max(0, z). Range [0,&infin;). Most popular for hidden layers. Dying ReLU problem.'},
-{front:'NN: Leaky ReLU',back:'g(z) = max(0.1z, z). Fixes dying ReLU by allowing small gradient for negative z.'},
-{front:'NN: Softmax function',back:'g(z<sub>k</sub>) = e<sup>z<sub>k</sub></sup>/&Sigma;e<sup>z<sub>j</sub></sup>. Outputs sum to 1. Multi-class output layer.'},
-{front:'NN: Forward propagation',back:'z = &Sigma;w<sub>i</sub>x<sub>i</sub> + b, then output = g(z). Layer by layer, input &rarr; output.'},
-{front:'NN: Backpropagation',back:'Compute loss, propagate error backward using chain rule, update weights: w = w - &eta;&middot;&part;L/&part;w'},
-{front:'NN: Vanishing gradient problem',back:'Sigmoid/tanh gradients approach 0 for large |z|, making weight updates negligible in deep networks. ReLU fixes this.'},
-{front:'SVM: Hyperplane equation',back:'&beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + ... + &beta;<sub>p</sub>X<sub>p</sub> = 0'},
-{front:'SVM: Distance to hyperplane',back:'d = |f(x)| / ||&beta;|| = |&beta;<sub>0</sub>+&beta;&middot;x| / &radic;(&Sigma;&beta;<sub>j</sub>&sup2;)'},
-{front:'SVM: Soft margin slack interpretation',back:'&xi;=0: outside margin (correct). 0<&xi;<1: inside margin (correct). &xi;=1: on boundary. &xi;>1: MISCLASSIFIED.'},
-{front:'SVM: C parameter',back:'Large C: few violations, narrow margin (low bias, high var). Small C: many violations, wide margin (high bias, low var).'},
-{front:'SVM: Three kernel types',back:'Linear: K=x&middot;x\'. Polynomial: K=(1+x&middot;x\')^d. RBF: K=exp(-&gamma;||x-x\'||&sup2;)'},
-{front:'SVM: RBF &gamma; effect',back:'High &gamma;: localized influence, complex boundary, overfit risk. Low &gamma;: broad influence, smoother boundary.'},
-{front:'SVM: OVR classifiers for K classes',back:'K classifiers (one per class vs all others)'},
-{front:'SVM: OVO classifiers for K classes',back:'K(K-1)/2 classifiers (one per pair)'},
-{front:'SVM: When better than LR?',back:'When classes are (nearly) separable and when p > n.'},
-{front:'NN: Single neuron computation',back:'z = &Sigma;w<sub>i</sub>x<sub>i</sub> + b (weighted sum + bias), then g(z) (activation)'},
-{front:'PCA: Orthogonality constraint',back:'Each PC must be uncorrelated (perpendicular) to all previous PCs.'},
-{front:'Clustering vs PCA',back:'PCA: find directions of max variance. Clustering: find homogeneous subgroups.'},
-{front:'SVM: Maximal margin optimization',back:'max M s.t. ||&beta;||=1, y<sub>i</sub>(f(x<sub>i</sub>)) &ge; M for all i'},
-{front:'SVM: Support vector classifier optimization',back:'max M s.t. ||&beta;||=1, y<sub>i</sub>(f(x<sub>i</sub>)) &ge; M(1-&xi;<sub>i</sub>), &xi;<sub>i</sub>&ge;0, &Sigma;&xi;<sub>i</sub>&le;C'},
-];
-
-const conceptualContent={
-pca:`<div class="topic-card"><h2>PCA: Conceptual Deep Dive</h2>
-
-<h3>Why PCA Works</h3>
-<p>Imagine a cloud of data points in 3D space that forms a flat "pancake" shape. PCA finds the plane of the pancake (2 PCs capturing most variance) and projects the data onto it, reducing from 3D to 2D with minimal information loss.</p>
-
-<h3>Variance = Information</h3>
-<p>PCA equates <strong>variance with information</strong>. A direction with high variance contains more signal; a direction with low variance is likely noise. By keeping high-variance directions, we keep the signal and discard noise.</p>
-
-<h3>Common Mistakes</h3>
-<ul>
-<li><strong>Forgetting to standardize:</strong> If X<sub>1</sub> is in meters and X<sub>2</sub> is in kilometers, X<sub>1</sub> has much larger variance just from units. PCA would be dominated by X<sub>1</sub>.</li>
-<li><strong>PCA on categorical data:</strong> PCA assumes linear combinations make sense. Doesn't work for categorical features.</li>
-<li><strong>Interpreting PCs literally:</strong> PCs are combinations of ALL features. They don't always have a clean physical interpretation.</li>
-</ul>
-
-<h3>Biplot</h3>
-<p>A biplot displays both PC scores (observations) and loadings (variable contributions) on the same plot. Variable arrows show which original features contribute to which PC direction.</p>
-
-<h3>When to Use PCA</h3>
-<ul>
-<li>Visualization of high-dimensional data</li>
-<li>Preprocessing before supervised learning (reduce features)</li>
-<li>Identifying redundant features (high correlation &rarr; fewer PCs needed)</li>
-<li>Noise reduction (discard low-variance components)</li>
-</ul>
-</div>`,
-
-kmeans:`<div class="topic-card"><h2>K-Means: Conceptual Deep Dive</h2>
-
-<h3>Why Multiple Runs?</h3>
-<p>K-means is sensitive to initialization. Two different random starts can produce very different final clusters. The standard practice is to run 10-20 times and pick the best (lowest total WCV).</p>
-
-<h3>Choosing K</h3>
-<ul>
-<li><strong>Elbow method:</strong> Plot total WCV vs K. Look for an "elbow" where improvement slows down.</li>
-<li><strong>Domain knowledge:</strong> Sometimes the number of groups is known (e.g., 3 types of customers).</li>
-<li><strong>Silhouette analysis:</strong> Measures how well-separated clusters are.</li>
-</ul>
-
-<h3>Limitations of K-Means</h3>
-<ul>
-<li>Assumes <strong>spherical, equally-sized</strong> clusters</li>
-<li>Sensitive to <strong>outliers</strong> (single outlier can shift centroid)</li>
-<li>Must specify K in advance</li>
-<li>May converge to local minimum</li>
-</ul>
-
-<h3>K-Means Connection to WCV Formula</h3>
-<p>The pairwise distance formula WCV = (1/|C<sub>k</sub>|)&Sigma;||x<sub>i</sub>-x<sub>i'</sub>||&sup2; is equivalent to 2&Sigma;||x<sub>i</sub>-&mu;<sub>k</sub>||&sup2;. This equivalence means minimizing pairwise distances within a cluster is the same as minimizing distances to the centroid.</p>
-</div>`,
-
-hierarchical:`<div class="topic-card"><h2>Hierarchical Clustering: Conceptual Deep Dive</h2>
-
-<h3>Agglomerative vs Divisive</h3>
-<ul>
-<li><strong>Agglomerative (bottom-up):</strong> Start with n clusters, merge. Most common.</li>
-<li><strong>Divisive (top-down):</strong> Start with 1 cluster, split. Less common.</li>
-</ul>
-
-<h3>Linkage Choice Matters</h3>
-<p>Different linkage methods can produce very different dendrograms on the same data:</p>
-<ul>
-<li><strong>Single linkage:</strong> Tends to produce long, "chaining" clusters. Good for non-convex shapes.</li>
-<li><strong>Complete linkage:</strong> Produces compact, roughly equal-sized clusters. More robust.</li>
-<li><strong>Ward:</strong> Minimizes within-cluster variance, similar to K-means philosophy.</li>
-</ul>
-
-<h3>Common Exam Pattern</h3>
-<p>Given a distance matrix, you'll be asked to show merging steps and construct a dendrogram. Remember:</p>
-<ol>
-<li>Find the smallest distance &rarr; merge those two.</li>
-<li>Recompute distances using chosen linkage.</li>
-<li>Repeat.</li>
-</ol>
-</div>`,
-
-nn:`<div class="topic-card"><h2>Neural Networks: Conceptual Deep Dive</h2>
-
-<h3>Why Non-linearity Matters</h3>
-<p>Without activation functions, a multi-layer network collapses to a single linear transformation (matrix multiplication). Activation functions introduce non-linearity, enabling NNs to learn complex patterns like circles, spirals, and XOR.</p>
-
-<h3>Depth vs Width</h3>
-<ul>
-<li><strong>Deeper networks</strong> (more hidden layers) can learn hierarchical features (e.g., edges &rarr; shapes &rarr; faces).</li>
-<li><strong>Wider networks</strong> (more neurons per layer) can approximate more functions but may be less efficient.</li>
-</ul>
-
-<h3>Overfitting in NNs</h3>
-<p>Neural networks with many parameters easily overfit. Regularization techniques include:</p>
-<ul>
-<li><strong>Dropout:</strong> Randomly deactivate neurons during training.</li>
-<li><strong>Early stopping:</strong> Stop training when validation error starts increasing.</li>
-<li><strong>Weight decay (L2):</strong> Penalize large weights.</li>
-</ul>
-
-<h3>Exam Strategy for NN Problems</h3>
-<ol>
-<li>Draw the network architecture</li>
-<li>Label all weights and biases</li>
-<li>Compute z for each neuron (weighted sum + bias)</li>
-<li>Apply activation function to get output</li>
-<li>Feed forward through each layer</li>
-</ol>
-
-<h3>Common Activation Function Exam Questions</h3>
-<ul>
-<li>"Which function for output of binary classifier?" &rarr; Sigmoid</li>
-<li>"Which function for multi-class output?" &rarr; Softmax</li>
-<li>"Which function avoids vanishing gradient?" &rarr; ReLU</li>
-<li>"Which fixes dying ReLU?" &rarr; Leaky ReLU</li>
-<li>"Which is zero-centered?" &rarr; Tanh</li>
-</ul>
-</div>`,
-
-svm:`<div class="topic-card"><h2>SVM: Conceptual Deep Dive</h2>
-
-<h3>Geometric Intuition</h3>
-<p>Think of SVM as placing a "road" between two classes. The road is the margin, and we want the widest road possible. Support vectors are the buildings on the edge of the road &mdash; they define how wide the road can be.</p>
-
-<h3>Why Maximize the Margin?</h3>
-<ul>
-<li>A wider margin means the classifier is more robust to small perturbations in data.</li>
-<li>Narrow margin = high variance (sensitive to individual points).</li>
-<li>Wide margin = more generalizable to unseen data.</li>
-</ul>
-
-<h3>Kernel Trick: The Big Idea</h3>
-<p>Instead of explicitly computing features in high-dimensional space (expensive), the kernel function computes the inner product directly. This gives us the EFFECT of working in high dimensions without the cost.</p>
-
-<h3>Choosing the Right Kernel</h3>
-<table>
-<tr><th>Scenario</th><th>Recommended Kernel</th></tr>
-<tr><td>Linearly separable data</td><td>Linear</td></tr>
-<tr><td>Moderate non-linearity</td><td>Polynomial (try d=2,3)</td></tr>
-<tr><td>Complex, unknown non-linearity</td><td>RBF</td></tr>
-<tr><td>More features than observations (p&gt;n)</td><td>Linear (often sufficient)</td></tr>
-</table>
-
-<h3>SVM for Regression (SVR)</h3>
-<p>SVMs can also do regression using <code>sklearn.svm.SVR</code>. Instead of maximizing margin between classes, SVR fits a tube of width &epsilon; around the data and minimizes deviations outside this tube.</p>
-
-<h3>Key Exam Patterns</h3>
-<ul>
-<li>Compute f(x) for given observations &rarr; determine classification</li>
-<li>Compute distance from point to hyperplane</li>
-<li>Interpret &xi; values (inside margin? misclassified?)</li>
-<li>Compute RBF kernel values and interpret</li>
-<li>OVR vs OVO: how many classifiers for K classes?</li>
-</ul>
-</div>`
+const QUIZZES={
+pca:[
+{q:'What is the first step before applying PCA?',o:['Compute eigenvalues','Standardize the data','Covariance matrix','Choose # components'],a:1,e:'PCA is variance-sensitive. Standardizing ensures no variable dominates due to scale.'},
+{q:'Eigenvalues λ₁=5.5, λ₂=1.2, λ₃=0.3. PVE for PC1?',o:['78.6%','17.1%','95.7%','4.3%'],a:0,e:'PVE₁ = 5.5/(5.5+1.2+0.3) = 5.5/7.0 = 78.6%'},
+{q:'PC2 is the direction with maximum variance that is:',o:['Same as PC1','Orthogonal to PC1','Random','Minimum variance'],a:1,e:'PC2 maximizes variance subject to being uncorrelated (orthogonal/perpendicular) with PC1.'},
+{q:'Max PCs for n=50, p=4?',o:['50','4','3','min(49,4)=4'],a:3,e:'Max PCs = min(n−1, p) = min(49, 4) = 4.'},
+{q:'Scree plot: how to choose # PCs?',o:['Always use all','Only PC1','Look for elbow','Lowest PVE'],a:2,e:'The elbow indicates diminishing returns. Keep PCs before the elbow.'},
+{q:'Covariance Σ=[[4,3],[3,9]]. Eigenvalue equation: λ²−13λ+27=0. Eigenvalues?',o:['10.4 and 2.6','6.5 and 6.5','4 and 9','13 and 0'],a:0,e:'Quadratic formula: λ=(13±√61)/2 ≈ 10.4 and 2.6.'},
+{q:'All eigenvalues are equal. What does this mean?',o:['Perfect correlation','PCA is not useful for reduction','No variance','Singular matrix'],a:1,e:'Equal eigenvalues → variance spread equally in all directions. No single direction captures more.'},
+{q:'Z₁=0.6X₁+0.6X₂+0.529X₃. All loadings positive. PC1 represents?',o:['Contrast between features','Overall magnitude across all features','Random noise','Only X₁'],a:1,e:'All positive loadings → PC1 increases when ALL variables increase. Represents overall "size."'},
+],
+kmeans:[
+{q:'K-means is guaranteed to find the global minimum?',o:['True','False — only local minimum','True if K=2','True with enough iterations'],a:1,e:'K-means converges to a local minimum depending on initialization. Run multiple times.'},
+{q:'What does the centroid represent?',o:['Median','Mode','Vector of feature means','Closest point to all'],a:2,e:'Centroid = mean of all observations in the cluster for each feature.'},
+{q:'A(1,1), B(2,2) in cluster 1. Centroid?',o:['(1,1)','(1.5,1.5)','(2,2)','(3,3)'],a:1,e:'Centroid = ((1+2)/2, (1+2)/2) = (1.5, 1.5).'},
+{q:'K-means requires specifying K. Which alternative does not?',o:['Random Forest','Hierarchical Clustering','Logistic Regression','Linear SVM'],a:1,e:'Hierarchical clustering produces a dendrogram, allowing any K by cutting at different heights.'},
+{q:'How does K-means handle local minima?',o:['Gradient descent','Multiple random starts, keep best','Increase K','Hierarchical first'],a:1,e:'Run with multiple random initializations, keep result with lowest total WCV.'},
+{q:'K-means uses which distance by default?',o:['Manhattan','Cosine','Euclidean','Mahalanobis'],a:2,e:'K-means assigns observations to nearest centroid using Euclidean distance.'},
+],
+hierarchical:[
+{q:'Complete linkage distance between clusters is:',o:['Minimum pairwise','Maximum pairwise','Average pairwise','Centroid distance'],a:1,e:'Complete linkage = max distance between any pair from the two clusters. Compact clusters.'},
+{q:'Lower fusion height in dendrogram means:',o:['More different','More similar observations merged','Worse clustering','Random'],a:1,e:'Lower merge height = more similar observations. Height represents dissimilarity.'},
+{q:'Cutting dendrogram at higher height gives:',o:['More clusters','Fewer clusters','Same','No clusters'],a:1,e:'Higher cut = fewer, larger clusters. Lower cut = more, smaller clusters.'},
+{q:'Which linkage produces chain-like clusters?',o:['Complete','Average','Single','Ward'],a:2,e:'Single linkage uses minimum distance, allowing chains via single close pairs.'},
+{q:'Ward linkage minimizes:',o:['Max distance','Min distance','Within-cluster sum of squares','Average distance'],a:2,e:'Ward merges clusters with minimum increase in total within-cluster variance. Similar to K-means.'},
+],
+nn:[
+{q:'Which activation outputs values between 0 and 1?',o:['ReLU','Tanh','Sigmoid','Leaky ReLU'],a:2,e:'Sigmoid: g(z) = 1/(1+e⁻ᶻ). Range (0,1). Binary classification output.'},
+{q:'ReLU: g(−3) = ?',o:['3','0','-3','0.1'],a:1,e:'ReLU outputs 0 for any negative input. max(0, −3) = 0.'},
+{q:'What is "dying ReLU"?',o:['Outputs explode','Neurons stuck at 0 permanently','Too slow','Too deep'],a:1,e:'If z always negative, ReLU always 0, gradient=0, neuron stops learning. Fix: Leaky ReLU.'},
+{q:'Leaky ReLU differs from ReLU by:',o:['Maximum output','Small gradient for negative inputs','Differentiable','No parameters'],a:1,e:'Leaky ReLU: max(0.1z, z). For z<0, output is 0.1z instead of 0.'},
+{q:'Which activation converts outputs to probabilities summing to 1?',o:['Sigmoid','ReLU','Tanh','Softmax'],a:3,e:'Softmax: eᶻᵏ/Σeᶻʲ. Outputs sum to 1. Multi-class output layer.'},
+{q:'x₁=1, x₂=2, w₁=0.5, w₂=0.3, bias=0.1. What is z?',o:['0.9','1.2','1.5','0.6'],a:1,e:'z = 0.5(1) + 0.3(2) + 0.1 = 0.5 + 0.6 + 0.1 = 1.2'},
+{q:'Backpropagation uses which mathematical rule?',o:['Product rule','Quotient rule','Chain rule','Power rule'],a:2,e:'∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w — chain rule.'},
+{q:'Sigmoid/tanh suffer from what in deep networks?',o:['Dying neurons','Vanishing gradients','Expense','Overflow'],a:1,e:'Gradients approach 0 for large |z|, making updates negligible in early layers.'},
+{q:'Tanh is preferred over sigmoid in hidden layers because:',o:['Faster','Zero-centered outputs help optimization','Never saturates','Larger gradients'],a:1,e:'Zero-centered outputs avoid systematic gradient bias, improving convergence.'},
+{q:'Single-layer perceptron can solve:',o:['Any classification','Only linearly separable','Any regression','Only non-linear'],a:1,e:'No hidden layers → only linear boundaries. Need MLP for non-linear.'},
+],
+svm:[
+{q:'SVM: what is the margin?',o:['Error rate','Distance from boundary to nearest points','# support vectors','Kernel parameter'],a:1,e:'Margin = distance from hyperplane to closest data points of either class. SVM maximizes this.'},
+{q:'Support vectors are:',o:['All training points','Farthest from boundary','Points on/within margin that influence boundary','Outliers'],a:2,e:'Support vectors are critical points closest to boundary. Removing them changes the hyperplane.'},
+{q:'If ξᵢ > 1 in soft-margin SVM:',o:['Correctly classified','On margin','Misclassified','Support vector'],a:2,e:'ξᵢ > 1 means the point is on the wrong side of the hyperplane — misclassified.'},
+{q:'Increasing C in SVM:',o:['Wider margin, more violations','Narrower margin, fewer violations','No effect','Always improves'],a:1,e:'Larger C = heavier penalty for violations = fewer tolerated = narrower margin.'},
+{q:'RBF kernel: increasing γ causes:',o:['Smoother boundary','More complex, localized boundary (overfit risk)','No change','Always better'],a:1,e:'Higher γ = faster decay = each point has local influence = complex boundary = overfit risk.'},
+{q:'OVR with 5 classes: how many classifiers?',o:['5','10','25','4'],a:0,e:'OVR: K classifiers, one per class vs all others. 5 classes = 5 classifiers.'},
+{q:'OVO with 5 classes: how many classifiers?',o:['5','10','20','25'],a:1,e:'OVO: K(K−1)/2 = 5(4)/2 = 10 classifiers, one per pair.'},
+{q:'f(x)=2X₁+X₂−5. Point (1,3). f(x)=?',o:['0','1','2','−1'],a:0,e:'f(1,3) = 2(1)+3−5 = 0. Point lies exactly on the hyperplane.'},
+{q:'When is SVM preferred over LR?',o:['Need probabilities','Classes nearly separable','Very few features','Time-series data'],a:1,e:'SVM excels when classes are (nearly) separable and when p > n.'},
+{q:'What does the kernel trick do?',o:['Speed up training','Nonlinear boundaries without explicit high-dim computation','Reduce support vectors','Regression'],a:1,e:'Kernel computes inner products in high-dim space implicitly, enabling nonlinear boundaries efficiently.'},
+{q:'LinearSVC() vs SVC(kernel="linear"):',o:['Identical','Different optimizers; LinearSVC faster','SVC always better','LinearSVC supports kernels'],a:1,e:'LinearSVC uses liblinear (fast, linear only). SVC uses libsvm (slower, supports all kernels).'},
+{q:'Why add ||β||=1 constraint?',o:['Make problem unique and well-defined','Reduce computation','Classify all points','Make C unnecessary'],a:0,e:'Without fixing ||β||, we can scale β arbitrarily without changing hyperplane, making M unbounded.'},
+]
 };
 
-let state={mode:'learn',topic:'pca',score:0,attempted:0,streak:0,fcIndex:0,fcFlipped:false,examQs:[],examIdx:0,examAnswers:[],answered:new Set()};
+const MOCK_EXAMS=[(function(){
+const all=[];Object.entries(QUIZZES).forEach(([tid,qs])=>{qs.forEach(q=>{all.push({t:tid,...q});});});
+for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+return all.slice(0,24);
+})()];
 
-function setMode(m){state.mode=m;document.querySelectorAll('.mode-tab').forEach((t,i)=>{t.classList.toggle('active',['learn','practice','flashcards','exam','conceptual'][i]===m);});renderNav();render();}
-function setTopic(id){state.topic=id;renderNav();render();}
-function renderNav(){const n=document.getElementById('topicNav');if(state.mode==='exam'||state.mode==='flashcards'){n.innerHTML='';return;}n.innerHTML=topics.map(t=>`<button class="nav-btn ${state.topic===t.id?'active':''}" onclick="setTopic('${t.id}')">${t.short}</button>`).join('');}
-function updateStats(){document.getElementById('score').textContent=state.score;document.getElementById('attempted').textContent=state.attempted;document.getElementById('accuracy').textContent=state.attempted>0?Math.round(state.score/state.attempted*100)+'%':'--';document.getElementById('streak').textContent=state.streak;}
-function render(){const c=document.getElementById('content');if(state.mode==='learn')c.innerHTML=learnContent[state.topic]||'';else if(state.mode==='practice')renderPractice(c);else if(state.mode==='flashcards')renderFlashcards(c);else if(state.mode==='exam')renderExam(c);else if(state.mode==='conceptual')c.innerHTML=conceptualContent[state.topic]||'';}
+let appState={
+  page:'dashboard',guideTopic:'pca',
+  fcIndex:0,fcFlipped:false,fcTopic:'all',fcMode:'all',
+  quizTopic:'pca',quizIndex:0,quizAnswered:false,quizSelected:-1,quizScore:0,quizTotal:0,quizDone:false,
+  mockExam:-1,mockIndex:0,mockAnswers:[],mockDone:false,mockStartTime:0,mockTimerInterval:null,
+};
 
-function renderPractice(c){const qs=allQuestions.filter(q=>q.topic===state.topic);if(!qs.length){c.innerHTML='<p>No questions for this topic yet.</p>';return;}c.innerHTML=qs.map((q,i)=>{const u=state.topic+'_'+i;return`<div class="question-card" id="qc_${u}"><div class="q-header"><span class="q-number">Q${i+1}</span><span class="q-topic">${topics.find(t=>t.id===q.topic)?.name}</span></div><div class="q-text">${q.q}</div><div class="options">${q.opts.map((o,j)=>`<div class="option" id="opt_${u}_${j}" onclick="answer('${u}',${j},${q.ans})"><div class="option-letter">${'ABCD'[j]}</div><div class="option-text">${o}</div></div>`).join('')}</div><div class="explanation" id="expl_${u}">${q.expl}</div></div>`;}).join('');}
+function loadProgress(){try{return JSON.parse(localStorage.getItem('mse446_progress'))||{};}catch{return {};}}
+function saveProgress(p){localStorage.setItem('mse446_progress',JSON.stringify(p));}
+function getProgress(){const p=loadProgress();if(!p.quizScores)p.quizScores={};if(!p.fcKnown)p.fcKnown={};if(!p.mockScores)p.mockScores=[];if(!p.lastStudy)p.lastStudy=null;if(!p.streak)p.streak=0;return p;}
+function recordQuizScore(topic,score,total){const p=getProgress();if(!p.quizScores[topic])p.quizScores[topic]=[];p.quizScores[topic].push({score,total,date:Date.now()});p.lastStudy=new Date().toDateString();saveProgress(p);}
+function recordMockScore(ei,score,total,bd){const p=getProgress();p.mockScores.push({exam:ei,score,total,breakdown:bd,date:Date.now()});p.lastStudy=new Date().toDateString();saveProgress(p);}
+function fcKey(c){return c.t+':'+c.q.substring(0,50);}
+function toggleFcKnown(key){const p=getProgress();p.fcKnown[key]=!p.fcKnown[key];p.lastStudy=new Date().toDateString();saveProgress(p);}
+function saveQuizSession(){localStorage.setItem('mse446_quizSession',JSON.stringify({quizTopic:appState.quizTopic,quizIndex:appState.quizIndex,quizScore:appState.quizScore,quizTotal:appState.quizTotal,quizDone:appState.quizDone,quizAnswered:appState.quizAnswered,quizSelected:appState.quizSelected}));}
+function loadQuizSession(){try{return JSON.parse(localStorage.getItem('mse446_quizSession'));}catch{return null;}}
+function clearQuizSession(){localStorage.removeItem('mse446_quizSession');}
+function updateStreak(){const p=getProgress();const today=new Date().toDateString();if(p.lastStudy!==today){const y=new Date(Date.now()-86400000).toDateString();p.streak=p.lastStudy===y?p.streak+1:1;p.lastStudy=today;saveProgress(p);}const el=document.getElementById('streakDisplay');if(el&&p.streak>0)el.textContent=p.streak+' day streak';}
 
-function answer(u,ch,co){if(state.answered.has(u))return;state.answered.add(u);state.attempted++;const ok=ch===co;if(ok){state.score++;state.streak++;}else{state.streak=0;}document.getElementById(`opt_${u}_${ch}`).classList.add(ok?'correct':'wrong');document.getElementById(`opt_${u}_${co}`).classList.add('correct');document.getElementById(`expl_${u}`).classList.add('visible');updateStats();}
+function navigate(page){if(appState.mockTimerInterval){clearInterval(appState.mockTimerInterval);appState.mockTimerInterval=null;}appState.page=page;if(page==='quiz'){const s=loadQuizSession();if(s&&!s.quizDone)Object.assign(appState,s);else{appState.quizIndex=0;appState.quizScore=0;appState.quizTotal=0;appState.quizDone=false;appState.quizAnswered=false;clearQuizSession();}}render();document.querySelectorAll('.nav-item').forEach(el=>{el.classList.toggle('active',el.dataset.page===page);});document.getElementById('main').scrollTop=0;const sb=document.getElementById('sidebar');if(sb.classList.contains('open'))sb.classList.remove('open');updateStreak();}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+function toggleTheme(){const h=document.documentElement;const n=h.dataset.theme==='dark'?'light':'dark';h.dataset.theme=n;document.getElementById('themeBtn').textContent=n==='dark'?'\u263E':'\u2600';localStorage.setItem('mse446_theme',n);}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function renderFlashcards(c){const fc=flashcards[state.fcIndex];c.innerHTML=`<div class="fc-counter">${state.fcIndex+1} / ${flashcards.length}</div><div class="progress-bar"><div class="progress-fill" style="width:${(state.fcIndex+1)/flashcards.length*100}%"></div></div><div class="flashcard" onclick="flipCard()"><div class="fc-label">${state.fcFlipped?'ANSWER':'QUESTION'} (click to flip)</div><div class="fc-content ${state.fcFlipped?'answer':''}">${state.fcFlipped?fc.back:fc.front}</div></div><div class="btn-row"><button class="btn btn-secondary" onclick="prevCard()">&larr; Previous</button><button class="btn btn-primary" onclick="nextCard()">Next &rarr;</button><button class="btn btn-secondary" onclick="shuffleCards()">Shuffle</button></div>`;}
+function render(){const c=document.getElementById('content');switch(appState.page){case'dashboard':c.innerHTML=renderDashboard();break;case'guide':c.innerHTML=renderGuide();break;case'flashcards':c.innerHTML=renderFlashcards();break;case'quiz':c.innerHTML=renderQuiz();break;case'mock':c.innerHTML=renderMock();break;}}
 
-function flipCard(){state.fcFlipped=!state.fcFlipped;render();}
-function nextCard(){state.fcIndex=(state.fcIndex+1)%flashcards.length;state.fcFlipped=false;render();}
-function prevCard(){state.fcIndex=(state.fcIndex-1+flashcards.length)%flashcards.length;state.fcFlipped=false;render();}
-function shuffleCards(){for(let i=flashcards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[flashcards[i],flashcards[j]]=[flashcards[j],flashcards[i]];}state.fcIndex=0;state.fcFlipped=false;render();}
+function renderDashboard(){
+const p=getProgress();const totalFC=FLASHCARDS.length;const knownFC=Object.values(p.fcKnown).filter(Boolean).length;
+let totalQ=0,totalC=0;TOPICS.forEach(t=>{const s=p.quizScores[t.id]||[];if(s.length){const l=s[s.length-1];totalQ+=l.total;totalC+=l.score;}});
+let topicRows='';TOPICS.forEach(t=>{let m=0,parts=0;const s=p.quizScores[t.id]||[];if(s.length){m+=(s[s.length-1].score/s[s.length-1].total)*100;parts++;}const tFC=FLASHCARDS.filter(f=>f.t===t.id);const tK=tFC.filter(f=>p.fcKnown[fcKey(f)]).length;if(tFC.length){m+=(tK/tFC.length)*100;parts++;}const o=parts?Math.round(m/parts):0;const col=o>=80?'var(--green)':o>=50?'var(--orange)':'var(--red)';topicRows+=`<div class="topic-mastery"><span class="label">${t.full}</span><div class="bar"><div class="progress-bar"><div class="fill" style="width:${o}%;background:${col}"></div></div></div><span class="pct" style="color:${col}">${o}%</span></div>`;});
+let weak='',strong='';TOPICS.forEach(t=>{const s=p.quizScores[t.id]||[];if(s.length){const l=s[s.length-1];const pc=Math.round(l.score/l.total*100);if(pc<60)weak+=`<div class="weak-area">${t.full} (${pc}%) — Review this topic</div>`;else if(pc>=90)strong+=`<div class="strong-area">${t.full} (${pc}%) — Strong</div>`;}});
+let mh='';p.mockScores.forEach(m=>{mh+=`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">Mock ${m.exam+1}: ${m.score}/${m.total} (${Math.round(m.score/m.total*100)}%) — ${new Date(m.date).toLocaleDateString()}</div>`;});
+const examDate=new Date('2026-04-15T09:00:00');const diff=examDate-new Date();const dd=Math.max(0,Math.floor(diff/864e5));const hh=Math.max(0,Math.floor((diff%864e5)/36e5));
+return`<div class="fade-in"><h2 style="margin-bottom:16px">Dashboard</h2>
+<div class="exam-format-banner"><h3>Final Exam — MSE 446/623</h3><p><strong>150 minutes.</strong> Part I: 24 MCQs (conceptual + Python). Part II: 5 long-answer problems (post-midterm topics). No formula sheet — formulas provided in questions.</p>
+<div class="fmt-grid"><div class="fmt-item"><div class="num">${dd}d ${hh}h</div><div class="lbl">Until Exam</div></div><div class="fmt-item"><div class="num">24</div><div class="lbl">MCQs (Part I)</div></div><div class="fmt-item"><div class="num">5</div><div class="lbl">Long Answer (Part II)</div></div><div class="fmt-item"><div class="num">150</div><div class="lbl">Minutes</div></div></div></div>
+<div class="dash-grid"><div class="dash-card"><h4>Flashcards Mastered</h4><div class="big-num">${knownFC}/${totalFC}</div><div class="progress-bar" style="margin-top:8px"><div class="fill" style="width:${totalFC?knownFC/totalFC*100:0}%"></div></div></div>
+<div class="dash-card"><h4>Quiz Accuracy</h4><div class="big-num">${totalQ?Math.round(totalC/totalQ*100):0}%</div></div>
+<div class="dash-card"><h4>Mock Exams</h4><div class="big-num">${p.mockScores.length}</div></div>
+<div class="dash-card"><h4>Study Streak</h4><div class="big-num">${p.streak} day${p.streak!==1?'s':''}</div></div></div>
+<div class="card"><h3>Topic Mastery</h3>${topicRows}</div>
+${weak?`<div class="card"><h3>Areas to Focus On</h3>${weak}</div>`:''}
+${strong?`<div class="card"><h3>Strong Areas</h3>${strong}</div>`:''}
+${mh?`<div class="card"><h3>Mock Exam History</h3>${mh}</div>`:''}
+<div class="card"><h3>Quick Start</h3><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+<button class="btn btn-primary" onclick="navigate('guide')">Study Guide</button>
+<button class="btn btn-secondary" onclick="navigate('flashcards')">Flashcards</button>
+<button class="btn btn-secondary" onclick="navigate('quiz')">Take a Quiz</button>
+<button class="btn btn-secondary" onclick="navigate('mock')">Mock Exam</button></div></div></div>`;
+}
 
-function startExam(){const s=[...allQuestions].sort(()=>Math.random()-0.5);state.examQs=s.slice(0,24);state.examIdx=0;state.examAnswers=new Array(state.examQs.length).fill(-1);renderExam(document.getElementById('content'));}
+function renderGuide(){const tabs=TOPICS.map(t=>`<button class="tab ${appState.guideTopic===t.id?'active':''}" onclick="appState.guideTopic='${t.id}';render()">${t.full}</button>`).join('');return`<div class="fade-in"><h2 style="margin-bottom:16px">Study Guide</h2><div class="tabs">${tabs}</div><div class="card">${GUIDE[appState.guideTopic]||'<p>Coming soon.</p>'}</div></div>`;}
 
-function renderExam(c){if(!state.examQs.length){c.innerHTML=`<div class="topic-card" style="text-align:center"><h2>Mock Final Exam &mdash; Part I Simulation</h2><p>24 randomly selected MCQs from all post-midterm topics, matching the exam format.<br>Time yourself: aim for ~60 minutes (2.5 min per question).</p><div class="btn-row"><button class="btn btn-primary" onclick="startExam()">Start Mock Exam</button></div></div>`;return;}if(state.examIdx>=state.examQs.length){renderExamResults(c);return;}const q=state.examQs[state.examIdx];const sel=state.examAnswers[state.examIdx];c.innerHTML=`<div class="progress-bar"><div class="progress-fill" style="width:${state.examIdx/state.examQs.length*100}%"></div></div><div class="question-card"><div class="q-header"><span class="q-number">MCP-Q${state.examIdx+1}/${state.examQs.length}</span><span class="q-topic">${topics.find(t=>t.id===q.topic)?.name}</span></div><div class="q-text">${q.q}</div><div class="options">${q.opts.map((o,j)=>`<div class="option ${sel===j?'selected':''}" onclick="examSelect(${j})"><div class="option-letter">${'ABCD'[j]}</div><div class="option-text">${o}</div></div>`).join('')}</div></div><div class="btn-row">${state.examIdx>0?'<button class="btn btn-secondary" onclick="examPrev()">&larr; Prev</button>':''}<button class="btn btn-primary" onclick="examNext()">${state.examIdx===state.examQs.length-1?'Submit Exam':'Next &rarr;'}</button></div>`;}
+function renderFlashcards(){const p=getProgress();let cards=[...FLASHCARDS];if(appState.fcTopic!=='all')cards=cards.filter(f=>f.t===appState.fcTopic);if(appState.fcMode==='learning')cards=cards.filter(f=>!p.fcKnown[fcKey(f)]);if(!cards.length)return`<div class="fade-in"><h2>Flashcards</h2><div class="card"><p>No cards match. Try changing topic or mode.</p></div></div>`;if(appState.fcIndex>=cards.length)appState.fcIndex=0;const card=cards[appState.fcIndex];const ck=fcKey(card);const known=p.fcKnown[ck];const tn=TOPICS.find(t=>t.id===card.t)?.full||card.t;const chips=`<button class="topic-chip ${appState.fcTopic==='all'?'active':''}" onclick="appState.fcTopic='all';appState.fcIndex=0;appState.fcFlipped=false;render()">All</button>`+TOPICS.map(t=>`<button class="topic-chip ${appState.fcTopic===t.id?'active':''}" onclick="appState.fcTopic='${t.id}';appState.fcIndex=0;appState.fcFlipped=false;render()">${t.name}</button>`).join('');
+return`<div class="fade-in"><h2 style="margin-bottom:16px">Flashcards</h2><div class="topic-selector">${chips}</div><div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"><button class="btn btn-sm ${appState.fcMode==='all'?'btn-primary':'btn-secondary'}" onclick="appState.fcMode='all';appState.fcIndex=0;appState.fcFlipped=false;render()">All Cards</button><button class="btn btn-sm ${appState.fcMode==='learning'?'btn-primary':'btn-secondary'}" onclick="appState.fcMode='learning';appState.fcIndex=0;appState.fcFlipped=false;render()">Still Learning</button><button class="btn btn-sm btn-secondary" onclick="shuffleFC()">Shuffle</button></div>
+<div class="flashcard-container"><div class="flashcard-progress">${appState.fcIndex+1} / ${cards.length}</div><div class="flashcard ${appState.fcFlipped?'flipped':''}" onclick="appState.fcFlipped=!appState.fcFlipped;render()"><div class="flashcard-inner"><div class="flashcard-front"><div class="flashcard-topic">${esc(tn)}</div><p>${esc(card.q)}</p></div><div class="flashcard-back"><div class="flashcard-topic">Answer</div><p>${esc(card.a)}</p></div></div></div>
+<div class="flashcard-controls"><button class="btn btn-secondary" onclick="fcPrev()" ${appState.fcIndex===0?'disabled':''}>Previous</button><button class="btn ${known?'btn-success':'btn-secondary'}" onclick='toggleFcKnown(${JSON.stringify(ck)});render()'>${known?'Known':'Mark Known'}</button><button class="btn btn-primary" onclick="fcNext(${cards.length})">Next</button></div></div></div>`;}
 
-function examSelect(j){state.examAnswers[state.examIdx]=j;render();}
-function examNext(){if(state.examAnswers[state.examIdx]===-1){alert('Please select an answer before proceeding.');return;}state.examIdx++;render();}
-function examPrev(){state.examIdx--;render();}
+function fcNext(t){appState.fcIndex=(appState.fcIndex+1)%t;appState.fcFlipped=false;render();}
+function fcPrev(){if(appState.fcIndex>0){appState.fcIndex--;appState.fcFlipped=false;render();}}
+function shuffleFC(){const a=[...FLASHCARDS];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}FLASHCARDS.length=0;FLASHCARDS.push(...a);appState.fcIndex=0;appState.fcFlipped=false;render();}
 
-function renderExamResults(c){let cor=0;const det=state.examQs.map((q,i)=>{const ok=state.examAnswers[i]===q.ans;if(ok)cor++;return`<div class="question-card" style="border-left:3px solid ${ok?'var(--correct)':'var(--wrong)'}"><div class="q-header"><span class="q-number">MCP-Q${i+1} ${ok?'&#10003;':'&#10007;'}</span><span class="q-topic">${topics.find(t=>t.id===q.topic)?.name}</span></div><div class="q-text">${q.q}</div><p style="font-size:0.88em">Your answer: <strong>${'ABCD'[state.examAnswers[i]]}</strong> | Correct: <strong style="color:var(--correct)">${'ABCD'[q.ans]}</strong></p><div class="explanation visible">${q.expl}</div></div>`;});const pct=Math.round(cor/state.examQs.length*100);const cls=pct>=80?'good':pct>=60?'ok':'bad';c.innerHTML=`<div class="results-card"><h2>Mock Exam Results</h2><div class="score-big ${cls}">${pct}%</div><p>${cor}/${state.examQs.length} correct</p><p style="margin-top:10px;color:var(--text-dim)">Review each question below. Focus on topics where you got answers wrong.</p><div class="btn-row"><button class="btn btn-primary" onclick="state.examQs=[];render()">Try Again</button></div></div>${det.join('')}`;}
+function renderQuiz(){const chips=TOPICS.map(t=>`<button class="topic-chip ${appState.quizTopic===t.id?'active':''}" onclick="startQuiz('${t.id}')">${t.name}</button>`).join('');const qs=QUIZZES[appState.quizTopic]||[];if(!qs.length)return`<div class="fade-in"><h2>Quizzes</h2><div class="topic-selector">${chips}</div><div class="card"><p>No questions for this topic.</p></div></div>`;
+if(appState.quizDone){const pc=Math.round(appState.quizScore/appState.quizTotal*100);return`<div class="fade-in"><h2>Quiz Complete!</h2><div class="card"><div class="quiz-score">${pc}%</div><div class="quiz-score-sub">${appState.quizScore} / ${appState.quizTotal} correct</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="startQuiz('${appState.quizTopic}')">Retry</button> <button class="btn btn-secondary" onclick="navigate('dashboard')">Dashboard</button></div></div></div>`;}
+const qn=qs[appState.quizIndex];const opts=qn.o.map((o,i)=>{let cl='quiz-option';if(appState.quizAnswered){if(i===qn.a)cl+=' correct';else if(i===appState.quizSelected)cl+=' incorrect';}else if(i===appState.quizSelected)cl+=' selected';return`<button class="${cl}" onclick="selectQuizAnswer(${i})" ${appState.quizAnswered?'disabled':''}>${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
+return`<div class="fade-in"><h2 style="margin-bottom:16px">Quizzes</h2><div class="topic-selector">${chips}</div><div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="font-size:13px;color:var(--text2)">Question ${appState.quizIndex+1}/${qs.length}</span><span style="font-size:13px;color:var(--text2)">Score: ${appState.quizScore}</span></div><div class="progress-bar" style="margin-bottom:16px"><div class="fill" style="width:${(appState.quizIndex/qs.length)*100}%"></div></div><h3 style="margin-bottom:16px;color:var(--text)">${esc(qn.q)}</h3>${opts}${appState.quizAnswered?`<div class="quiz-explanation"><strong>${appState.quizSelected===qn.a?'Correct!':'Incorrect.'}</strong> ${esc(qn.e)}</div><div style="text-align:right;margin-top:12px"><button class="btn btn-primary" onclick="nextQuizQ()">Next</button></div>`:''}</div></div>`;}
 
-renderNav();render();updateStats();
+function startQuiz(t){appState.quizTopic=t;appState.quizIndex=0;appState.quizScore=0;appState.quizTotal=0;appState.quizDone=false;appState.quizAnswered=false;appState.quizSelected=-1;saveQuizSession();render();}
+function selectQuizAnswer(i){if(appState.quizAnswered)return;appState.quizSelected=i;appState.quizAnswered=true;const qn=QUIZZES[appState.quizTopic][appState.quizIndex];appState.quizTotal++;if(i===qn.a)appState.quizScore++;saveQuizSession();render();}
+function nextQuizQ(){const qs=QUIZZES[appState.quizTopic];appState.quizIndex++;appState.quizAnswered=false;appState.quizSelected=-1;if(appState.quizIndex>=qs.length){appState.quizDone=true;recordQuizScore(appState.quizTopic,appState.quizScore,appState.quizTotal);clearQuizSession();}else saveQuizSession();render();}
+
+function renderMock(){if(appState.mockExam===-1){const p=getProgress();const cards=MOCK_EXAMS.map((exam,i)=>{const taken=p.mockScores.filter(m=>m.exam===i);const best=taken.length?Math.max(...taken.map(t=>Math.round(t.score/t.total*100))):null;return`<div class="card" style="cursor:pointer" onclick="startMock(${i})"><h3>Mock Exam ${i+1}</h3><p style="color:var(--text2)">${exam.length} questions · Simulates Part I</p>${best!==null?`<p style="margin-top:8px">Best: <strong style="color:var(--accent)">${best}%</strong> (${taken.length} attempt${taken.length>1?'s':''})</p>`:'<p style="margin-top:8px;color:var(--text2)">Not attempted</p>'}<button class="btn btn-primary" style="margin-top:12px">Start Exam</button></div>`;}).join('');
+return`<div class="fade-in"><h2 style="margin-bottom:16px">Mock Exams</h2><div class="exam-format-banner"><h3>Exam Format</h3><p>24 MCQs covering conceptual understanding and Python. Time yourself: ~60 min for Part I. Post-midterm topics: NN, PCA, Clustering, SVM.</p></div>${cards}</div>`;}
+const exam=MOCK_EXAMS[appState.mockExam];
+if(appState.mockDone){const score=appState.mockAnswers.reduce((s,a,i)=>s+(a===exam[i].a?1:0),0);const pct=Math.round(score/exam.length*100);const bd={};exam.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(appState.mockAnswers[i]===q.a)bd[q.t].c++;});
+let bdH='';Object.entries(bd).forEach(([tid,v])=>{const tn=TOPICS.find(t=>t.id===tid)?.full||tid;const p2=Math.round(v.c/v.t*100);const col=p2>=80?'var(--green)':p2>=50?'var(--orange)':'var(--red)';bdH+=`<div class="topic-mastery"><span class="label">${tn}</span><div class="bar"><div class="progress-bar"><div class="fill" style="width:${p2}%;background:${col}"></div></div></div><span class="pct" style="color:${col}">${v.c}/${v.t}</span></div>`;});
+let rH='';exam.forEach((q,i)=>{const ok=appState.mockAnswers[i]===q.a;rH+=`<div style="padding:12px 0;border-bottom:1px solid var(--border)"><p style="font-weight:600;${ok?'':'color:var(--red)'}">${i+1}. ${esc(q.q)}</p><p style="font-size:13px;margin-top:4px">Your answer: <strong>${esc(q.o[appState.mockAnswers[i]]||'(skipped)')}</strong> ${ok?'✓':'✗ Correct: <strong>'+esc(q.o[q.a])+'</strong>'}</p><p style="font-size:13px;color:var(--text2);margin-top:2px">${esc(q.e)}</p></div>`;});
+return`<div class="fade-in"><h2>Exam Complete!</h2><div class="card"><div class="quiz-score">${pct}%</div><div class="quiz-score-sub">${score}/${exam.length} correct</div></div><div class="card"><h3>Topic Breakdown</h3>${bdH}</div><div class="card"><h3>Review All</h3>${rH}</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="appState.mockExam=-1;appState.mockDone=false;render()">Back to Exams</button></div></div>`;}
+const elapsed=Math.floor((Date.now()-appState.mockStartTime)/1000);const mins=Math.floor(elapsed/60),secs=elapsed%60;const timeStr=`${mins}:${secs<10?'0':''}${secs}`;const timeCls=mins>=55?'danger':mins>=45?'warning':'';const qn=exam[appState.mockIndex];
+const opts=qn.o.map((o,i)=>{let cl='quiz-option';if(appState.mockAnswers[appState.mockIndex]===i)cl+=' selected';return`<button class="${cl}" onclick="selectMockAnswer(${i})">${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
+const dots=exam.map((_,i)=>{const a=appState.mockAnswers[i];const cl=i===appState.mockIndex?'background:var(--accent)':a!==undefined?'background:var(--green)':'background:var(--bg4)';return`<span style="display:inline-block;width:10px;height:10px;border-radius:50%;${cl};cursor:pointer;margin:2px" onclick="appState.mockIndex=${i};render()"></span>`;}).join('');
+return`<div class="fade-in"><div class="mock-timer"><span style="font-size:14px">Question ${appState.mockIndex+1}/${exam.length}</span><span class="time ${timeCls}">${timeStr}</span><button class="btn btn-danger btn-sm" onclick="finishMock()">Finish Exam</button></div><div class="card"><h3 style="margin-bottom:16px">${esc(qn.q)}</h3>${opts}<div style="display:flex;justify-content:space-between;margin-top:16px"><button class="btn btn-secondary" onclick="mockNav(-1)" ${appState.mockIndex===0?'disabled':''}>Previous</button><button class="btn btn-primary" onclick="mockNav(1)">${appState.mockIndex===exam.length-1?'Review / Finish':'Next'}</button></div></div><div style="text-align:center;margin-top:12px">${dots}</div></div>`;}
+
+function startMock(i){appState.mockExam=i;appState.mockIndex=0;appState.mockAnswers=[];appState.mockDone=false;appState.mockStartTime=Date.now();if(appState.mockTimerInterval)clearInterval(appState.mockTimerInterval);appState.mockTimerInterval=setInterval(()=>{const el=document.querySelector('.mock-timer .time');if(!el)return;const e=Math.floor((Date.now()-appState.mockStartTime)/1000);const m=Math.floor(e/60),s=e%60;el.textContent=`${m}:${s<10?'0':''}${s}`;el.className='time'+(m>=55?' danger':m>=45?' warning':'');},1000);render();}
+function selectMockAnswer(i){appState.mockAnswers[appState.mockIndex]=i;render();}
+function mockNav(dir){const exam=MOCK_EXAMS[appState.mockExam];if(dir===1&&appState.mockIndex===exam.length-1){finishMock();return;}appState.mockIndex=Math.max(0,Math.min(exam.length-1,appState.mockIndex+dir));render();}
+function finishMock(){if(appState.mockTimerInterval){clearInterval(appState.mockTimerInterval);appState.mockTimerInterval=null;}appState.mockDone=true;const exam=MOCK_EXAMS[appState.mockExam];const score=appState.mockAnswers.reduce((s,a,i)=>s+(a===exam[i].a?1:0),0);const bd={};exam.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(appState.mockAnswers[i]===q.a)bd[q.t].c++;});recordMockScore(appState.mockExam,score,exam.length,bd);render();}
+
+(function init(){const s=localStorage.getItem('mse446_theme');if(s){document.documentElement.dataset.theme=s;document.getElementById('themeBtn').textContent=s==='dark'?'\u263E':'\u2600';}updateStreak();navigate('dashboard');})();
 </script>
 </body>
 </html>
