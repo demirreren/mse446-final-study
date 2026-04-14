@@ -1235,180 +1235,33 @@ const MK=[
 
 const LA=[
 {title:'PA-Q1: Neural Network Forward Propagation',topic:'nn',points:20,parts:[
-{label:'Part (a) — Forward Propagation [12 pts]',q:'<p>A neural network has the following architecture and parameters:</p><table class="tbl"><tr><th colspan="2">Network</th></tr><tr><td>Input</td><td>2 neurons (x₁, x₂)</td></tr><tr><td>Hidden</td><td>2 neurons, <b>sigmoid</b></td></tr><tr><td>Output</td><td>1 neuron, <b>sigmoid</b></td></tr></table><table class="tbl"><tr><th>Parameter</th><th>Value</th></tr><tr><td>w₁₁ (x₁→h₁)</td><td>0.4</td></tr><tr><td>w₂₁ (x₂→h₁)</td><td>−0.6</td></tr><tr><td>w₁₂ (x₁→h₂)</td><td>0.3</td></tr><tr><td>w₂₂ (x₂→h₂)</td><td>0.8</td></tr><tr><td>b<sub>hidden</sub></td><td>0.1</td></tr><tr><td>v₁ (h₁→out)</td><td>1.0</td></tr><tr><td>v₂ (h₂→out)</td><td>−0.5</td></tr><tr><td>b<sub>output</sub></td><td>0.2</td></tr></table><p>Given <b>x₁ = 2, x₂ = 1</b>, compute ŷ. Show all intermediate z and h values.</p><p><em>Use: σ(0.3)=0.574, σ(0.5)=0.622, σ(1.0)=0.731, σ(1.5)=0.818, σ(−0.2)=0.450, σ(0.37)=0.591</em></p>',a:'Hidden neuron h₁:
-  z₁ = 0.4(2) + (−0.6)(1) + 0.1 = 0.8 − 0.6 + 0.1 = 0.3
-  h₁ = σ(0.3) = 0.574
-
-Hidden neuron h₂:
-  z₂ = 0.3(2) + 0.8(1) + 0.1 = 0.6 + 0.8 + 0.1 = 1.5
-  h₂ = σ(1.5) = 0.818
-
-Output:
-  z₃ = 1.0(0.574) + (−0.5)(0.818) + 0.2
-     = 0.574 − 0.409 + 0.2 = 0.365
-  ŷ = σ(0.365) ≈ 0.590
-
-Final output: ŷ ≈ 0.590'},
-{label:'Part (b) — Activation Functions [4 pts]',q:'<p>For each scenario, name the best activation function and give one reason.</p><table class="tbl"><tr><th>#</th><th>Scenario</th></tr><tr><td>i</td><td>Output layer: spam vs not-spam</td></tr><tr><td>ii</td><td>Output layer: classifying digits 0–9</td></tr><tr><td>iii</td><td>Hidden layers in a 50-layer network</td></tr><tr><td>iv</td><td>Hidden layer with many permanently-zero neurons</td></tr></table>',a:'i) Sigmoid — output in (0,1), interpretable as probability for binary classification.
-ii) Softmax — 10 outputs summing to 1, each = P(class k).
-iii) ReLU — gradient=1 for z>0, prevents vanishing gradient in deep nets.
-iv) Leaky ReLU — allows gradient=0.1 for z<0, reviving "dead" neurons.'},
-{label:'Part (c) — Conceptual [4 pts]',q:'<ol><li>What happens if a network uses <b>no activation functions</b> (identity only)?</li><li>Explain vanishing gradient in one sentence.</li><li>What happens if learning rate η is too large? Too small?</li></ol>',a:'1) Network collapses to a single linear transformation W·x — equivalent to linear regression. Cannot learn non-linear patterns.
-
-2) In deep nets with sigmoid/tanh, gradients multiply through layers and shrink toward 0, so early layers barely update.
-
-3) η too large: overshoots minimum, training diverges. η too small: converges extremely slowly, may get stuck.'}
+{label:'Part (a) — Forward Propagation [12 pts]',q:'<p>A neural network has the following architecture and parameters:</p><table class="tbl"><tr><th colspan="2">Network</th></tr><tr><td>Input</td><td>2 neurons (x₁, x₂)</td></tr><tr><td>Hidden</td><td>2 neurons, <b>sigmoid</b></td></tr><tr><td>Output</td><td>1 neuron, <b>sigmoid</b></td></tr></table><table class="tbl"><tr><th>Parameter</th><th>Value</th></tr><tr><td>w₁₁ (x₁→h₁)</td><td>0.4</td></tr><tr><td>w₂₁ (x₂→h₁)</td><td>−0.6</td></tr><tr><td>w₁₂ (x₁→h₂)</td><td>0.3</td></tr><tr><td>w₂₂ (x₂→h₂)</td><td>0.8</td></tr><tr><td>b<sub>hidden</sub></td><td>0.1</td></tr><tr><td>v₁ (h₁→out)</td><td>1.0</td></tr><tr><td>v₂ (h₂→out)</td><td>−0.5</td></tr><tr><td>b<sub>output</sub></td><td>0.2</td></tr></table><p>Given <b>x₁ = 2, x₂ = 1</b>, compute ŷ. Show all intermediate z and h values.</p><p><em>Use: σ(0.3)=0.574, σ(0.5)=0.622, σ(1.0)=0.731, σ(1.5)=0.818, σ(−0.2)=0.450, σ(0.37)=0.591</em></p>',a:'Hidden neuron h₁:\n  z₁ = 0.4(2) + (−0.6)(1) + 0.1 = 0.8 − 0.6 + 0.1 = 0.3\n  h₁ = σ(0.3) = 0.574\n\nHidden neuron h₂:\n  z₂ = 0.3(2) + 0.8(1) + 0.1 = 0.6 + 0.8 + 0.1 = 1.5\n  h₂ = σ(1.5) = 0.818\n\nOutput:\n  z₃ = 1.0(0.574) + (−0.5)(0.818) + 0.2\n     = 0.574 − 0.409 + 0.2 = 0.365\n  ŷ = σ(0.365) ≈ 0.590\n\nFinal output: ŷ ≈ 0.590'},
+{label:'Part (b) — Activation Functions [4 pts]',q:'<p>For each scenario, name the best activation function and give one reason.</p><table class="tbl"><tr><th>#</th><th>Scenario</th></tr><tr><td>i</td><td>Output layer: spam vs not-spam</td></tr><tr><td>ii</td><td>Output layer: classifying digits 0–9</td></tr><tr><td>iii</td><td>Hidden layers in a 50-layer network</td></tr><tr><td>iv</td><td>Hidden layer with many permanently-zero neurons</td></tr></table>',a:'i) Sigmoid — output in (0,1), interpretable as probability for binary classification.\nii) Softmax — 10 outputs summing to 1, each = P(class k).\niii) ReLU — gradient=1 for z>0, prevents vanishing gradient in deep nets.\niv) Leaky ReLU — allows gradient=0.1 for z<0, reviving "dead" neurons.'},
+{label:'Part (c) — Conceptual [4 pts]',q:'<ol><li>What happens if a network uses <b>no activation functions</b> (identity only)?</li><li>Explain vanishing gradient in one sentence.</li><li>What happens if learning rate η is too large? Too small?</li></ol>',a:'1) Network collapses to a single linear transformation W·x — equivalent to linear regression. Cannot learn non-linear patterns.\n\n2) In deep nets with sigmoid/tanh, gradients multiply through layers and shrink toward 0, so early layers barely update.\n\n3) η too large: overshoots minimum, training diverges. η too small: converges extremely slowly, may get stuck.'}
 ]},
 {title:'PA-Q2: PCA Computation',topic:'pca',points:20,parts:[
-{label:'Part (a) — Center & Covariance [6 pts]',q:'<p>A factory monitors two sensors:</p><table class="tbl"><tr><th>Obs</th><th>Temp (X₁)</th><th>Vibration (X₂)</th></tr><tr><td>1</td><td>4</td><td>2</td></tr><tr><td>2</td><td>6</td><td>4</td></tr><tr><td>3</td><td>8</td><td>6</td></tr><tr><td>4</td><td>10</td><td>8</td></tr></table><ol><li>Compute the mean of each feature.</li><li>Center the data (subtract means).</li><li>Compute the covariance matrix Σ using <b>1/n</b>.</li></ol>',a:'1) Means: X̄₁ = (4+6+8+10)/4 = 7,  X̄₂ = (2+4+6+8)/4 = 5
-
-2) Centered:
-  Obs 1: (−3, −3)    Obs 2: (−1, −1)
-  Obs 3: ( 1,  1)    Obs 4: ( 3,  3)
-
-3) Covariance (1/n):
-  Var(X₁) = (9+1+1+9)/4 = 5.0
-  Var(X₂) = (9+1+1+9)/4 = 5.0
-  Cov     = (9+1+1+9)/4 = 5.0
-
-  Σ = | 5  5 |
-      | 5  5 |'},
-{label:'Part (b) — Eigenvalues & Eigenvectors [6 pts]',q:'<ol><li>Find eigenvalues by solving det(Σ − λI) = 0.</li><li>Find the normalized eigenvector for the largest eigenvalue.</li><li>Write PC1 as a linear combination of X₁ and X₂.</li></ol>',a:'1) det(Σ−λI) = (5−λ)² − 25 = λ² − 10λ = λ(λ−10) = 0
-   λ₁ = 10,  λ₂ = 0
-
-2) For λ₁=10:  −5v₁ + 5v₂ = 0 → v₂ = v₁
-   v = (1,1), ||v|| = √2
-   φ₁ = (1/√2, 1/√2)
-
-3) PC1 = (1/√2)X₁ + (1/√2)X₂'},
-{label:'Part (c) — PVE [4 pts]',q:'<ol><li>Compute PVE for each component.</li><li>How many PCs for ≥ 95% variance?</li><li>What does λ₂ = 0 mean about the features?</li></ol>',a:'1) PVE₁ = 10/10 = 100%,  PVE₂ = 0/10 = 0%
-
-2) Just 1 PC captures everything.
-
-3) λ₂ = 0 means zero variance in the orthogonal direction. Temp and Vibration are perfectly correlated — the data is 1-dimensional. Vibration is fully redundant.'},
-{label:'Part (d) — Projections [4 pts]',q:'<p>Project all 4 centered observations onto PC1. Then interpret what a high PC1 score means for the factory.</p>',a:'zᵢ = (1/√2)(x₁ᵢ + x₂ᵢ)  using centered values:
-
-  z₁ = (−3−3)/√2 = −6/√2 ≈ −4.24
-  z₂ = (−1−1)/√2 = −2/√2 ≈ −1.41
-  z₃ = ( 1+1)/√2 =  2/√2 ≈  1.41
-  z₄ = ( 3+3)/√2 =  6/√2 ≈  4.24
-
-High PC1 = both temp and vibration are elevated. Represents overall "process intensity."'}
+{label:'Part (a) — Center & Covariance [6 pts]',q:'<p>A factory monitors two sensors:</p><table class="tbl"><tr><th>Obs</th><th>Temp (X₁)</th><th>Vibration (X₂)</th></tr><tr><td>1</td><td>4</td><td>2</td></tr><tr><td>2</td><td>6</td><td>4</td></tr><tr><td>3</td><td>8</td><td>6</td></tr><tr><td>4</td><td>10</td><td>8</td></tr></table><ol><li>Compute the mean of each feature.</li><li>Center the data (subtract means).</li><li>Compute the covariance matrix Σ using <b>1/n</b>.</li></ol>',a:'1) Means: X̄₁ = (4+6+8+10)/4 = 7,  X̄₂ = (2+4+6+8)/4 = 5\n\n2) Centered:\n  Obs 1: (−3, −3)    Obs 2: (−1, −1)\n  Obs 3: ( 1,  1)    Obs 4: ( 3,  3)\n\n3) Covariance (1/n):\n  Var(X₁) = (9+1+1+9)/4 = 5.0\n  Var(X₂) = (9+1+1+9)/4 = 5.0\n  Cov     = (9+1+1+9)/4 = 5.0\n\n  Σ = | 5  5 |\n      | 5  5 |'},
+{label:'Part (b) — Eigenvalues & Eigenvectors [6 pts]',q:'<ol><li>Find eigenvalues by solving det(Σ − λI) = 0.</li><li>Find the normalized eigenvector for the largest eigenvalue.</li><li>Write PC1 as a linear combination of X₁ and X₂.</li></ol>',a:'1) det(Σ−λI) = (5−λ)² − 25 = λ² − 10λ = λ(λ−10) = 0\n   λ₁ = 10,  λ₂ = 0\n\n2) For λ₁=10:  −5v₁ + 5v₂ = 0 → v₂ = v₁\n   v = (1,1), ||v|| = √2\n   φ₁ = (1/√2, 1/√2)\n\n3) PC1 = (1/√2)X₁ + (1/√2)X₂'},
+{label:'Part (c) — PVE [4 pts]',q:'<ol><li>Compute PVE for each component.</li><li>How many PCs for ≥ 95% variance?</li><li>What does λ₂ = 0 mean about the features?</li></ol>',a:'1) PVE₁ = 10/10 = 100%,  PVE₂ = 0/10 = 0%\n\n2) Just 1 PC captures everything.\n\n3) λ₂ = 0 means zero variance in the orthogonal direction. Temp and Vibration are perfectly correlated — the data is 1-dimensional. Vibration is fully redundant.'},
+{label:'Part (d) — Projections [4 pts]',q:'<p>Project all 4 centered observations onto PC1. Then interpret what a high PC1 score means for the factory.</p>',a:'zᵢ = (1/√2)(x₁ᵢ + x₂ᵢ)  using centered values:\n\n  z₁ = (−3−3)/√2 = −6/√2 ≈ −4.24\n  z₂ = (−1−1)/√2 = −2/√2 ≈ −1.41\n  z₃ = ( 1+1)/√2 =  2/√2 ≈  1.41\n  z₄ = ( 3+3)/√2 =  6/√2 ≈  4.24\n\nHigh PC1 = both temp and vibration are elevated. Represents overall "process intensity."'}
 ]},
 {title:'PA-Q3: K-Means Clustering',topic:'kmeans',points:20,parts:[
-{label:'Part (a) — Centroids [5 pts]',q:'<p>Segment customers by two features. K=2.</p><table class="tbl"><tr><th>Customer</th><th>Spending (X₁)</th><th>Visits (X₂)</th></tr><tr><td>A</td><td>2</td><td>8</td></tr><tr><td>B</td><td>3</td><td>6</td></tr><tr><td>C</td><td>7</td><td>3</td></tr><tr><td>D</td><td>8</td><td>2</td></tr><tr><td>E</td><td>5</td><td>5</td></tr></table><p>Initial: <b>C₁ = {A,B,E}</b>, <b>C₂ = {C,D}</b>. Compute centroids.</p>',a:'μ₁ = ((2+3+5)/3, (8+6+5)/3) = (3.33, 6.33)
-μ₂ = ((7+8)/2, (3+2)/2) = (7.50, 2.50)'},
-{label:'Part (b) — Reassignment [8 pts]',q:'<p>Compute distances from each customer to both centroids. Fill in the table.</p><table class="tbl"><tr><th>Customer</th><th>d(·, μ₁)</th><th>d(·, μ₂)</th><th>Assign</th></tr><tr><td>A (2,8)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>B (3,6)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>C (7,3)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>D (8,2)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>E (5,5)</td><td>?</td><td>?</td><td>?</td></tr></table><p>Has the algorithm converged?</p>',a:'Customer   d(·,μ₁)   d(·,μ₂)   Assign
-A (2,8)    2.14      7.78      C₁ ✓
-B (3,6)    0.47      5.70      C₁ ✓
-C (7,3)    4.96      0.71      C₂ ✓
-D (8,2)    6.37      0.71      C₂ ✓
-E (5,5)    2.14      3.54      C₁ ✓
-
-Sample: d(A,μ₁)=√((2−3.33)²+(8−6.33)²)=√4.57≈2.14
-
-No changes → CONVERGED.'},
-{label:'Part (c) — WCV [4 pts]',q:'<p>Compute total WCV = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||². Show each cluster separately.</p>',a:'C₁ {A,B,E}, μ₁=(3.33,6.33):
-  ||A−μ₁||²=4.57, ||B−μ₁||²=0.22, ||E−μ₁||²=4.56
-  WCV₁ = 9.35
-
-C₂ {C,D}, μ₂=(7.5,2.5):
-  ||C−μ₂||²=0.50, ||D−μ₂||²=0.50
-  WCV₂ = 1.00
-
-Total WCV = 9.35 + 1.00 = 10.35'},
-{label:'Part (d) — Interpretation [3 pts]',q:'<ol><li>Describe clusters in business terms.</li><li>New customer: Spending=6, Visits=7. Which cluster?</li><li>Why run K-Means multiple times?</li></ol>',a:'1) C₁: "Frequent visitors" (low spend, high visits)
-   C₂: "Big spenders" (high spend, low visits)
-
-2) d(new,μ₁)=√((6−3.33)²+(7−6.33)²)=√7.58≈2.75
-   d(new,μ₂)=√((6−7.5)²+(7−2.5)²)=√22.5≈4.74
-   → C₁ (Frequent visitors)
-
-3) K-Means finds only a LOCAL minimum. Different random starts → different results. Keep the run with lowest WCV.'}
+{label:'Part (a) — Centroids [5 pts]',q:'<p>Segment customers by two features. K=2.</p><table class="tbl"><tr><th>Customer</th><th>Spending (X₁)</th><th>Visits (X₂)</th></tr><tr><td>A</td><td>2</td><td>8</td></tr><tr><td>B</td><td>3</td><td>6</td></tr><tr><td>C</td><td>7</td><td>3</td></tr><tr><td>D</td><td>8</td><td>2</td></tr><tr><td>E</td><td>5</td><td>5</td></tr></table><p>Initial: <b>C₁ = {A,B,E}</b>, <b>C₂ = {C,D}</b>. Compute centroids.</p>',a:'μ₁ = ((2+3+5)/3, (8+6+5)/3) = (3.33, 6.33)\nμ₂ = ((7+8)/2, (3+2)/2) = (7.50, 2.50)'},
+{label:'Part (b) — Reassignment [8 pts]',q:'<p>Compute distances from each customer to both centroids. Fill in the table.</p><table class="tbl"><tr><th>Customer</th><th>d(·, μ₁)</th><th>d(·, μ₂)</th><th>Assign</th></tr><tr><td>A (2,8)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>B (3,6)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>C (7,3)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>D (8,2)</td><td>?</td><td>?</td><td>?</td></tr><tr><td>E (5,5)</td><td>?</td><td>?</td><td>?</td></tr></table><p>Has the algorithm converged?</p>',a:'Customer   d(·,μ₁)   d(·,μ₂)   Assign\nA (2,8)    2.14      7.78      C₁ ✓\nB (3,6)    0.47      5.70      C₁ ✓\nC (7,3)    4.96      0.71      C₂ ✓\nD (8,2)    6.37      0.71      C₂ ✓\nE (5,5)    2.14      3.54      C₁ ✓\n\nSample: d(A,μ₁)=√((2−3.33)²+(8−6.33)²)=√4.57≈2.14\n\nNo changes → CONVERGED.'},
+{label:'Part (c) — WCV [4 pts]',q:'<p>Compute total WCV = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||². Show each cluster separately.</p>',a:'C₁ {A,B,E}, μ₁=(3.33,6.33):\n  ||A−μ₁||²=4.57, ||B−μ₁||²=0.22, ||E−μ₁||²=4.56\n  WCV₁ = 9.35\n\nC₂ {C,D}, μ₂=(7.5,2.5):\n  ||C−μ₂||²=0.50, ||D−μ₂||²=0.50\n  WCV₂ = 1.00\n\nTotal WCV = 9.35 + 1.00 = 10.35'},
+{label:'Part (d) — Interpretation [3 pts]',q:'<ol><li>Describe clusters in business terms.</li><li>New customer: Spending=6, Visits=7. Which cluster?</li><li>Why run K-Means multiple times?</li></ol>',a:'1) C₁: "Frequent visitors" (low spend, high visits)\n   C₂: "Big spenders" (high spend, low visits)\n\n2) d(new,μ₁)=√((6−3.33)²+(7−6.33)²)=√7.58≈2.75\n   d(new,μ₂)=√((6−7.5)²+(7−2.5)²)=√22.5≈4.74\n   → C₁ (Frequent visitors)\n\n3) K-Means finds only a LOCAL minimum. Different random starts → different results. Keep the run with lowest WCV.'}
 ]},
 {title:'PA-Q4: Support Vector Machines',topic:'svm',points:20,parts:[
-{label:'Part (a) — Hyperplane Classification [6 pts]',q:'<p>Hyperplane: <b>f(x) = 2X₁ − X₂ + 1</b></p><table class="tbl"><tr><th>Obs</th><th>X₁</th><th>X₂</th><th>True y</th></tr><tr><td>1</td><td>1</td><td>4</td><td>+1</td></tr><tr><td>2</td><td>3</td><td>2</td><td>+1</td></tr><tr><td>3</td><td>2</td><td>7</td><td>−1</td></tr><tr><td>4</td><td>4</td><td>5</td><td>−1</td></tr></table><ol><li>Compute f(x) for each point.</li><li>Which are correctly classified? (Predict +1 if f>0, −1 if f<0)</li><li>Compute perpendicular distance d = |f(x)|/||β||.</li></ol>',a:'||β|| = √(4+1) = √5
-
-1) f values:
-  f(1,4) = 2−4+1 = −1
-  f(3,2) = 6−2+1 = 5
-  f(2,7) = 4−7+1 = −2
-  f(4,5) = 8−5+1 = 4
-
-2) Obs 1: f=−1→pred −1, true +1 → WRONG ✗
-   Obs 2: f=5→pred +1, true +1 → correct ✓
-   Obs 3: f=−2→pred −1, true −1 → correct ✓
-   Obs 4: f=4→pred +1, true −1 → WRONG ✗
-
-3) d₁=1/√5≈0.447  d₂=5/√5≈2.236
-   d₃=2/√5≈0.894  d₄=4/√5≈1.789'},
-{label:'Part (b) — Slack Variables [6 pts]',q:'<p>A trained SVM gives:</p><table class="tbl"><tr><th>Obs</th><th>yᵢ</th><th>f(xᵢ)</th><th>yᵢf(xᵢ)</th><th>Status</th><th>ξᵢ</th></tr><tr><td>1</td><td>+1</td><td>0.4</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr><tr><td>2</td><td>+1</td><td>1.5</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr><tr><td>3</td><td>−1</td><td>−2.0</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr><tr><td>4</td><td>−1</td><td>0.3</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr></table><p>Fill in. Use ξᵢ = max(0, 1−yᵢf(xᵢ)).<br/>yf > 1: outside margin. 0 < yf < 1: inside margin. yf < 0: misclassified.</p>',a:'Obs  yf      Status              ξ
-1    0.4    inside margin       0.6
-2    1.5    outside margin      0
-3    2.0    outside margin      0
-4   −0.3    MISCLASSIFIED       1.3
-
-ξ₄=1.3 > 1 confirms misclassification.
-ξ₁=0.6 ∈ (0,1): margin violator, correct side.'},
-{label:'Part (c) — RBF Kernel [4 pts]',q:'<p>K(xᵢ,xⱼ) = exp(−γ||xᵢ−xⱼ||²), γ = 0.25</p><table class="tbl"><tr><th>Point</th><th>Coordinates</th></tr><tr><td>x₁</td><td>(1, 2)</td></tr><tr><td>x₂</td><td>(4, 6)</td></tr><tr><td>x₃</td><td>(2, 3)</td></tr></table><ol><li>Compute K(x₁,x₂).</li><li>Compute K(x₁,x₃).</li><li>Which pair is more similar?</li></ol>',a:'1) ||x₁−x₂||²=(1−4)²+(2−6)²=9+16=25
-   K(x₁,x₂)=exp(−0.25×25)=exp(−6.25)≈0.002
-
-2) ||x₁−x₃||²=(1−2)²+(2−3)²=1+1=2
-   K(x₁,x₃)=exp(−0.25×2)=exp(−0.5)≈0.607
-
-3) x₁ & x₃ are far more similar (K≈0.607 vs 0.002).
-   K=1: identical. K→0: very far apart.'},
-{label:'Part (d) — Multiclass & C [4 pts]',q:'<ol><li>For 5 classes: how many classifiers for OVR? OVO?</li><li>As C increases, what happens to margin width and bias-variance?</li><li>When should you prefer SVM over logistic regression?</li></ol>',a:'1) OVR: 5.  OVO: 5(4)/2 = 10.
-
-2) ↑C → narrower margin, fewer violations.
-   Bias ↓ (closer fit), Variance ↑ (more sensitive).
-   C=∞ → hard margin.
-
-3) SVM preferred when:
-   • Classes nearly separable
-   • p > n (high-dimensional, few observations)
-   • Nonlinear boundaries needed (kernel trick)
-   • Probability estimates not required'}
+{label:'Part (a) — Hyperplane Classification [6 pts]',q:'<p>Hyperplane: <b>f(x) = 2X₁ − X₂ + 1</b></p><table class="tbl"><tr><th>Obs</th><th>X₁</th><th>X₂</th><th>True y</th></tr><tr><td>1</td><td>1</td><td>4</td><td>+1</td></tr><tr><td>2</td><td>3</td><td>2</td><td>+1</td></tr><tr><td>3</td><td>2</td><td>7</td><td>−1</td></tr><tr><td>4</td><td>4</td><td>5</td><td>−1</td></tr></table><ol><li>Compute f(x) for each point.</li><li>Which are correctly classified? (Predict +1 if f>0, −1 if f<0)</li><li>Compute perpendicular distance d = |f(x)|/||β||.</li></ol>',a:'||β|| = √(4+1) = √5\n\n1) f values:\n  f(1,4) = 2−4+1 = −1\n  f(3,2) = 6−2+1 = 5\n  f(2,7) = 4−7+1 = −2\n  f(4,5) = 8−5+1 = 4\n\n2) Obs 1: f=−1→pred −1, true +1 → WRONG ✗\n   Obs 2: f=5→pred +1, true +1 → correct ✓\n   Obs 3: f=−2→pred −1, true −1 → correct ✓\n   Obs 4: f=4→pred +1, true −1 → WRONG ✗\n\n3) d₁=1/√5≈0.447  d₂=5/√5≈2.236\n   d₃=2/√5≈0.894  d₄=4/√5≈1.789'},
+{label:'Part (b) — Slack Variables [6 pts]',q:'<p>A trained SVM gives:</p><table class="tbl"><tr><th>Obs</th><th>yᵢ</th><th>f(xᵢ)</th><th>yᵢf(xᵢ)</th><th>Status</th><th>ξᵢ</th></tr><tr><td>1</td><td>+1</td><td>0.4</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr><tr><td>2</td><td>+1</td><td>1.5</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr><tr><td>3</td><td>−1</td><td>−2.0</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr><tr><td>4</td><td>−1</td><td>0.3</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td><td style="color:var(--text3)">?</td></tr></table><p>Fill in. Use ξᵢ = max(0, 1−yᵢf(xᵢ)).<br/>yf > 1: outside margin. 0 < yf < 1: inside margin. yf < 0: misclassified.</p>',a:'Obs  yf      Status              ξ\n1    0.4    inside margin       0.6\n2    1.5    outside margin      0\n3    2.0    outside margin      0\n4   −0.3    MISCLASSIFIED       1.3\n\nξ₄=1.3 > 1 confirms misclassification.\nξ₁=0.6 ∈ (0,1): margin violator, correct side.'},
+{label:'Part (c) — RBF Kernel [4 pts]',q:'<p>K(xᵢ,xⱼ) = exp(−γ||xᵢ−xⱼ||²), γ = 0.25</p><table class="tbl"><tr><th>Point</th><th>Coordinates</th></tr><tr><td>x₁</td><td>(1, 2)</td></tr><tr><td>x₂</td><td>(4, 6)</td></tr><tr><td>x₃</td><td>(2, 3)</td></tr></table><ol><li>Compute K(x₁,x₂).</li><li>Compute K(x₁,x₃).</li><li>Which pair is more similar?</li></ol>',a:'1) ||x₁−x₂||²=(1−4)²+(2−6)²=9+16=25\n   K(x₁,x₂)=exp(−0.25×25)=exp(−6.25)≈0.002\n\n2) ||x₁−x₃||²=(1−2)²+(2−3)²=1+1=2\n   K(x₁,x₃)=exp(−0.25×2)=exp(−0.5)≈0.607\n\n3) x₁ & x₃ are far more similar (K≈0.607 vs 0.002).\n   K=1: identical. K→0: very far apart.'},
+{label:'Part (d) — Multiclass & C [4 pts]',q:'<ol><li>For 5 classes: how many classifiers for OVR? OVO?</li><li>As C increases, what happens to margin width and bias-variance?</li><li>When should you prefer SVM over logistic regression?</li></ol>',a:'1) OVR: 5.  OVO: 5(4)/2 = 10.\n\n2) ↑C → narrower margin, fewer violations.\n   Bias ↓ (closer fit), Variance ↑ (more sensitive).\n   C=∞ → hard margin.\n\n3) SVM preferred when:\n   • Classes nearly separable\n   • p > n (high-dimensional, few observations)\n   • Nonlinear boundaries needed (kernel trick)\n   • Probability estimates not required'}
 ]},
 {title:'PA-Q5: Hierarchical Clustering',topic:'hierarchical',points:20,parts:[
-{label:'Part (a) — Distance Matrix [5 pts]',q:'<p>Cluster 4 warehouses by location:</p><table class="tbl"><tr><th>Warehouse</th><th>X</th><th>Y</th></tr><tr><td>W1</td><td>1</td><td>2</td></tr><tr><td>W2</td><td>3</td><td>4</td></tr><tr><td>W3</td><td>8</td><td>7</td></tr><tr><td>W4</td><td>10</td><td>9</td></tr></table><p>Compute all 6 pairwise Euclidean distances. Present as a matrix.</p>',a:'d(W1,W2)=√(4+4)=2√2≈2.83
-d(W1,W3)=√(49+25)=√74≈8.60
-d(W1,W4)=√(81+49)=√130≈11.40
-d(W2,W3)=√(25+9)=√34≈5.83
-d(W2,W4)=√(49+25)=√74≈8.60
-d(W3,W4)=√(4+4)=2√2≈2.83
-
-       W1    W2    W3    W4
-W1    —     2.83  8.60  11.40
-W2          —     5.83   8.60
-W3                —      2.83
-W4                       —'},
-{label:'Part (b) — Complete Linkage [6 pts]',q:'<p>Perform agglomerative clustering with <b>complete linkage</b>. For each step state: which clusters merge, at what height, and update distances.</p>',a:'Step 1: Min distances = d(W1,W2)=d(W3,W4)=2.83
-  Merge {W1,W2} at h=2.83
-  Merge {W3,W4} at h=2.83
-
-Step 2: Complete linkage between remaining:
-  d({W1,W2},{W3,W4}) = max(8.60, 11.40, 5.83, 8.60) = 11.40
-  Merge at h=11.40
-
-Sequence: 2.83 → 2.83 → 11.40'},
-{label:'Part (c) — Dendrogram & Cutting [4 pts]',q:'<ol><li>Sketch the dendrogram.</li><li>Cut at h=5 → how many clusters? List them.</li><li>Cut at h=1 → how many clusters?</li></ol>',a:'1) Dendrogram:
-   h=11.40  ______|______
-           |            |
-   h=2.83  |__    |     |__
-          |    |       |    |
-          W1  W2      W3  W4
-
-2) h=5: 2 clusters → {W1,W2} and {W3,W4}
-   (cross-merge at 11.40 > 5)
-
-3) h=1: 4 clusters (no merge < 1)'},
-{label:'Part (d) — Linkage Comparison [5 pts]',q:'<ol><li>Compute d<sub>single</sub>({W1,W2},{W3,W4}). Compare with complete.</li><li>Why does single linkage produce "chaining"?</li><li>Would K-Means (K=2) give the same clusters?</li></ol>',a:'1) d_single = min(8.60,11.40,5.83,8.60) = 5.83
-   vs complete = 11.40. Single merges earlier.
-
-2) Single uses only the closest pair. If points form a chain where each neighbor is close but endpoints are far, single merges the whole chain — producing elongated, non-compact clusters.
-
-3) Yes — K-Means would almost certainly produce {W1,W2} and {W3,W4}. The two pairs are tightly clustered (d=2.83) and well-separated (d≥5.83). Both methods identify this structure, but hierarchical also shows the internal structure via the dendrogram.'}
+{label:'Part (a) — Distance Matrix [5 pts]',q:'<p>Cluster 4 warehouses by location:</p><table class="tbl"><tr><th>Warehouse</th><th>X</th><th>Y</th></tr><tr><td>W1</td><td>1</td><td>2</td></tr><tr><td>W2</td><td>3</td><td>4</td></tr><tr><td>W3</td><td>8</td><td>7</td></tr><tr><td>W4</td><td>10</td><td>9</td></tr></table><p>Compute all 6 pairwise Euclidean distances. Present as a matrix.</p>',a:'d(W1,W2)=√(4+4)=2√2≈2.83\nd(W1,W3)=√(49+25)=√74≈8.60\nd(W1,W4)=√(81+49)=√130≈11.40\nd(W2,W3)=√(25+9)=√34≈5.83\nd(W2,W4)=√(49+25)=√74≈8.60\nd(W3,W4)=√(4+4)=2√2≈2.83\n\n       W1    W2    W3    W4\nW1    —     2.83  8.60  11.40\nW2          —     5.83   8.60\nW3                —      2.83\nW4                       —'},
+{label:'Part (b) — Complete Linkage [6 pts]',q:'<p>Perform agglomerative clustering with <b>complete linkage</b>. For each step state: which clusters merge, at what height, and update distances.</p>',a:'Step 1: Min distances = d(W1,W2)=d(W3,W4)=2.83\n  Merge {W1,W2} at h=2.83\n  Merge {W3,W4} at h=2.83\n\nStep 2: Complete linkage between remaining:\n  d({W1,W2},{W3,W4}) = max(8.60, 11.40, 5.83, 8.60) = 11.40\n  Merge at h=11.40\n\nSequence: 2.83 → 2.83 → 11.40'},
+{label:'Part (c) — Dendrogram & Cutting [4 pts]',q:'<ol><li>Sketch the dendrogram.</li><li>Cut at h=5 → how many clusters? List them.</li><li>Cut at h=1 → how many clusters?</li></ol>',a:'1) Dendrogram:\n   h=11.40  ______|______\n           |            |\n   h=2.83  |__    |     |__\n          |    |       |    |\n          W1  W2      W3  W4\n\n2) h=5: 2 clusters → {W1,W2} and {W3,W4}\n   (cross-merge at 11.40 > 5)\n\n3) h=1: 4 clusters (no merge < 1)'},
+{label:'Part (d) — Linkage Comparison [5 pts]',q:'<ol><li>Compute d<sub>single</sub>({W1,W2},{W3,W4}). Compare with complete.</li><li>Why does single linkage produce "chaining"?</li><li>Would K-Means (K=2) give the same clusters?</li></ol>',a:'1) d_single = min(8.60,11.40,5.83,8.60) = 5.83\n   vs complete = 11.40. Single merges earlier.\n\n2) Single uses only the closest pair. If points form a chain where each neighbor is close but endpoints are far, single merges the whole chain — producing elongated, non-compact clusters.\n\n3) Yes — K-Means would almost certainly produce {W1,W2} and {W3,W4}. The two pairs are tightly clustered (d=2.83) and well-separated (d≥5.83). Both methods identify this structure, but hierarchical also shows the internal structure via the dendrogram.'}
 ]}
 ];
 
