@@ -3,787 +3,632 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSE 446 Final Exam Study System</title>
+<title>MSE 446 · Final Exam Study</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0c0e14;--bg2:#14171f;--bg3:#1c2030;--bg4:#262b3d;
-  --text:#e8ebf4;--text2:#8892b0;
-  --accent:#7b93ff;--accent2:#5a6fef;--accent-glow:rgba(123,147,255,.12);
-  --green:#5bf0a0;--red:#ff6b7a;--orange:#ffb054;--yellow:#ffe066;
-  --border:rgba(255,255,255,.06);--card:#14171f;
-  --code-bg:#0e1019;
-  --shadow:0 2px 12px rgba(0,0,0,.3),0 8px 32px rgba(0,0,0,.2);
-  --radius:14px;--sidebar-w:260px;--header-h:60px
+/* ===== DESIGN TOKENS ===== */
+:root {
+  --bg: #0b0d12; --bg-raised: #12151c; --bg-overlay: #181c26; --bg-input: #1e2230;
+  --text-primary: #e4e7ef; --text-secondary: #7b83a0; --text-tertiary: #515872;
+  --accent: #6e8cff; --accent-hover: #5a75e6; --accent-subtle: rgba(110,140,255,.10); --accent-glow: rgba(110,140,255,.18);
+  --green: #34d399; --green-subtle: rgba(52,211,153,.10);
+  --red: #f87171; --red-subtle: rgba(248,113,113,.10);
+  --amber: #fbbf24; --amber-subtle: rgba(251,191,36,.10);
+  --border: rgba(255,255,255,.07); --border-strong: rgba(255,255,255,.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.24); --shadow-md: 0 4px 16px rgba(0,0,0,.28); --shadow-lg: 0 12px 40px rgba(0,0,0,.35);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-full: 9999px;
+  --sidebar-w: 240px; --header-h: 56px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
 }
-[data-theme="light"]{
-  --bg:#f4f5f9;--bg2:#ffffff;--bg3:#eceef5;--bg4:#dfe2ed;
-  --text:#1a1e2e;--text2:#636d8c;
-  --accent:#4f63e8;--accent2:#3a4ed0;--accent-glow:rgba(79,99,232,.08);
-  --green:#1aad5c;--red:#d93848;--orange:#d98a20;--yellow:#b89a00;
-  --border:rgba(0,0,0,.06);--card:#ffffff;
-  --code-bg:#f0f1f7;
-  --shadow:0 2px 8px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06)
+[data-theme="light"] {
+  --bg: #f5f6fa; --bg-raised: #ffffff; --bg-overlay: #eceef5; --bg-input: #f0f1f7;
+  --text-primary: #1a1d2e; --text-secondary: #5c6380; --text-tertiary: #8b91a8;
+  --accent: #4f63e8; --accent-hover: #3d4fd6; --accent-subtle: rgba(79,99,232,.07); --accent-glow: rgba(79,99,232,.12);
+  --green: #059669; --green-subtle: rgba(5,150,105,.07);
+  --red: #dc2626; --red-subtle: rgba(220,38,38,.07);
+  --amber: #d97706; --amber-subtle: rgba(217,119,6,.07);
+  --border: rgba(0,0,0,.06); --border-strong: rgba(0,0,0,.10);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06); --shadow-md: 0 4px 12px rgba(0,0,0,.06); --shadow-lg: 0 8px 30px rgba(0,0,0,.08);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow:hidden;height:100vh;font-size:15px;letter-spacing:-.01em}
-::-webkit-scrollbar{width:7px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:10px}::-webkit-scrollbar-thumb:hover{background:var(--text2)}
-::selection{background:var(--accent);color:#fff}
-button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
-code,pre{font-family:'JetBrains Mono','SF Mono',Consolas,monospace}
 
-.header{position:fixed;top:0;left:0;right:0;height:var(--header-h);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(16px);background:rgba(20,23,31,.85)}
-[data-theme="light"] .header{background:rgba(255,255,255,.85)}
-.header h1{font-size:17px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
-.header-right{display:flex;align-items:center;gap:12px}
-.theme-toggle{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--bg3);transition:all .25s;border:1px solid var(--border)}
-.theme-toggle:hover{background:var(--bg4);transform:scale(1.05)}
-.menu-btn{display:none;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center;font-size:20px;background:var(--bg3);border:1px solid var(--border)}
+/* ===== RESET & BASE ===== */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; scroll-behavior:smooth; }
+body { font-family:var(--font); background:var(--bg); color:var(--text-primary); line-height:1.65; font-size:14.5px; letter-spacing:-.01em; overflow:hidden; height:100dvh; transition:background var(--transition),color var(--transition); }
+::selection { background:var(--accent); color:#fff; }
+::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--text-tertiary); border-radius:8px; } ::-webkit-scrollbar-thumb:hover { background:var(--text-secondary); }
+button { cursor:pointer; font-family:inherit; border:none; background:none; color:inherit; font-size:inherit; }
+a { color:var(--accent); text-decoration:none; }
+code,pre { font-family:var(--mono); }
 
-.sidebar{position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:20px 0;z-index:90;transition:transform .3s cubic-bezier(.4,0,.2,1)}
-.sidebar .nav-group{margin-bottom:12px}
-.sidebar .nav-label{padding:8px 24px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);opacity:.6}
-.sidebar .nav-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;border-left:3px solid transparent;margin:1px 0}
-.sidebar .nav-item:hover{background:var(--accent-glow);color:var(--text)}
-.sidebar .nav-item.active{background:var(--accent-glow);color:var(--accent);border-left-color:var(--accent);font-weight:600}
-.sidebar .nav-item .icon{width:22px;text-align:center;font-size:17px;opacity:.8}
+/* ===== HEADER ===== */
+.header { position:fixed; top:0; left:0; right:0; height:var(--header-h); background:var(--bg-raised); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:200; backdrop-filter:blur(20px) saturate(1.2); -webkit-backdrop-filter:blur(20px) saturate(1.2); transition:background var(--transition),border-color var(--transition); }
+[data-theme="dark"] .header { background:rgba(18,21,28,.82); }
+[data-theme="light"] .header { background:rgba(255,255,255,.82); }
+.header-left { display:flex; align-items:center; gap:12px; }
+.logo { font-size:15px; font-weight:700; letter-spacing:-.02em; color:var(--text-primary); }
+.logo span { color:var(--accent); }
+.header-right { display:flex; align-items:center; gap:8px; }
+.streak-badge { font-size:12px; font-weight:600; color:var(--accent); background:var(--accent-subtle); padding:4px 12px; border-radius:var(--radius-full); display:none; }
+.streak-badge.visible { display:inline-flex; align-items:center; gap:5px; }
+.icon-btn { width:36px; height:36px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--text-secondary); transition:all var(--transition); border:1px solid transparent; }
+.icon-btn:hover { background:var(--accent-subtle); color:var(--accent); border-color:var(--border); }
+.menu-btn { display:none; }
 
-.main{position:fixed;top:var(--header-h);left:var(--sidebar-w);right:0;bottom:0;overflow-y:auto;padding:36px 40px;transition:left .3s cubic-bezier(.4,0,.2,1)}
-.main-inner{max-width:960px;margin:0 auto}
+/* ===== SIDEBAR ===== */
+.sidebar { position:fixed; top:var(--header-h); left:0; bottom:0; width:var(--sidebar-w); background:var(--bg-raised); border-right:1px solid var(--border); overflow-y:auto; padding:16px 0; z-index:100; transition:transform .3s cubic-bezier(.4,0,.2,1),background var(--transition),border-color var(--transition); }
+.nav-section { margin-bottom:8px; }
+.nav-section-label { padding:12px 20px 6px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.6px; color:var(--text-tertiary); }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 20px; font-size:13.5px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:all var(--transition); border-left:2.5px solid transparent; margin:1px 0; border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.nav-item:hover { background:var(--accent-subtle); color:var(--text-primary); }
+.nav-item.active { background:var(--accent-subtle); color:var(--accent); border-left-color:var(--accent); font-weight:600; }
+.nav-icon { width:20px; text-align:center; font-size:15px; opacity:.75; flex-shrink:0; }
+.nav-item.active .nav-icon { opacity:1; }
 
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;box-shadow:var(--shadow)}
-.card h2{font-size:24px;margin-bottom:18px;color:var(--text);font-weight:800;letter-spacing:-.03em;line-height:1.3}
-.card h3{font-size:17px;margin:28px 0 12px;color:var(--accent);font-weight:700;letter-spacing:-.01em}
-.card h3:first-child{margin-top:0}
-.card p{margin-bottom:10px;color:var(--text);line-height:1.75}
-.card ul,.card ol{margin:10px 0 14px 0;padding-left:24px}
-.card li{padding:4px 0;line-height:1.7}
-.card li+li{margin-top:2px}
-.card strong{font-weight:700}
+/* ===== MAIN ===== */
+.main { position:fixed; top:var(--header-h); left:var(--sidebar-w); right:0; bottom:0; overflow-y:auto; padding:32px 36px; transition:left .3s cubic-bezier(.4,0,.2,1); }
+.main-inner { max-width:880px; margin:0 auto; }
 
-.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:10px;font-size:14px;font-weight:600;transition:all .2s;letter-spacing:-.01em;border:1px solid transparent}
-.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(123,147,255,.25)}
-.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(123,147,255,.35)}
-.btn-secondary{background:var(--bg3);color:var(--text);border-color:var(--border)}
-.btn-secondary:hover{background:var(--bg4);border-color:rgba(255,255,255,.1)}
-.btn-success{background:var(--green);color:#000;box-shadow:0 2px 12px rgba(91,240,160,.2)}
-.btn-danger{background:var(--red);color:#fff;box-shadow:0 2px 12px rgba(255,107,122,.2)}
-.btn-sm{padding:6px 14px;font-size:12px;border-radius:8px}
+/* ===== CARDS ===== */
+.card { background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px 28px; margin-bottom:20px; box-shadow:var(--shadow-sm); transition:background var(--transition),border-color var(--transition),box-shadow var(--transition); }
+.card h2 { font-size:22px; font-weight:800; letter-spacing:-.03em; line-height:1.3; margin-bottom:16px; color:var(--text-primary); }
+.card h3 { font-size:16px; font-weight:700; color:var(--accent); margin:24px 0 10px; letter-spacing:-.01em; }
+.card h3:first-child { margin-top:0; }
+.card p { margin-bottom:8px; line-height:1.75; color:var(--text-primary); }
+.card ul,.card ol { margin:8px 0 12px; padding-left:22px; }
+.card li { padding:3px 0; line-height:1.7; }
+.card strong { font-weight:700; }
 
-.progress-bar{height:7px;background:var(--bg3);border-radius:10px;overflow:hidden}
-.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:10px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+/* ===== BUTTONS ===== */
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:8px 18px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; transition:all var(--transition); border:1px solid transparent; letter-spacing:-.01em; line-height:1; white-space:nowrap; }
+.btn-primary { background:var(--accent); color:#fff; box-shadow:0 1px 8px rgba(110,140,255,.25); }
+.btn-primary:hover { background:var(--accent-hover); transform:translateY(-1px); box-shadow:0 4px 16px rgba(110,140,255,.3); }
+.btn-primary:active { transform:translateY(0); }
+.btn-ghost { background:var(--bg-overlay); color:var(--text-primary); border-color:var(--border-strong); }
+.btn-ghost:hover { background:var(--bg-input); border-color:var(--accent); color:var(--accent); }
+.btn-success { background:var(--green); color:#fff; }
+.btn-success:hover { opacity:.9; }
+.btn-danger { background:var(--red); color:#fff; }
+.btn-sm { padding:5px 12px; font-size:12px; border-radius:6px; }
 
-pre.code-block{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:20px 22px;overflow-x:auto;font-size:13.5px;line-height:1.75;margin:14px 0;tab-size:2;white-space:pre-wrap}
-code.inline{background:var(--code-bg);padding:3px 8px;border-radius:6px;font-size:13px;border:1px solid var(--border);font-weight:500}
+/* ===== PROGRESS ===== */
+.progress { height:6px; background:var(--bg-input); border-radius:var(--radius-full); overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent-hover),var(--accent)); border-radius:var(--radius-full); transition:width .5s cubic-bezier(.4,0,.2,1); }
 
-.exam-callout{background:var(--accent-glow);border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 10px 10px 0;margin:16px 0;font-size:14px;line-height:1.7}
-.exam-callout::before{content:"KEY EXAM POINT";display:block;font-size:10px;font-weight:800;color:var(--accent);margin-bottom:6px;letter-spacing:1px}
+/* ===== CODE ===== */
+pre.code { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; overflow-x:auto; font-size:13px; line-height:1.8; margin:12px 0; white-space:pre-wrap; word-break:break-word; color:var(--text-secondary); }
+code.il { background:var(--bg-input); padding:2px 7px; border-radius:5px; font-size:12.5px; border:1px solid var(--border); font-weight:500; color:var(--accent); }
 
-.warning-callout{background:rgba(255,107,122,.06);border-left:4px solid var(--red);padding:16px 20px;border-radius:0 10px 10px 0;margin:16px 0;font-size:14px;line-height:1.7}
-.warning-callout::before{content:"WATCH OUT";display:block;font-size:10px;font-weight:800;color:var(--red);margin-bottom:6px;letter-spacing:1px}
+/* ===== CALLOUTS ===== */
+.callout { padding:14px 18px; border-radius:0 var(--radius-md) var(--radius-md) 0; margin:14px 0; font-size:13.5px; line-height:1.7; }
+.callout-label { font-size:10px; font-weight:800; letter-spacing:1.2px; margin-bottom:5px; text-transform:uppercase; }
+.callout-key { background:var(--accent-subtle); border-left:3px solid var(--accent); }
+.callout-key .callout-label { color:var(--accent); }
+.callout-warn { background:var(--red-subtle); border-left:3px solid var(--red); }
+.callout-warn .callout-label { color:var(--red); }
 
-.compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0;font-size:13.5px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
-.compare-table th{background:var(--bg3);padding:10px 16px;text-align:left;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:1px solid var(--border)}
-.compare-table th+th{border-left:1px solid var(--border)}
-.compare-table td{padding:10px 16px;border-bottom:1px solid var(--border)}
-.compare-table td+td{border-left:1px solid var(--border)}
-.compare-table tr:last-child td{border-bottom:none}
-.compare-table tr:nth-child(even) td{background:rgba(123,147,255,.03)}
+/* ===== TABLES ===== */
+.tbl { width:100%; border-collapse:separate; border-spacing:0; margin:12px 0; font-size:13px; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); }
+.tbl th { background:var(--bg-overlay); padding:10px 14px; text-align:left; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); border-bottom:1px solid var(--border); }
+.tbl th+th { border-left:1px solid var(--border); }
+.tbl td { padding:9px 14px; border-bottom:1px solid var(--border); font-size:13px; line-height:1.6; }
+.tbl td+td { border-left:1px solid var(--border); }
+.tbl tr:last-child td { border-bottom:none; }
 
-.flashcard-container{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px 0}
-.flashcard{width:100%;max-width:620px;min-height:300px;perspective:1200px;cursor:pointer}
-.flashcard-inner{position:relative;width:100%;min-height:300px;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
-.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
-.flashcard-front,.flashcard-back{position:absolute;top:0;left:0;right:0;min-height:300px;backface-visibility:hidden;border-radius:var(--radius);padding:36px 32px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.flashcard-front{background:var(--bg3);border:1px solid var(--border);box-shadow:var(--shadow)}
-.flashcard-back{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;transform:rotateY(180deg);box-shadow:0 8px 32px rgba(123,147,255,.3)}
-.flashcard-front p{font-size:19px;font-weight:600;letter-spacing:-.01em;line-height:1.6}
-.flashcard-back p{font-size:16px;line-height:1.8}
-.flashcard-topic{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;opacity:.5;margin-bottom:16px;font-weight:700}
-.flashcard-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.flashcard-progress{font-size:14px;color:var(--text2);font-weight:500}
+/* ===== DIAGRAM ===== */
+.diagram { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; overflow-x:auto; font-family:var(--mono); font-size:12.5px; line-height:1.5; margin:12px 0; white-space:pre; color:var(--accent); }
 
-.quiz-option{display:block;width:100%;text-align:left;padding:14px 20px;margin:8px 0;border-radius:10px;border:1.5px solid var(--border);background:var(--bg3);font-size:14.5px;transition:all .2s;font-weight:500;line-height:1.6}
-.quiz-option:hover{border-color:var(--accent);background:var(--accent-glow);transform:translateX(4px)}
-.quiz-option.selected{border-color:var(--accent);background:var(--accent-glow)}
-.quiz-option.correct{border-color:var(--green);background:rgba(91,240,160,.08)}
-.quiz-option.incorrect{border-color:var(--red);background:rgba(255,107,122,.08)}
-.quiz-explanation{margin-top:16px;padding:16px 20px;background:var(--bg3);border-radius:10px;font-size:14px;line-height:1.75;border:1px solid var(--border)}
-.quiz-score{font-size:56px;font-weight:900;color:var(--accent);text-align:center;letter-spacing:-.04em}
-.quiz-score-sub{text-align:center;color:var(--text2);margin-bottom:24px;font-size:16px}
+/* ===== DASHBOARD ===== */
+.banner { background:var(--accent-subtle); border:1px solid rgba(110,140,255,.12); border-radius:var(--radius-lg); padding:22px 24px; margin-bottom:20px; font-size:13.5px; line-height:1.7; }
+.banner h3 { font-size:15px; color:var(--accent); margin-bottom:6px; font-weight:700; }
+.banner-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:14px; }
+.banner-item { text-align:center; padding:12px 8px; background:var(--bg-raised); border-radius:var(--radius-md); border:1px solid var(--border); }
+.banner-num { font-size:24px; font-weight:800; color:var(--accent); letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
+.banner-lbl { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
+.stat-card { background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 22px; box-shadow:var(--shadow-sm); transition:all var(--transition); }
+.stat-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.stat-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.6px; color:var(--text-secondary); margin-bottom:8px; }
+.stat-value { font-size:32px; font-weight:800; color:var(--accent); letter-spacing:-.04em; font-variant-numeric:tabular-nums; line-height:1.1; }
+.mastery-row { display:flex; align-items:center; gap:12px; padding:8px 0; }
+.mastery-label { flex:1; font-size:13px; font-weight:500; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mastery-bar { flex:1.8; }
+.mastery-pct { width:42px; text-align:right; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
+.weak { background:var(--red-subtle); border:1px solid rgba(248,113,113,.15); border-radius:var(--radius-sm); padding:10px 14px; margin:6px 0; font-size:13px; }
+.strong { background:var(--green-subtle); border:1px solid rgba(52,211,153,.15); border-radius:var(--radius-sm); padding:10px 14px; margin:6px 0; font-size:13px; }
 
-.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:24px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{padding:11px 20px;font-size:13.5px;font-weight:600;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;letter-spacing:-.01em}
-.tab:hover{color:var(--text);background:var(--accent-glow);border-radius:8px 8px 0 0}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+/* ===== TABS ===== */
+.tabs { display:flex; gap:0; border-bottom:1.5px solid var(--border); margin-bottom:20px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; }
+.tabs::-webkit-scrollbar { display:none; }
+.tab { padding:10px 18px; font-size:13px; font-weight:600; color:var(--text-secondary); border-bottom:2px solid transparent; margin-bottom:-1.5px; transition:all var(--transition); white-space:nowrap; }
+.tab:hover { color:var(--text-primary); background:var(--accent-subtle); border-radius:var(--radius-sm) var(--radius-sm) 0 0; }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
 
-.topic-chip{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:var(--bg3);transition:all .2s;letter-spacing:-.01em}
-.topic-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
-.topic-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 12px rgba(123,147,255,.3)}
-.topic-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+/* ===== CHIPS ===== */
+.chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:20px; }
+.chip { padding:6px 14px; border-radius:var(--radius-full); font-size:12.5px; font-weight:600; border:1.5px solid var(--border); background:var(--bg-overlay); transition:all var(--transition); }
+.chip:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-subtle); }
+.chip.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 2px 10px rgba(110,140,255,.25); }
 
-.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
-.dash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
-.dash-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.dash-card h4{font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.dash-card .big-num{font-size:40px;font-weight:900;color:var(--accent);letter-spacing:-.04em}
-.topic-mastery{display:flex;align-items:center;gap:14px;padding:10px 0}
-.topic-mastery .label{flex:1;font-size:14px;font-weight:500}
-.topic-mastery .bar{flex:2}
-.topic-mastery .pct{width:48px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
-.weak-area{background:rgba(255,107,122,.06);border:1px solid rgba(255,107,122,.2);border-radius:10px;padding:14px 18px;margin:8px 0;font-size:14px}
-.strong-area{background:rgba(91,240,160,.06);border:1px solid rgba(91,240,160,.2);border-radius:10px;padding:14px 18px;margin:8px 0;font-size:14px}
+/* ===== FLASHCARDS ===== */
+.fc-wrap { display:flex; flex-direction:column; align-items:center; gap:20px; padding:16px 0; }
+.fc-card { width:100%; max-width:580px; height:280px; perspective:1000px; cursor:pointer; }
+.fc-inner { position:relative; width:100%; height:100%; transition:transform .55s cubic-bezier(.4,0,.2,1); transform-style:preserve-3d; }
+.fc-card.flipped .fc-inner { transform:rotateY(180deg); }
+.fc-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius-lg); padding:32px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+.fc-front { background:var(--bg-overlay); border:1px solid var(--border-strong); box-shadow:var(--shadow-md); }
+.fc-back { background:linear-gradient(135deg,var(--accent-hover),var(--accent)); color:#fff; transform:rotateY(180deg); box-shadow:0 8px 32px rgba(110,140,255,.3); }
+.fc-topic { font-size:10px; text-transform:uppercase; letter-spacing:1.8px; color:var(--text-tertiary); margin-bottom:16px; font-weight:700; }
+.fc-back .fc-topic { color:rgba(255,255,255,.5); }
+.fc-front .fc-text { font-size:17px; font-weight:600; line-height:1.55; color:var(--text-primary); }
+.fc-back .fc-text { font-size:15px; line-height:1.7; }
+.fc-controls { display:flex; gap:8px; }
+.fc-count { font-size:13px; color:var(--text-secondary); font-weight:500; font-variant-numeric:tabular-nums; }
 
-.exam-format-banner{background:var(--accent-glow);border:1px solid rgba(123,147,255,.15);border-radius:var(--radius);padding:24px;margin-bottom:24px;font-size:14px;line-height:1.7}
-.exam-format-banner h3{color:var(--accent);margin-bottom:8px;font-weight:700}
-.exam-format-banner .fmt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
-.exam-format-banner .fmt-item{text-align:center;padding:12px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)}
-.exam-format-banner .fmt-item .num{font-size:28px;font-weight:900;color:var(--accent);letter-spacing:-.03em}
-.exam-format-banner .fmt-item .lbl{font-size:12px;color:var(--text2);margin-top:2px}
+/* ===== QUIZ ===== */
+.q-opt { display:block; width:100%; text-align:left; padding:12px 16px; margin:6px 0; border-radius:var(--radius-md); border:1.5px solid var(--border); background:var(--bg-overlay); font-size:14px; transition:all var(--transition); font-weight:500; line-height:1.6; }
+.q-opt:hover { border-color:var(--accent); background:var(--accent-subtle); transform:translateX(3px); }
+.q-opt.sel { border-color:var(--accent); background:var(--accent-subtle); }
+.q-opt.ok { border-color:var(--green); background:var(--green-subtle); }
+.q-opt.wrong { border-color:var(--red); background:var(--red-subtle); }
+.q-exp { margin-top:14px; padding:14px 16px; background:var(--bg-overlay); border-radius:var(--radius-md); font-size:13.5px; line-height:1.7; border:1px solid var(--border); }
+.q-score { font-size:52px; font-weight:800; color:var(--accent); text-align:center; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
+.q-score-sub { text-align:center; color:var(--text-secondary); margin-bottom:20px; font-size:15px; }
 
-.mock-timer{position:sticky;top:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 24px;margin:-36px -40px 28px;display:flex;align-items:center;justify-content:space-between;z-index:10;backdrop-filter:blur(12px);background:rgba(20,23,31,.9)}
-[data-theme="light"] .mock-timer{background:rgba(255,255,255,.9)}
-.mock-timer .time{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.mock-timer .time.warning{color:var(--orange)}
-.mock-timer .time.danger{color:var(--red)}
+/* ===== MOCK TIMER ===== */
+.timer-bar { position:sticky; top:0; z-index:10; background:var(--bg-raised); border-bottom:1px solid var(--border); padding:12px 24px; margin:-32px -36px 24px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(16px); transition:background var(--transition); }
+[data-theme="dark"] .timer-bar { background:rgba(18,21,28,.88); }
+[data-theme="light"] .timer-bar { background:rgba(255,255,255,.88); }
+.timer-time { font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+.timer-time.warn { color:var(--amber); }
+.timer-time.crit { color:var(--red); }
 
-.diagram{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:20px 22px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;margin:14px 0;white-space:pre;color:var(--accent)}
+/* ===== ANIMATIONS ===== */
+.fade-in { animation:fadeUp .3s cubic-bezier(.4,0,.2,1) both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-.fade-in{animation:fadeIn .35s cubic-bezier(.4,0,.2,1)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
-  .main{left:0;padding:24px 20px}.menu-btn{display:flex}
-  .mock-timer{margin:-24px -20px 20px}.card{padding:20px}
-  .dash-grid{grid-template-columns:1fr 1fr}
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px) {
+  .sidebar { transform:translateX(-100%); } .sidebar.open { transform:translateX(0); box-shadow:var(--shadow-lg); }
+  .main { left:0; padding:24px 16px; } .menu-btn { display:flex; }
+  .timer-bar { margin:-24px -16px 20px; padding:12px 16px; }
+  .card { padding:18px 20px; }
+  .stat-grid { grid-template-columns:1fr 1fr; gap:10px; }
+  .banner-grid { grid-template-columns:repeat(2,1fr); }
 }
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div style="display:flex;align-items:center;gap:12px">
-    <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
-    <h1>MSE 446 Study System</h1>
+  <div class="header-left">
+    <button class="icon-btn menu-btn" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+    <div class="logo"><span>MSE 446</span> · Study</div>
   </div>
   <div class="header-right">
-    <span id="streakDisplay" style="font-size:13px;color:var(--text2)"></span>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">&#9790;</button>
+    <div class="streak-badge" id="streakBadge">&#128293; <span id="streakText"></span></div>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle theme">&#9790;</button>
   </div>
 </header>
 
 <nav class="sidebar" id="sidebar">
-  <div class="nav-group">
-    <div class="nav-label">Home</div>
-    <div class="nav-item" data-page="dashboard" onclick="navigate('dashboard')"><span class="icon">&#9636;</span>Dashboard</div>
+  <div class="nav-section">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item" data-page="dashboard" onclick="navigate('dashboard')"><span class="nav-icon">&#9632;</span>Dashboard</div>
   </div>
-  <div class="nav-group">
-    <div class="nav-label">Study</div>
-    <div class="nav-item" data-page="guide" onclick="navigate('guide')"><span class="icon">&#128214;</span>Study Guide</div>
-    <div class="nav-item" data-page="flashcards" onclick="navigate('flashcards')"><span class="icon">&#127183;</span>Flashcards</div>
+  <div class="nav-section">
+    <div class="nav-section-label">Study</div>
+    <div class="nav-item" data-page="guide" onclick="navigate('guide')"><span class="nav-icon">&#9998;</span>Study Guide</div>
+    <div class="nav-item" data-page="flashcards" onclick="navigate('flashcards')"><span class="nav-icon">&#9830;</span>Flashcards</div>
   </div>
-  <div class="nav-group">
-    <div class="nav-label">Practice</div>
-    <div class="nav-item" data-page="quiz" onclick="navigate('quiz')"><span class="icon">&#10004;</span>Quizzes</div>
-    <div class="nav-item" data-page="mock" onclick="navigate('mock')"><span class="icon">&#128221;</span>Mock Exams</div>
+  <div class="nav-section">
+    <div class="nav-section-label">Practice</div>
+    <div class="nav-item" data-page="quiz" onclick="navigate('quiz')"><span class="nav-icon">&#10003;</span>Quizzes</div>
+    <div class="nav-item" data-page="mock" onclick="navigate('mock')"><span class="nav-icon">&#9200;</span>Mock Exam</div>
   </div>
 </nav>
 
-<main class="main" id="main">
-  <div class="main-inner" id="content"></div>
-</main>
+<main class="main" id="main"><div class="main-inner" id="content"></div></main>
 
 <script>
-const TOPICS=[
-{id:'pca',name:'PCA',full:'Principal Component Analysis'},
-{id:'kmeans',name:'K-Means',full:'K-Means Clustering'},
-{id:'hierarchical',name:'Hierarchical',full:'Hierarchical Clustering'},
-{id:'nn',name:'Neural Networks',full:'Neural Networks'},
-{id:'svm',name:'SVM',full:'Support Vector Machines'}
-];
+const T=[{id:'pca',s:'PCA',f:'Principal Component Analysis'},{id:'kmeans',s:'K-Means',f:'K-Means Clustering'},{id:'hierarchical',s:'Hierarchical',f:'Hierarchical Clustering'},{id:'nn',s:'Neural Nets',f:'Neural Networks'},{id:'svm',s:'SVM',f:'Support Vector Machines'}];
 
-const GUIDE={
-pca:`<h2>Principal Component Analysis (PCA)</h2>
+const G={
+pca:`<h2>Principal Component Analysis</h2>
 <h3>What is PCA?</h3>
-<p>PCA is a <strong>dimensionality reduction</strong> method that produces a low-dimensional representation of a dataset. It finds <strong>linear combinations</strong> of variables with <strong>maximal variance</strong> that are <strong>mutually uncorrelated</strong>.</p>
-<div class="exam-callout">PCA looks for directions of <strong>maximum variance</strong>. Clustering looks for <strong>homogeneous subgroups</strong>. Know the difference.</div>
+<p>A <strong>dimensionality reduction</strong> method that finds <strong>linear combinations</strong> of variables with <strong>maximal variance</strong>, mutually uncorrelated. Solved via eigenvalue decomposition of the covariance matrix.</p>
+<div class="callout callout-key"><div class="callout-label">Key Exam Point</div>PCA looks for directions of <strong>maximum variance</strong>. Clustering looks for <strong>homogeneous subgroups</strong>.</div>
 <h3>First Principal Component</h3>
-<pre class="code-block">Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ
+<pre class="code">Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ
 
-subject to: Σ φⱼ₁² = 1  (normalization constraint)
+subject to: Σ φⱼ₁² = 1  (normalization)
 
-• Loadings φ₁₁,...,φₚ₁ define the direction of maximum variance
-• Scores z_i1 are the projections onto this direction
-• Solved via eigenvalue decomposition of the covariance matrix</pre>
-<h3>Further Principal Components</h3>
-<ul>
-<li>PC2 maximizes variance among all directions <strong>orthogonal to PC1</strong></li>
-<li>Uncorrelated with Z₁ ⇔ direction φ₂ is <strong>perpendicular</strong> to φ₁</li>
-<li>Max PCs = <strong>min(n−1, p)</strong></li>
-</ul>
+• Loadings define the direction of maximum variance
+• Scores are projections onto this direction</pre>
+<h3>Further PCs</h3>
+<ul><li>PC2 maximizes variance among all directions <strong>orthogonal to PC1</strong></li><li>Max PCs = <strong>min(n−1, p)</strong></li></ul>
 <div class="diagram">     PC2 (less variance)
       ↑
       |     · ·
-      |   ·  ╱  ·        PC1 direction (most variance)
-      |  · ╱     ·       ──────→
+      |   ·  ╱  ·       PC1 (most variance)
+      |  · ╱     ·      ──────→
       | ·╱    ·
       |╱ ·  ·
-──────┼──────────→ PC1
-      |
+──────┼──────────→
    PCA rotates axes to maximize
-   variance along PC1, then PC2, etc.</div>
-<h3>Step-by-Step PCA Process</h3>
-<ol>
-<li><strong>Standardize</strong> — PCA is variance-sensitive. Scale so each feature has mean=0, std=1.</li>
-<li><strong>Covariance matrix</strong> — Compute relationships between variables.</li>
-<li><strong>Eigenvalues & eigenvectors</strong> — Eigenvalues = variance per PC. Eigenvectors = loading directions.</li>
-<li><strong>Choose # PCs</strong> — Use PVE and scree plot (look for "elbow").</li>
-<li><strong>Project data</strong> — Multiply original data by the feature vector.</li>
-</ol>
-<h3>Proportion of Variance Explained (PVE)</h3>
-<pre class="code-block">PVEₘ = λₘ / Σλⱼ  =  Var(Zₘ) / Total Variance
+   variance along PC1, then PC2</div>
+<h3>5-Step PCA Process</h3>
+<ol><li><strong>Standardize</strong> — each feature mean=0, std=1</li><li><strong>Covariance matrix</strong> — relationships between variables</li><li><strong>Eigenvalues &amp; eigenvectors</strong> — variance per PC + loading directions</li><li><strong>Choose # PCs</strong> — scree plot, look for elbow</li><li><strong>Project data</strong> — multiply by feature vector</li></ol>
+<h3>Proportion of Variance Explained</h3>
+<pre class="code">PVEₘ = λₘ / Σλⱼ
 
-• PVE is between 0 and 1
-• All PVEs sum to 1
-• Scree plot: PVE vs component number — look for "elbow"</pre>
-<div class="exam-callout">PVE = eigenvalue / sum of ALL eigenvalues. Cumulative PVE tells you total variance captured by first m components.</div>
-<h3>Worked Example: PCA Computation</h3>
-<pre class="code-block">Data: (2,3), (3,4), (4,5)  — 3 obs, 2 features
+• Between 0 and 1, all PVEs sum to 1
+• Scree plot: PVE vs component — look for "elbow"</pre>
+<h3>Worked Example</h3>
+<pre class="code">Data: (2,3), (3,4), (4,5)
 
-Step 1: Center (subtract means: X̄₁=3, X̄₂=4)
+Center: means X̄₁=3, X̄₂=4
   Centered: (-1,-1), (0,0), (1,1)
 
-Step 2: Covariance matrix (1/n)
-  Var(X₁) = (1+0+1)/3 = 2/3
-  Var(X₂) = (1+0+1)/3 = 2/3
-  Cov = (1+0+1)/3 = 2/3
+Covariance (1/n):
+  Var(X₁) = 2/3,  Var(X₂) = 2/3,  Cov = 2/3
   Σ = [[2/3, 2/3], [2/3, 2/3]]
 
-Step 3: Eigenvalues
-  det(Σ − λI) = (2/3−λ)² − (2/3)² = 0
-  λ₁ = 4/3,  λ₂ = 0
+Eigenvalues: λ₁ = 4/3, λ₂ = 0
+  PVE₁ = 100% (perfect correlation)
 
-Step 4: PVE
-  PVE₁ = (4/3)/(4/3) = 100%  ← perfect correlation!
-
-Step 5: Eigenvector for λ₁
-  φ₁ = (1/√2, 1/√2)
+Eigenvector: φ₁ = (1/√2, 1/√2)
   PC1 = (1/√2)(X₁ + X₂)</pre>
 <h3>Worked Example: Route Optimization</h3>
-<pre class="code-block">Given: Z₁ = 0.6X₁ + 0.6X₂ + 0.529X₃
-Eigenvalues: λ₁=5.5, λ₂=1.2, λ₃=0.3
+<pre class="code">Z₁ = 0.6X₁ + 0.6X₂ + 0.529X₃
+λ₁=5.5, λ₂=1.2, λ₃=0.3
 
-Total variance = 5.5 + 1.2 + 0.3 = 7.0
-PVE₁ = 5.5/7.0 = 78.6%
-PVE₂ = 1.2/7.0 = 17.1%
-PVE₃ = 0.3/7.0 = 4.3%
-Cumulative (PC1+PC2) = 95.7% → retain 2 components</pre>
+Total = 7.0
+PVE₁ = 78.6%,  PVE₂ = 17.1%,  PVE₃ = 4.3%
+Cumulative (PC1+PC2) = 95.7% → retain 2</pre>
 <h3>Python</h3>
-<pre class="code-block">from sklearn.preprocessing import StandardScaler
+<pre class="code">from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+X_scaled = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2).fit(X_scaled)
 
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X_scaled)
-
-pca.explained_variance_ratio_  # PVE per component
-pca.components_                # loading vectors</pre>
-<div class="warning-callout">Always standardize before PCA unless told otherwise. Different scales → different PCs. The intercept is not meaningful in PCA.</div>`,
+pca.explained_variance_ratio_  # PVE
+pca.components_                # loadings</pre>
+<div class="callout callout-warn"><div class="callout-label">Watch Out</div>Always standardize before PCA unless told otherwise. Different scales → different PCs.</div>`,
 
 kmeans:`<h2>K-Means Clustering</h2>
 <h3>Core Idea</h3>
-<p>K-means partitions n observations into K clusters by minimizing <strong>within-cluster variation (WCV)</strong>. You must specify K in advance.</p>
-<h3>Mathematical Formulation</h3>
-<pre class="code-block">Objective: min  Σₖ WCV(Cₖ)
+<p>Partition n observations into K clusters by minimizing <strong>within-cluster variation</strong>. K must be specified in advance.</p>
+<h3>Formulation</h3>
+<pre class="code">Objective: min Σₖ WCV(Cₖ)
 
 WCV(Cₖ) = (1/|Cₖ|) Σᵢ,ᵢ'∈Cₖ Σⱼ (xᵢⱼ − xᵢ'ⱼ)²
+         = 2 Σᵢ∈Cₖ ||xᵢ − x̄ₖ||²
 
-Equivalent: WCV(Cₖ) = 2 Σᵢ∈Cₖ ||xᵢ − x̄ₖ||²
-
-Two properties:
-1. C₁ ∪ C₂ ∪ ... ∪ Cₖ = {1,...,n}  (every obs in a cluster)
-2. Cₖ ∩ Cₖ' = ∅ for k ≠ k'       (non-overlapping)</pre>
+Properties:
+1. Every obs in exactly one cluster
+2. Clusters non-overlapping</pre>
 <h3>Algorithm</h3>
-<ol>
-<li><strong>Initialize:</strong> Randomly assign each observation to one of K clusters</li>
-<li><strong>Iterate until convergence:</strong><br>(a) Compute the <strong>centroid</strong> of each cluster (vector of feature means)<br>(b) <strong>Reassign</strong> each observation to the cluster with nearest centroid (Euclidean distance)</li>
-</ol>
-<div class="exam-callout"><strong>Guaranteed</strong> to decrease the objective at each step. <strong>NOT guaranteed</strong> to find the global minimum — depends on initialization. Solution: run multiple times with different starts, keep lowest WCV.</div>
+<ol><li><strong>Initialize:</strong> randomly assign each obs to cluster 1..K</li><li><strong>Iterate:</strong><br/>(a) Compute centroid (feature means per cluster)<br/>(b) Reassign each obs to nearest centroid</li></ol>
+<div class="callout callout-key"><div class="callout-label">Key Exam Point</div><strong>Guaranteed</strong> to decrease objective each step. <strong>NOT guaranteed</strong> global minimum. Solution: multiple random starts, keep lowest WCV.</div>
 <h3>Worked Example</h3>
-<pre class="code-block">Points: A(1,1), B(1.5,2), C(3,4), D(5,7).  K=2.
+<pre class="code">A(1,1), B(1.5,2), C(3,4), D(5,7)  K=2
 
-Initial clusters: C₁={A,B}, C₂={C,D}
+Init: C₁={A,B}, C₂={C,D}
+Centroids: μ₁=(1.25,1.5)  μ₂=(4,5.5)
 
-Centroids:
-  μ₁ = ((1+1.5)/2, (1+2)/2) = (1.25, 1.5)
-  μ₂ = ((3+5)/2, (4+7)/2)   = (4, 5.5)
-
-Reassign (Euclidean distances):
-  d(A, μ₁) = √0.3125 = 0.559    d(A, μ₂) = √29.25 = 5.408  → A stays C₁
-  d(B, μ₁) = 0.559               d(B, μ₂) = 4.301            → B stays C₁
-  d(C, μ₁) = 3.051               d(C, μ₂) = 1.803            → C stays C₂
-  d(D, μ₁) = 6.657               d(D, μ₂) = 1.803            → D stays C₂
+Distances:
+  d(A,μ₁)=0.56  d(A,μ₂)=5.41 → C₁
+  d(B,μ₁)=0.56  d(B,μ₂)=4.30 → C₁
+  d(C,μ₁)=3.05  d(C,μ₂)=1.80 → C₂
+  d(D,μ₁)=6.66  d(D,μ₂)=1.80 → C₂
 
 No changes → converged!
-
-Final WCV:
-  Cluster 1: 0.3125 + 0.3125 = 0.625
-  Cluster 2: 3.25 + 3.25 = 6.5
-  Total WCV = 7.125</pre>
-<h3>Python</h3>
-<pre class="code-block">from sklearn.cluster import KMeans
-
-kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)
-kmeans.fit(X)
-labels = kmeans.labels_
-centroids = kmeans.cluster_centers_
-inertia = kmeans.inertia_  # total WCV</pre>`,
+Total WCV = 0.625 + 6.5 = 7.125</pre>`,
 
 hierarchical:`<h2>Hierarchical Clustering</h2>
 <h3>Key Advantage</h3>
-<p>Does <strong>NOT require specifying K</strong> in advance. Produces a <strong>dendrogram</strong> — cut at any height to get desired number of clusters.</p>
-<h3>Agglomerative (Bottom-Up) Algorithm</h3>
-<ol>
-<li>Start with each observation in its own cluster (n clusters)</li>
-<li>Find the two <strong>most similar</strong> (closest) clusters → merge them</li>
-<li>Repeat until all observations are in a single cluster</li>
-</ol>
-<div class="diagram">  Dendrogram Example:
+<p><strong>No K needed in advance.</strong> Produces a dendrogram — cut at any height for desired clusters.</p>
+<h3>Agglomerative Algorithm</h3>
+<ol><li>Each obs = its own cluster</li><li>Merge two closest clusters</li><li>Repeat until one cluster remains</li></ol>
+<div class="diagram">  Dendrogram:
 
   Height
-  11.31 |         _____|_____
-        |        |           |
-   1.41 |    ___|___     ___|___
-        |   |       |   |       |
-        |   A       B   C       D
+  11.31 |       _____|_____
+        |      |           |
+   1.41 |  ___|___     ___|___
+        | |       |   |       |
+        | A       B   C       D
 
-  Cut at height 5 → 2 clusters: {A,B} and {C,D}
-  Lower merge height = more similar observations</div>
+  Cut at h=5 → {A,B} and {C,D}</div>
 <h3>Linkage Criteria</h3>
-<table class="compare-table">
-<tr><th>Linkage</th><th>Distance Between Clusters</th><th>Properties</th></tr>
-<tr><td><strong>Single</strong></td><td>Minimum pairwise distance</td><td>Can chain; elongated clusters</td></tr>
-<tr><td><strong>Complete</strong></td><td>Maximum pairwise distance</td><td>Compact, spherical clusters</td></tr>
-<tr><td><strong>Average</strong></td><td>Average of all pairwise distances</td><td>Compromise</td></tr>
-<tr><td><strong>Ward</strong></td><td>Min increase in total within-cluster variance</td><td>Similar to K-means objective</td></tr>
-</table>
-<h3>Worked Example (Complete Linkage)</h3>
-<pre class="code-block">Points: A(1,1), B(2,2), C(8,8), D(9,9)
+<table class="tbl"><tr><th>Linkage</th><th>Measure</th><th>Character</th></tr>
+<tr><td><strong>Single</strong></td><td>Min pairwise distance</td><td>Can chain; elongated</td></tr>
+<tr><td><strong>Complete</strong></td><td>Max pairwise distance</td><td>Compact, spherical</td></tr>
+<tr><td><strong>Average</strong></td><td>Mean of all pairs</td><td>Compromise</td></tr>
+<tr><td><strong>Ward</strong></td><td>Min variance increase</td><td>K-means-like</td></tr></table>
+<h3>Worked Example (Complete)</h3>
+<pre class="code">A(1,1), B(2,2), C(8,8), D(9,9)
 
-Pairwise distances:
-  d(A,B) = √2 ≈ 1.41     d(C,D) = √2 ≈ 1.41
-  d(A,C) = 7√2 ≈ 9.90    d(A,D) = 8√2 ≈ 11.31
-  d(B,C) = 6√2 ≈ 8.49    d(B,D) = 7√2 ≈ 9.90
+d(A,B)=√2≈1.41   d(C,D)=√2≈1.41
+d(A,C)=7√2≈9.90  d(A,D)=8√2≈11.31
+d(B,C)=6√2≈8.49  d(B,D)=7√2≈9.90
 
-Merge sequence:
-  1. Merge A & B at height √2 ≈ 1.41
-  2. Merge C & D at height √2 ≈ 1.41
-  3. Merge {A,B} & {C,D} at height max(9.9, 11.31, 8.49, 9.9) = 11.31
-
-Cut at h=5 → 2 clusters: {A,B} and {C,D}</pre>
+Merge: A&B at 1.41, C&D at 1.41
+Then {A,B}&{C,D} at max=11.31</pre>
 <h3>K-Means vs Hierarchical</h3>
-<table class="compare-table">
-<tr><th>Property</th><th>K-Means</th><th>Hierarchical</th></tr>
-<tr><td>Specify K?</td><td>Yes, in advance</td><td>No (choose after via dendrogram)</td></tr>
-<tr><td>Deterministic?</td><td>No (random init)</td><td>Yes (for same linkage)</td></tr>
-<tr><td>Scalability</td><td>Better for large n</td><td>O(n²) or O(n³)</td></tr>
-<tr><td>Cluster shape</td><td>Spherical</td><td>Arbitrary (depends on linkage)</td></tr>
-</table>`,
+<table class="tbl"><tr><th></th><th>K-Means</th><th>Hierarchical</th></tr>
+<tr><td>Specify K?</td><td>Yes</td><td>No (dendrogram)</td></tr>
+<tr><td>Deterministic?</td><td>No</td><td>Yes</td></tr>
+<tr><td>Scalability</td><td>Good</td><td>O(n²+)</td></tr></table>`,
 
 nn:`<h2>Neural Networks</h2>
 <h3>Architecture</h3>
-<div class="diagram">  Neural Network:
+<div class="diagram">  Input       Hidden        Output
 
-   Input Layer    Hidden Layer(s)    Output Layer
+   x₁ ─────╲     h₁ ╲
+              ╲ ╱      ╲
+   x₂ ────────╳──── h₂ ──╳──── ŷ
+              ╱ ╲      ╱
+   x₃ ─────╱     h₃ ╱
 
-    x₁ ──────╲      h₁  ╲
-               ╲  ╱       ╲
-    x₂ ────────╳─────── h₂ ───╳────── ŷ
-               ╱  ╲       ╱
-    x₃ ──────╱      h₃  ╱
-
-  Each connection has weight w
-  Each neuron: output = g(Σwᵢxᵢ + b)
-  g() = activation function</div>
-<ul>
-<li><strong>Input Layer:</strong> receives raw features, no computation</li>
-<li><strong>Hidden Layer(s):</strong> weights + biases + activation functions — the "learning"</li>
-<li><strong>Output Layer:</strong> final prediction or classification</li>
-</ul>
-<h3>Single Neuron Computation</h3>
-<pre class="code-block">Step 1: Weighted sum
-  z = w₁x₁ + w₂x₂ + ... + wₙxₙ + b
-
-Step 2: Activation function
-  output = g(z)
-
-The bias b allows output even when all inputs are zero.</pre>
+  Neuron: output = g(Σwᵢxᵢ + b)</div>
+<ul><li><strong>Input:</strong> raw features</li><li><strong>Hidden:</strong> weights + bias + activation</li><li><strong>Output:</strong> prediction</li></ul>
 <h3>Activation Functions</h3>
-<table class="compare-table">
-<tr><th>Function</th><th>Formula</th><th>Range</th><th>Use</th><th>Issue</th></tr>
-<tr><td><strong>Sigmoid</strong></td><td>1/(1+e⁻ᶻ)</td><td>(0,1)</td><td>Binary output</td><td>Vanishing gradient</td></tr>
-<tr><td><strong>Tanh</strong></td><td>(eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ)</td><td>(−1,1)</td><td>Hidden layers</td><td>Vanishing gradient</td></tr>
-<tr><td><strong>ReLU</strong></td><td>max(0, z)</td><td>[0,∞)</td><td>Hidden layers ★</td><td>Dying ReLU</td></tr>
-<tr><td><strong>Leaky ReLU</strong></td><td>max(0.1z, z)</td><td>(−∞,∞)</td><td>Hidden layers</td><td>Slightly complex</td></tr>
-<tr><td><strong>Softmax</strong></td><td>eᶻᵏ/Σeᶻʲ</td><td>(0,1), sum=1</td><td>Multi-class output</td><td>Costly for many classes</td></tr>
-</table>
-<div class="diagram">  Activation Function Shapes:
-
-  Sigmoid:        Tanh:           ReLU:         Leaky ReLU:
-       ___            ___           ╱              ╱
-      ╱               ╱            ╱              ╱
-  ___╱            ___╱         ___╱           ___╱
-  0 to 1          -1 to 1      0 if z&lt;0       0.1z if z&lt;0</div>
-<div class="exam-callout"><strong>Vanishing gradients:</strong> Sigmoid/tanh squash gradients → near 0 for deep nets → slow training. ReLU fixes this. <strong>Dying ReLU:</strong> neuron stuck at 0 forever. Leaky ReLU fixes this.</div>
+<table class="tbl"><tr><th>Function</th><th>Formula</th><th>Range</th><th>Use</th><th>Issue</th></tr>
+<tr><td><strong>Sigmoid</strong></td><td>1/(1+e⁻ᶻ)</td><td>(0,1)</td><td>Binary output</td><td>Vanishing grad</td></tr>
+<tr><td><strong>Tanh</strong></td><td>(eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ)</td><td>(−1,1)</td><td>Hidden</td><td>Vanishing grad</td></tr>
+<tr><td><strong>ReLU</strong></td><td>max(0,z)</td><td>[0,∞)</td><td>Hidden ★</td><td>Dying ReLU</td></tr>
+<tr><td><strong>Leaky ReLU</strong></td><td>max(0.1z,z)</td><td>(−∞,∞)</td><td>Hidden</td><td>—</td></tr>
+<tr><td><strong>Softmax</strong></td><td>eᶻᵏ/Σeᶻʲ</td><td>(0,1) Σ=1</td><td>Multi-class</td><td>—</td></tr></table>
+<div class="callout callout-key"><div class="callout-label">Key Exam Point</div><strong>Vanishing gradient:</strong> sigmoid/tanh squash gradients → near 0 deep. ReLU fixes. <strong>Dying ReLU:</strong> stuck at 0. Leaky ReLU fixes.</div>
 <h3>Forward Propagation</h3>
-<ol>
-<li>Input features enter the input layer</li>
-<li>For each hidden neuron: compute z = Σwᵢxᵢ + b, then h = g(z)</li>
-<li>Hidden outputs become inputs to next layer</li>
-<li>Output layer produces final prediction</li>
-</ol>
+<pre class="code">Step 1: z = Σwᵢxᵢ + b   (weighted sum)
+Step 2: output = g(z)    (activation)</pre>
 <h3>Backpropagation</h3>
-<pre class="code-block">After forward pass, compare prediction to truth via loss function.
-Propagate error backward using the chain rule:
-
+<pre class="code">Chain rule:
   ∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w
 
-Update weights: w = w − η · ∂Loss/∂w
-  η = learning rate</pre>
-<h3>Worked Example: Forward Propagation</h3>
-<pre class="code-block">Network: 2 inputs, 2 hidden (sigmoid), 1 output (sigmoid)
-Inputs: x₁=1, x₂=2
+Update: w ← w − η · ∂Loss/∂w</pre>
+<h3>Worked Example</h3>
+<pre class="code">2 inputs, 2 hidden (sigmoid), 1 output (sigmoid)
+x₁=1, x₂=2
 
-Weights (input→hidden): w₁₁=0.5, w₁₂=−0.5, w₂₁=0.3, w₂₂=0.8
-Hidden bias: bₕ=0.1
-Weights (hidden→output): w₃₁=1.0, w₃₂=−1.0
-Output bias: bₒ=0.2
+Weights: w₁₁=0.5, w₁₂=−0.5, w₂₁=0.3, w₂₂=0.8
+Biases: bₕ=0.1, bₒ=0.2
+Hidden→Output: w₃₁=1.0, w₃₂=−1.0
 
-Hidden Layer:
-  z_h1 = 0.5(1) + 0.3(2) + 0.1 = 1.2
-  h₁ = sigmoid(1.2) = 1/(1+e⁻¹·²) ≈ 0.769
+Hidden:
+  z₁ = 0.5(1)+0.3(2)+0.1 = 1.2 → σ(1.2) ≈ 0.769
+  z₂ = −0.5(1)+0.8(2)+0.1 = 1.2 → σ(1.2) ≈ 0.769
 
-  z_h2 = −0.5(1) + 0.8(2) + 0.1 = 1.2
-  h₂ = sigmoid(1.2) ≈ 0.769
+Output:
+  z = 1.0(0.769)+(−1.0)(0.769)+0.2 = 0.2
+  ŷ = σ(0.2) ≈ 0.550</pre>`,
 
-Output Layer:
-  z_o = 1.0(0.769) + (−1.0)(0.769) + 0.2 = 0.2
-  ŷ = sigmoid(0.2) ≈ 0.550</pre>
-<div class="exam-callout">Be able to perform forward propagation <strong>by hand</strong>. Know all 5 activation functions and their properties. Understand backpropagation conceptually (chain rule).</div>`,
-
-svm:`<h2>Support Vector Machines (SVM)</h2>
+svm:`<h2>Support Vector Machines</h2>
 <h3>Core Idea</h3>
-<p>Find the <strong>optimal separating hyperplane</strong> between two classes that <strong>maximizes the margin</strong> (distance to nearest points).</p>
+<p>Find the <strong>optimal separating hyperplane</strong> that <strong>maximizes the margin</strong> to nearest points.</p>
 <h3>Hyperplane</h3>
-<pre class="code-block">β₀ + β₁X₁ + β₂X₂ + ... + βₚXₚ = 0
+<pre class="code">β₀ + β₁X₁ + ... + βₚXₚ = 0
 
-• In 2D: a line      • In 3D: a plane      • In pD: (p−1)-dimensional
-• β = (β₁,...,βₚ) is the normal vector (perpendicular to hyperplane)
-• f(X) > 0 → one side,  f(X) < 0 → other side
+• 2D: line   3D: plane   pD: (p−1)-dimensional
+• β = normal vector (perpendicular)
+• Distance: d = |f(x)| / ||β||</pre>
+<div class="diagram">  Maximal Margin:
 
-Distance from point x to hyperplane:
-  d = |f(x)| / ||β|| = |β₀ + β·x| / √(Σβⱼ²)</pre>
-<div class="diagram">  Maximal Margin Classifier:
+  Class +1     | margin |     Class −1
+    ∗          |________|          ○
+    ∗ ∗    SV→ | hyper- | ←SV   ○ ○
+    ∗   ∗      | plane  |     ○   ○
+    ∗      SV→ |________| ←SV     ○
 
-  Class +1          | margin |          Class −1
-    ∗               |________|               ○
-    ∗ ∗         SV→ | hyper- | ←SV         ○ ○
-    ∗   ∗           | plane  |           ○   ○
-    ∗     ∗     SV→ |________| ←SV     ○     ○
+  SV = Support Vectors</div>
+<h3>Soft Margin (Slack ξ)</h3>
+<table class="tbl"><tr><th>ξᵢ</th><th>Location</th><th>Status</th></tr>
+<tr><td>= 0</td><td>Outside margin</td><td>Correct</td></tr>
+<tr><td>0 &lt; ξ &lt; 1</td><td>Inside margin</td><td>Correct side</td></tr>
+<tr><td>= 1</td><td>On hyperplane</td><td>Boundary</td></tr>
+<tr><td><strong>&gt; 1</strong></td><td><strong>Wrong side</strong></td><td><strong>Misclassified</strong></td></tr></table>
+<div class="callout callout-key"><div class="callout-label">Key Exam Point</div><strong>C parameter:</strong> Large C → few violations, narrow margin (low bias, high var). Small C → wide margin (high bias, low var).</div>
+<h3>Worked Example: Distance</h3>
+<pre class="code">Hyperplane: 3X₁+4X₂−12=0   ||β||=5
 
-  SV = Support Vectors (points on margin boundary)
-  Hyperplane maximizes margin width</div>
-<h3>Maximal Margin Classifier</h3>
-<pre class="code-block">maximize M
-subject to: Σβⱼ² = 1
-  yᵢ(β₀ + β₁xᵢ₁ + ... + βₚxᵢₚ) ≥ M  for all i</pre>
-<h3>Support Vector Classifier (Soft Margin)</h3>
-<p>Allow violations via <strong>slack variables</strong> ξᵢ:</p>
-<pre class="code-block">maximize M
-subject to: Σβⱼ² = 1
-  yᵢ(β₀ + β·xᵢ) ≥ M(1 − ξᵢ)
-  ξᵢ ≥ 0,  Σξᵢ ≤ C</pre>
-<h3>Slack Variable Interpretation — MUST KNOW</h3>
-<table class="compare-table">
-<tr><th>ξᵢ value</th><th>Location</th><th>Classified?</th></tr>
-<tr><td>ξᵢ = 0</td><td>On or outside margin</td><td>Correctly classified</td></tr>
-<tr><td>0 &lt; ξᵢ &lt; 1</td><td>Inside margin (violator)</td><td>Correct side, within margin</td></tr>
-<tr><td>ξᵢ = 1</td><td>On the hyperplane</td><td>On boundary</td></tr>
-<tr><td><strong>ξᵢ &gt; 1</strong></td><td><strong>Wrong side</strong></td><td><strong>MISCLASSIFIED</strong></td></tr>
-</table>
-<div class="exam-callout"><strong>C is a budget:</strong> Large C → few violations, narrow margin (low bias, high variance). Small C → many violations, wide margin (high bias, low variance).</div>
-<h3>Worked Example: Soft Margin</h3>
-<pre class="code-block">Obs 1: y=+1, f(x)=1.8 → y·f(x)=1.8 > 1 → outside margin (ξ=0)
-Obs 2: y=+1, f(x)=0.6 → y·f(x)=0.6     → inside margin  (ξ=0.4)
-Obs 3: y=+1, f(x)=−0.4→ y·f(x)=−0.4 < 0 → MISCLASSIFIED  (ξ=1.4)
-Obs 4: y=−1, f(x)=−1.5→ y·f(x)=1.5 > 1 → outside margin (ξ=0)
-Obs 5: y=−1, f(x)=−0.7→ y·f(x)=0.7     → inside margin  (ξ=0.3)</pre>
-<h3>Worked Example: Distance to Hyperplane</h3>
-<pre class="code-block">Hyperplane: 3X₁ + 4X₂ − 12 = 0   ||β|| = √(9+16) = 5
+d(2,1) = |6+4−12|/5 = 0.4  (inside margin)
+d(3,2) = |9+8−12|/5 = 1.0  (outside)
+d(1,2) = |3+8−12|/5 = 0.2  (inside)</pre>
+<h3>Kernels</h3>
+<table class="tbl"><tr><th>Kernel</th><th>Formula</th><th>Boundary</th></tr>
+<tr><td>Linear</td><td>x·x'</td><td>Flat</td></tr>
+<tr><td>Polynomial</td><td>(1+x·x')ᵈ</td><td>Curved</td></tr>
+<tr><td>RBF</td><td>exp(−γ||x−x'||²)</td><td>Flexible</td></tr></table>
+<h3>RBF Worked Example</h3>
+<pre class="code">x₁=(1,2), x₂=(3,4), x₃=(2,3), γ=0.5
 
-d(2,1) = |6+4−12|/5 = 2/5 = 0.4
-d(3,2) = |9+8−12|/5 = 5/5 = 1.0
-d(1,2) = |3+8−12|/5 = 1/5 = 0.2
+K(x₁,x₂) = e^(−0.5×8) = e^−4 ≈ 0.018
+K(x₁,x₃) = e^(−0.5×2) = e^−1 ≈ 0.368
 
-If margin width=1, half-margin=0.5:
-  (2,1): 0.4 < 0.5 → inside margin
-  (1,2): 0.2 < 0.5 → inside margin
-  (3,2): 1.0 > 0.5 → outside margin</pre>
-<h3>Kernel Functions</h3>
-<table class="compare-table">
-<tr><th>Kernel</th><th>Formula</th><th>Properties</th></tr>
-<tr><td><strong>Linear</strong></td><td>K(x,x') = x·x'</td><td>Flat hyperplane, fast</td></tr>
-<tr><td><strong>Polynomial</strong></td><td>K(x,x') = (1+x·x')ᵈ</td><td>d=degree, curves</td></tr>
-<tr><td><strong>RBF</strong></td><td>K(xᵢ,xᵢ') = exp(−γΣ(xᵢⱼ−xᵢ'ⱼ)²)</td><td>∞-dimensional, distance-based</td></tr>
-</table>
-<div class="diagram">  Kernel Trick:
-
-  Original 1D (not separable):     Projected to 2D (separable!):
-
-  ○ ○ ○ ∗ ∗ ∗ ○ ○ ○              ○     ○  ○
-  ←─────────────────→               ○  ∗  ∗  ∗ ○
-  Can't separate!                    ▔▔╱  ∗  ∗  ╲▔▔
-                                     Line separates!
-  Transformation: y = x²
-  Linear in transformed space = nonlinear in original</div>
-<h3>RBF Kernel: Worked Example</h3>
-<pre class="code-block">x₁=(1,2), x₂=(3,4), x₃=(2,3),  γ=0.5
-
-||x₁−x₂||² = (1−3)²+(2−4)² = 8
-||x₁−x₃||² = (1−2)²+(2−3)² = 2
-
-K(x₁,x₂) = e^(−0.5×8) = e^(−4) ≈ 0.0183  (low similarity)
-K(x₁,x₃) = e^(−0.5×2) = e^(−1) ≈ 0.3679  (higher similarity)
-
-Higher γ → faster decay → more localized → more complex boundary → overfit risk</pre>
-<h3>Multiclass SVM</h3>
-<table class="compare-table">
-<tr><th>Method</th><th># Classifiers</th><th>How</th></tr>
-<tr><td><strong>OVR</strong> (One-vs-Rest)</td><td>K</td><td>Each class vs all others. Highest confidence wins.</td></tr>
-<tr><td><strong>OVO</strong> (One-vs-One)</td><td>K(K−1)/2</td><td>Every pair. Majority vote wins.</td></tr>
-</table>
-<h3>SVM vs Logistic Regression</h3>
-<ul>
-<li>Classes (nearly) <strong>separable</strong> → SVM better</li>
-<li>Need <strong>probabilities</strong> → use LR</li>
-<li><strong>p > n</strong> (more features than obs) → SVM works well</li>
-<li>Nonlinear boundaries → kernel SVMs</li>
-</ul>
-<h3>Python</h3>
-<pre class="code-block">from sklearn.svm import SVC, LinearSVC
-
-model = LinearSVC()              # fast, linear only
-model = SVC(kernel='poly', degree=3)
-model = SVC(kernel='rbf', gamma=0.5, C=1.0)
-
-# Multiclass
-from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier
-ovr = OneVsRestClassifier(SVC(kernel='linear'))
-ovo = OneVsOneClassifier(SVC(kernel='linear'))</pre>`
+↑γ → faster decay → complex boundary → overfit</pre>
+<h3>Multiclass</h3>
+<table class="tbl"><tr><th>Method</th><th>Classifiers</th></tr>
+<tr><td>OVR</td><td>K</td></tr>
+<tr><td>OVO</td><td>K(K−1)/2</td></tr></table>`
 };
 
-const FLASHCARDS=[
-{t:'pca',q:'What is PCA?',a:'Dimensionality reduction method that finds linear combinations of variables with maximal variance, mutually uncorrelated. Solved via eigendecomposition of covariance matrix.'},
-{t:'pca',q:'PCA: First principal component formula',a:'Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ, subject to Σφⱼ₁² = 1 (normalization constraint)'},
-{t:'pca',q:'PCA: How to compute PVE',a:'PVEₘ = λₘ / Σλⱼ (eigenvalue / sum of all eigenvalues). PVEs sum to 1.'},
-{t:'pca',q:'PCA: Maximum number of PCs',a:'min(n−1, p) where n = observations, p = features'},
-{t:'pca',q:'PCA: 5 steps in order',a:'1. Standardize  2. Covariance matrix  3. Eigenvalues/eigenvectors  4. Choose # PCs (scree plot)  5. Project data'},
-{t:'pca',q:'PCA: Why standardize first?',a:'PCA is variance-sensitive. Without standardizing, features with larger scales dominate the principal components.'},
-{t:'pca',q:'PCA: What is orthogonality constraint?',a:'Each PC must be uncorrelated (perpendicular) to all previous PCs. PC2 direction is orthogonal to PC1.'},
-{t:'pca',q:'PCA vs Clustering: what is the difference?',a:'PCA finds directions of maximum variance (dimensionality reduction). Clustering finds homogeneous subgroups in the data.'},
-{t:'kmeans',q:'K-Means: objective function',a:'Minimize Σₖ WCV(Cₖ) = Σₖ (1/|Cₖ|) Σᵢ,ᵢ\' ||xᵢ − xᵢ\'||². Equivalently, minimize sum of squared distances to centroids.'},
-{t:'kmeans',q:'K-Means: algorithm steps',a:'1. Random assignment to K clusters  2a. Compute centroids (feature means)  2b. Reassign to nearest centroid  Repeat until convergence.'},
-{t:'kmeans',q:'K-Means: does it find global minimum?',a:'NO. Only guaranteed to find a local minimum. Run multiple times with different random starts, keep lowest WCV.'},
-{t:'kmeans',q:'K-Means: two cluster set properties',a:'1. Every observation belongs to at least one cluster (union = all obs)  2. Non-overlapping (intersection = empty)'},
-{t:'kmeans',q:'K-Means: what is the centroid?',a:'The vector of feature means for all observations in the cluster. The "center" of the cluster.'},
-{t:'hierarchical',q:'Hierarchical clustering: key advantage',a:'Does NOT require specifying K in advance. Produces a dendrogram — cut at any height for desired number of clusters.'},
-{t:'hierarchical',q:'Agglomerative algorithm steps',a:'1. Each obs is its own cluster  2. Merge two closest clusters  3. Repeat until single cluster  Bottom-up approach.'},
-{t:'hierarchical',q:'4 linkage types',a:'Single (min distance), Complete (max distance), Average (mean of all pairs), Ward (min within-cluster variance increase)'},
-{t:'hierarchical',q:'Dendrogram interpretation',a:'Height = dissimilarity at merge. Lower merge = more similar. Cut at height h to get clusters.'},
-{t:'hierarchical',q:'Complete linkage: how computed?',a:'Maximum of all pairwise distances between observations in two clusters. Produces compact, spherical clusters.'},
-{t:'hierarchical',q:'Single linkage: what problem?',a:'Can produce long, chain-like clusters (chaining effect). One close pair can link otherwise distant groups.'},
-{t:'nn',q:'NN: Sigmoid function',a:'g(z) = 1/(1+e⁻ᶻ), range (0,1). Binary classification output. Suffers vanishing gradient in deep nets.'},
-{t:'nn',q:'NN: Tanh function',a:'g(z) = (eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ), range (−1,1). Zero-centered (better for hidden layers). Vanishing gradient issue.'},
-{t:'nn',q:'NN: ReLU function',a:'g(z) = max(0, z), range [0,∞). Most popular for hidden layers. Fixes vanishing gradient. Issue: dying ReLU.'},
-{t:'nn',q:'NN: Leaky ReLU',a:'g(z) = max(0.1z, z). Allows small gradient for negative z, preventing dying ReLU problem.'},
-{t:'nn',q:'NN: Softmax function',a:'g(zₖ) = eᶻᵏ / Σeᶻʲ. Outputs sum to 1 (probabilities). Used for multi-class classification output layer.'},
-{t:'nn',q:'NN: forward propagation',a:'z = Σwᵢxᵢ + b (weighted sum + bias), then output = g(z) (activation). Layer by layer, input → output.'},
-{t:'nn',q:'NN: backpropagation',a:'Compute loss, propagate error backward using chain rule. ∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w. Update: w = w − η·∂L/∂w'},
-{t:'nn',q:'NN: vanishing gradient problem',a:'Sigmoid/tanh gradients approach 0 for large |z|. Makes weight updates negligible in early layers of deep networks. ReLU fixes this.'},
-{t:'nn',q:'NN: dying ReLU problem',a:'If weights cause z to always be negative, ReLU always outputs 0 and gradient is 0. Neuron stops learning permanently. Fix: Leaky ReLU.'},
-{t:'nn',q:'NN: role of bias',a:'Allows neuron to produce non-zero output even when all inputs are zero. Shifts activation function left/right.'},
-{t:'nn',q:'NN: which activation for binary output?',a:'Sigmoid (output in (0,1), interpretable as probability).'},
-{t:'nn',q:'NN: which activation for multi-class output?',a:'Softmax (outputs sum to 1, each represents class probability).'},
-{t:'svm',q:'SVM: what is the margin?',a:'Distance from decision boundary (hyperplane) to the nearest data points of either class. SVM maximizes this.'},
-{t:'svm',q:'SVM: what are support vectors?',a:'Points on or within the margin boundary that directly influence the hyperplane position. Removing them changes the boundary.'},
-{t:'svm',q:'SVM: distance from point to hyperplane',a:'d = |f(x)| / ||β|| = |β₀ + β·x| / √(Σβⱼ²)'},
-{t:'svm',q:'SVM: slack variable interpretation (ξ>1)',a:'ξ=0: outside margin. 0<ξ<1: inside margin (correct side). ξ=1: on hyperplane. ξ>1: MISCLASSIFIED.'},
-{t:'svm',q:'SVM: C parameter effect',a:'Large C → few violations, narrow margin (low bias, high variance). Small C → many violations, wide margin (high bias, low variance).'},
-{t:'svm',q:'SVM: three kernel types',a:'Linear: K=x·x\'. Polynomial: K=(1+x·x\')ᵈ. RBF: K=exp(−γ||x−x\'||²).'},
-{t:'svm',q:'SVM: RBF γ effect',a:'High γ → localized influence, complex/wiggly boundary, overfit risk. Low γ → broad influence, smoother boundary.'},
-{t:'svm',q:'SVM: OVR classifiers for K classes',a:'K classifiers (one per class vs all others). Pick highest confidence.'},
-{t:'svm',q:'SVM: OVO classifiers for K classes',a:'K(K−1)/2 classifiers (one per pair). Majority vote wins.'},
-{t:'svm',q:'SVM: when better than logistic regression?',a:'When classes are (nearly) separable. When p > n (more features than observations). For nonlinear boundaries (kernel SVM).'},
-{t:'svm',q:'SVM: maximal margin optimization',a:'max M  s.t. ||β||=1,  yᵢ(f(xᵢ)) ≥ M  for all i'},
-{t:'svm',q:'SVM: soft margin optimization',a:'max M  s.t. ||β||=1,  yᵢ(f(xᵢ)) ≥ M(1−ξᵢ),  ξᵢ≥0,  Σξᵢ≤C'},
+const FC=[
+{t:'pca',q:'What is PCA?',a:'Dimensionality reduction that finds linear combinations with maximal variance, mutually uncorrelated. Eigendecomposition of covariance matrix.'},
+{t:'pca',q:'PCA normalization constraint',a:'Σφⱼ₁² = 1. Without it, loadings can be scaled arbitrarily to get arbitrary variance.'},
+{t:'pca',q:'How to compute PVE',a:'PVEₘ = λₘ / Σλⱼ. All PVEs sum to 1.'},
+{t:'pca',q:'Max number of PCs',a:'min(n−1, p)'},
+{t:'pca',q:'5 PCA steps',a:'1. Standardize  2. Covariance matrix  3. Eigenvalues/vectors  4. Choose # PCs (scree)  5. Project'},
+{t:'pca',q:'Why standardize before PCA?',a:'PCA is variance-sensitive. Features with larger scales dominate PCs.'},
+{t:'pca',q:'PC orthogonality',a:'Each PC is uncorrelated (perpendicular) to all previous PCs.'},
+{t:'pca',q:'PCA vs Clustering',a:'PCA: max variance directions. Clustering: homogeneous subgroups.'},
+{t:'kmeans',q:'K-Means objective',a:'Minimize Σₖ WCV(Cₖ). WCV = sum of squared distances to centroid.'},
+{t:'kmeans',q:'K-Means algorithm',a:'1. Random assign  2a. Compute centroids  2b. Reassign nearest  Repeat.'},
+{t:'kmeans',q:'Global minimum?',a:'NO. Local only. Multiple random starts, keep lowest WCV.'},
+{t:'kmeans',q:'Cluster properties',a:'1. Union = all obs  2. Non-overlapping (empty intersection)'},
+{t:'kmeans',q:'What is a centroid?',a:'Vector of feature means for all observations in the cluster.'},
+{t:'hierarchical',q:'Key advantage',a:'No K needed. Dendrogram lets you choose any K after the fact.'},
+{t:'hierarchical',q:'Agglomerative steps',a:'1. Each obs = cluster  2. Merge closest pair  3. Repeat  (bottom-up)'},
+{t:'hierarchical',q:'4 linkage types',a:'Single (min), Complete (max), Average (mean), Ward (min variance)'},
+{t:'hierarchical',q:'Dendrogram reading',a:'Height = dissimilarity. Lower = more similar. Cut at h for clusters.'},
+{t:'hierarchical',q:'Single linkage issue',a:'Chaining: one close pair links distant groups into elongated clusters.'},
+{t:'nn',q:'Sigmoid',a:'g(z) = 1/(1+e⁻ᶻ). Range (0,1). Binary output. Vanishing gradient.'},
+{t:'nn',q:'Tanh',a:'Range (−1,1). Zero-centered. Hidden layers. Vanishing gradient.'},
+{t:'nn',q:'ReLU',a:'max(0,z). Range [0,∞). Most popular hidden. Fixes vanishing. Dying ReLU risk.'},
+{t:'nn',q:'Leaky ReLU',a:'max(0.1z,z). Fixes dying ReLU by allowing small negative gradient.'},
+{t:'nn',q:'Softmax',a:'eᶻᵏ/Σeᶻʲ. Outputs sum to 1. Multi-class output.'},
+{t:'nn',q:'Forward propagation',a:'z = Σwᵢxᵢ + b → output = g(z). Layer by layer.'},
+{t:'nn',q:'Backpropagation',a:'Chain rule: ∂L/∂w = ∂L/∂ŷ · ∂ŷ/∂z · ∂z/∂w. Update: w − η·∂L/∂w'},
+{t:'nn',q:'Vanishing gradient',a:'Sigmoid/tanh gradients → 0 for large |z|. Updates negligible in deep nets. ReLU fixes.'},
+{t:'nn',q:'Dying ReLU',a:'If z always negative, output always 0, gradient 0. Neuron dead. Fix: Leaky ReLU.'},
+{t:'nn',q:'Role of bias',a:'Non-zero output when inputs are zero. Shifts activation function.'},
+{t:'svm',q:'What is the margin?',a:'Distance from hyperplane to nearest points. SVM maximizes it.'},
+{t:'svm',q:'Support vectors',a:'Points on/within margin that define the boundary. Removing them changes it.'},
+{t:'svm',q:'Distance to hyperplane',a:'d = |f(x)| / ||β|| = |β₀+β·x| / √(Σβⱼ²)'},
+{t:'svm',q:'Slack ξ interpretation',a:'0: outside margin. 0<ξ<1: inside (correct). ξ=1: on boundary. ξ>1: MISCLASSIFIED.'},
+{t:'svm',q:'C parameter',a:'Large C → narrow margin, few violations. Small C → wide margin, more violations.'},
+{t:'svm',q:'Three kernels',a:'Linear: x·x′. Poly: (1+x·x′)ᵈ. RBF: exp(−γ||x−x′||²).'},
+{t:'svm',q:'RBF γ effect',a:'High γ → localized, complex, overfit. Low γ → smooth, generalized.'},
+{t:'svm',q:'OVR count',a:'K classifiers (class vs rest). Pick highest confidence.'},
+{t:'svm',q:'OVO count',a:'K(K−1)/2 classifiers (every pair). Majority vote.'},
+{t:'svm',q:'SVM vs LR',a:'SVM: separable data, p>n. LR: need probabilities.'},
 ];
 
-const QUIZZES={
+const Q={
 pca:[
-{q:'What is the first step before applying PCA?',o:['Compute eigenvalues','Standardize the data','Covariance matrix','Choose # components'],a:1,e:'PCA is variance-sensitive. Standardizing ensures no variable dominates due to scale.'},
-{q:'Eigenvalues λ₁=5.5, λ₂=1.2, λ₃=0.3. PVE for PC1?',o:['78.6%','17.1%','95.7%','4.3%'],a:0,e:'PVE₁ = 5.5/(5.5+1.2+0.3) = 5.5/7.0 = 78.6%'},
-{q:'PC2 is the direction with maximum variance that is:',o:['Same as PC1','Orthogonal to PC1','Random','Minimum variance'],a:1,e:'PC2 maximizes variance subject to being uncorrelated (orthogonal/perpendicular) with PC1.'},
-{q:'Max PCs for n=50, p=4?',o:['50','4','3','min(49,4)=4'],a:3,e:'Max PCs = min(n−1, p) = min(49, 4) = 4.'},
-{q:'Scree plot: how to choose # PCs?',o:['Always use all','Only PC1','Look for elbow','Lowest PVE'],a:2,e:'The elbow indicates diminishing returns. Keep PCs before the elbow.'},
-{q:'Covariance Σ=[[4,3],[3,9]]. Eigenvalue equation: λ²−13λ+27=0. Eigenvalues?',o:['10.4 and 2.6','6.5 and 6.5','4 and 9','13 and 0'],a:0,e:'Quadratic formula: λ=(13±√61)/2 ≈ 10.4 and 2.6.'},
-{q:'All eigenvalues are equal. What does this mean?',o:['Perfect correlation','PCA is not useful for reduction','No variance','Singular matrix'],a:1,e:'Equal eigenvalues → variance spread equally in all directions. No single direction captures more.'},
-{q:'Z₁=0.6X₁+0.6X₂+0.529X₃. All loadings positive. PC1 represents?',o:['Contrast between features','Overall magnitude across all features','Random noise','Only X₁'],a:1,e:'All positive loadings → PC1 increases when ALL variables increase. Represents overall "size."'},
+{q:'First step before PCA?',o:['Compute eigenvalues','Standardize the data','Covariance matrix','Choose # PCs'],a:1,e:'PCA is variance-sensitive. Standardizing prevents scale-dominated PCs.'},
+{q:'λ₁=5.5, λ₂=1.2, λ₃=0.3. PVE for PC1?',o:['78.6%','17.1%','95.7%','4.3%'],a:0,e:'5.5/7.0 = 78.6%'},
+{q:'PC2 is the direction with max variance that is:',o:['Same as PC1','Orthogonal to PC1','Random','Min variance'],a:1,e:'Orthogonal = uncorrelated with PC1.'},
+{q:'Max PCs for n=50, p=4?',o:['50','4','3','4 (=min(49,4))'],a:3,e:'min(n−1, p) = min(49,4) = 4.'},
+{q:'How to choose # PCs from scree plot?',o:['Use all','Only PC1','Look for elbow','Lowest PVE'],a:2,e:'Elbow = diminishing returns.'},
+{q:'All eigenvalues equal means:',o:['Perfect correlation','PCA not useful for reduction','No variance','Singular matrix'],a:1,e:'Equal variance in all directions → no preferred direction.'},
+{q:'All positive loadings on PC1 means:',o:['Contrast','Overall magnitude','Noise','Only X₁'],a:1,e:'All positive → PC1 increases when ALL features increase.'},
+{q:'Σ=[[4,3],[3,9]], λ²−13λ+27=0. Eigenvalues?',o:['10.4 and 2.6','6.5 and 6.5','4 and 9','13 and 0'],a:0,e:'Quadratic formula: (13±√61)/2 ≈ 10.4, 2.6.'},
 ],
 kmeans:[
-{q:'K-means is guaranteed to find the global minimum?',o:['True','False — only local minimum','True if K=2','True with enough iterations'],a:1,e:'K-means converges to a local minimum depending on initialization. Run multiple times.'},
-{q:'What does the centroid represent?',o:['Median','Mode','Vector of feature means','Closest point to all'],a:2,e:'Centroid = mean of all observations in the cluster for each feature.'},
-{q:'A(1,1), B(2,2) in cluster 1. Centroid?',o:['(1,1)','(1.5,1.5)','(2,2)','(3,3)'],a:1,e:'Centroid = ((1+2)/2, (1+2)/2) = (1.5, 1.5).'},
-{q:'K-means requires specifying K. Which alternative does not?',o:['Random Forest','Hierarchical Clustering','Logistic Regression','Linear SVM'],a:1,e:'Hierarchical clustering produces a dendrogram, allowing any K by cutting at different heights.'},
-{q:'How does K-means handle local minima?',o:['Gradient descent','Multiple random starts, keep best','Increase K','Hierarchical first'],a:1,e:'Run with multiple random initializations, keep result with lowest total WCV.'},
-{q:'K-means uses which distance by default?',o:['Manhattan','Cosine','Euclidean','Mahalanobis'],a:2,e:'K-means assigns observations to nearest centroid using Euclidean distance.'},
+{q:'K-means finds global minimum?',o:['True','False — local only','If K=2','With enough iterations'],a:1,e:'Depends on init. Run multiple times.'},
+{q:'Centroid is:',o:['Median','Mode','Vector of feature means','Closest point'],a:2,e:'Mean of all features for cluster members.'},
+{q:'A(1,1), B(2,2) centroid?',o:['(1,1)','(1.5,1.5)','(2,2)','(3,3)'],a:1,e:'((1+2)/2, (1+2)/2) = (1.5,1.5).'},
+{q:'Which method doesn\'t need K?',o:['Random Forest','Hierarchical','Logistic Reg','Linear SVM'],a:1,e:'Dendrogram → choose K after.'},
+{q:'How to handle local minima?',o:['Gradient descent','Multiple random starts','Increase K','Use hierarchical'],a:1,e:'Multiple inits, keep lowest WCV.'},
+{q:'Default distance metric?',o:['Manhattan','Cosine','Euclidean','Mahalanobis'],a:2,e:'Euclidean distance to centroids.'},
 ],
 hierarchical:[
-{q:'Complete linkage distance between clusters is:',o:['Minimum pairwise','Maximum pairwise','Average pairwise','Centroid distance'],a:1,e:'Complete linkage = max distance between any pair from the two clusters. Compact clusters.'},
-{q:'Lower fusion height in dendrogram means:',o:['More different','More similar observations merged','Worse clustering','Random'],a:1,e:'Lower merge height = more similar observations. Height represents dissimilarity.'},
-{q:'Cutting dendrogram at higher height gives:',o:['More clusters','Fewer clusters','Same','No clusters'],a:1,e:'Higher cut = fewer, larger clusters. Lower cut = more, smaller clusters.'},
-{q:'Which linkage produces chain-like clusters?',o:['Complete','Average','Single','Ward'],a:2,e:'Single linkage uses minimum distance, allowing chains via single close pairs.'},
-{q:'Ward linkage minimizes:',o:['Max distance','Min distance','Within-cluster sum of squares','Average distance'],a:2,e:'Ward merges clusters with minimum increase in total within-cluster variance. Similar to K-means.'},
+{q:'Complete linkage uses:',o:['Min distance','Max distance','Average','Centroid'],a:1,e:'Max pairwise → compact clusters.'},
+{q:'Lower dendrogram height means:',o:['More different','More similar','Worse','Random'],a:1,e:'Height = dissimilarity.'},
+{q:'Higher cut gives:',o:['More clusters','Fewer clusters','Same','None'],a:1,e:'Higher = fewer, larger clusters.'},
+{q:'Which linkage chains?',o:['Complete','Average','Single','Ward'],a:2,e:'Single uses min distance → chains.'},
+{q:'Ward minimizes:',o:['Max distance','Min distance','Within-cluster SS','Average'],a:2,e:'Within-cluster variance increase.'},
 ],
 nn:[
-{q:'Which activation outputs values between 0 and 1?',o:['ReLU','Tanh','Sigmoid','Leaky ReLU'],a:2,e:'Sigmoid: g(z) = 1/(1+e⁻ᶻ). Range (0,1). Binary classification output.'},
-{q:'ReLU: g(−3) = ?',o:['3','0','-3','0.1'],a:1,e:'ReLU outputs 0 for any negative input. max(0, −3) = 0.'},
-{q:'What is "dying ReLU"?',o:['Outputs explode','Neurons stuck at 0 permanently','Too slow','Too deep'],a:1,e:'If z always negative, ReLU always 0, gradient=0, neuron stops learning. Fix: Leaky ReLU.'},
-{q:'Leaky ReLU differs from ReLU by:',o:['Maximum output','Small gradient for negative inputs','Differentiable','No parameters'],a:1,e:'Leaky ReLU: max(0.1z, z). For z<0, output is 0.1z instead of 0.'},
-{q:'Which activation converts outputs to probabilities summing to 1?',o:['Sigmoid','ReLU','Tanh','Softmax'],a:3,e:'Softmax: eᶻᵏ/Σeᶻʲ. Outputs sum to 1. Multi-class output layer.'},
-{q:'x₁=1, x₂=2, w₁=0.5, w₂=0.3, bias=0.1. What is z?',o:['0.9','1.2','1.5','0.6'],a:1,e:'z = 0.5(1) + 0.3(2) + 0.1 = 0.5 + 0.6 + 0.1 = 1.2'},
-{q:'Backpropagation uses which mathematical rule?',o:['Product rule','Quotient rule','Chain rule','Power rule'],a:2,e:'∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w — chain rule.'},
-{q:'Sigmoid/tanh suffer from what in deep networks?',o:['Dying neurons','Vanishing gradients','Expense','Overflow'],a:1,e:'Gradients approach 0 for large |z|, making updates negligible in early layers.'},
-{q:'Tanh is preferred over sigmoid in hidden layers because:',o:['Faster','Zero-centered outputs help optimization','Never saturates','Larger gradients'],a:1,e:'Zero-centered outputs avoid systematic gradient bias, improving convergence.'},
-{q:'Single-layer perceptron can solve:',o:['Any classification','Only linearly separable','Any regression','Only non-linear'],a:1,e:'No hidden layers → only linear boundaries. Need MLP for non-linear.'},
+{q:'Activation with range (0,1)?',o:['ReLU','Tanh','Sigmoid','Leaky ReLU'],a:2,e:'Sigmoid: 1/(1+e⁻ᶻ).'},
+{q:'ReLU of −3?',o:['3','0','−3','0.3'],a:1,e:'max(0,−3) = 0.'},
+{q:'"Dying ReLU" means:',o:['Exploding outputs','Neurons stuck at 0','Too slow','Too deep'],a:1,e:'Always-negative z → output 0 → gradient 0 → dead.'},
+{q:'Leaky ReLU vs ReLU:',o:['Max output','Small gradient for negative z','Always differentiable','No params'],a:1,e:'max(0.1z,z) → negative z has gradient 0.1.'},
+{q:'Which sums to 1?',o:['Sigmoid','ReLU','Tanh','Softmax'],a:3,e:'Softmax: probabilities summing to 1.'},
+{q:'z = 0.5(1)+0.3(2)+0.1 = ?',o:['0.9','1.2','1.5','0.6'],a:1,e:'0.5+0.6+0.1 = 1.2.'},
+{q:'Backprop uses:',o:['Product rule','Quotient rule','Chain rule','Power rule'],a:2,e:'∂L/∂w via chain rule.'},
+{q:'Sigmoid/tanh deep net issue:',o:['Dying','Vanishing gradients','Cost','Overflow'],a:1,e:'Gradients → 0 in early layers.'},
+{q:'Tanh preferred in hidden because:',o:['Faster','Zero-centered','Never saturates','Larger gradients'],a:1,e:'Zero-centered → better optimization.'},
+{q:'Single perceptron solves:',o:['Anything','Linearly separable only','Regression','Non-linear'],a:1,e:'No hidden layers = linear boundary.'},
 ],
 svm:[
-{q:'SVM: what is the margin?',o:['Error rate','Distance from boundary to nearest points','# support vectors','Kernel parameter'],a:1,e:'Margin = distance from hyperplane to closest data points of either class. SVM maximizes this.'},
-{q:'Support vectors are:',o:['All training points','Farthest from boundary','Points on/within margin that influence boundary','Outliers'],a:2,e:'Support vectors are critical points closest to boundary. Removing them changes the hyperplane.'},
-{q:'If ξᵢ > 1 in soft-margin SVM:',o:['Correctly classified','On margin','Misclassified','Support vector'],a:2,e:'ξᵢ > 1 means the point is on the wrong side of the hyperplane — misclassified.'},
-{q:'Increasing C in SVM:',o:['Wider margin, more violations','Narrower margin, fewer violations','No effect','Always improves'],a:1,e:'Larger C = heavier penalty for violations = fewer tolerated = narrower margin.'},
-{q:'RBF kernel: increasing γ causes:',o:['Smoother boundary','More complex, localized boundary (overfit risk)','No change','Always better'],a:1,e:'Higher γ = faster decay = each point has local influence = complex boundary = overfit risk.'},
-{q:'OVR with 5 classes: how many classifiers?',o:['5','10','25','4'],a:0,e:'OVR: K classifiers, one per class vs all others. 5 classes = 5 classifiers.'},
-{q:'OVO with 5 classes: how many classifiers?',o:['5','10','20','25'],a:1,e:'OVO: K(K−1)/2 = 5(4)/2 = 10 classifiers, one per pair.'},
-{q:'f(x)=2X₁+X₂−5. Point (1,3). f(x)=?',o:['0','1','2','−1'],a:0,e:'f(1,3) = 2(1)+3−5 = 0. Point lies exactly on the hyperplane.'},
-{q:'When is SVM preferred over LR?',o:['Need probabilities','Classes nearly separable','Very few features','Time-series data'],a:1,e:'SVM excels when classes are (nearly) separable and when p > n.'},
-{q:'What does the kernel trick do?',o:['Speed up training','Nonlinear boundaries without explicit high-dim computation','Reduce support vectors','Regression'],a:1,e:'Kernel computes inner products in high-dim space implicitly, enabling nonlinear boundaries efficiently.'},
-{q:'LinearSVC() vs SVC(kernel="linear"):',o:['Identical','Different optimizers; LinearSVC faster','SVC always better','LinearSVC supports kernels'],a:1,e:'LinearSVC uses liblinear (fast, linear only). SVC uses libsvm (slower, supports all kernels).'},
-{q:'Why add ||β||=1 constraint?',o:['Make problem unique and well-defined','Reduce computation','Classify all points','Make C unnecessary'],a:0,e:'Without fixing ||β||, we can scale β arbitrarily without changing hyperplane, making M unbounded.'},
+{q:'Margin is:',o:['Error rate','Distance to nearest points','# SVs','Kernel param'],a:1,e:'SVM maximizes this distance.'},
+{q:'Support vectors are:',o:['All points','Farthest','On/within margin, define boundary','Outliers'],a:2,e:'Removing them changes the hyperplane.'},
+{q:'ξ > 1 means:',o:['Correct','On margin','Misclassified','Support vector'],a:2,e:'Wrong side of hyperplane.'},
+{q:'Increasing C:',o:['Wider margin','Narrower margin, fewer violations','No effect','Always better'],a:1,e:'Heavier penalty → fewer violations → narrow margin.'},
+{q:'Increasing γ (RBF):',o:['Smoother','More complex, overfit risk','No change','Better'],a:1,e:'Faster decay → localized → complex.'},
+{q:'OVR with 5 classes:',o:['5','10','25','4'],a:0,e:'K classifiers.'},
+{q:'OVO with 5 classes:',o:['5','10','20','25'],a:1,e:'K(K−1)/2 = 10.'},
+{q:'f(x)=2X₁+X₂−5 at (1,3):',o:['0','1','2','−1'],a:0,e:'2+3−5 = 0.'},
+{q:'SVM vs LR — when SVM?',o:['Need probs','Nearly separable','Few features','Time-series'],a:1,e:'SVM excels when separable, p>n.'},
+{q:'Kernel trick allows:',o:['Faster training','Nonlinear boundaries implicitly','Fewer SVs','Regression'],a:1,e:'High-dim inner products without explicit mapping.'},
+{q:'LinearSVC vs SVC(linear):',o:['Identical','Different optimizers, LinearSVC faster','SVC better','LinearSVC has kernels'],a:1,e:'liblinear vs libsvm.'},
+{q:'Why ||β||=1 constraint?',o:['Unique well-defined problem','Speed','Classify all','Remove C'],a:0,e:'Without it, β scales arbitrarily, M unbounded.'},
 ]
 };
 
-const MOCK_EXAMS=[(function(){
-const all=[];Object.entries(QUIZZES).forEach(([tid,qs])=>{qs.forEach(q=>{all.push({t:tid,...q});});});
-for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
-return all.slice(0,24);
-})()];
+const ME=[(()=>{const a=[];Object.entries(Q).forEach(([t,qs])=>qs.forEach(q=>a.push({t,...q})));for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,24);})()];
 
-let appState={
-  page:'dashboard',guideTopic:'pca',
-  fcIndex:0,fcFlipped:false,fcTopic:'all',fcMode:'all',
-  quizTopic:'pca',quizIndex:0,quizAnswered:false,quizSelected:-1,quizScore:0,quizTotal:0,quizDone:false,
-  mockExam:-1,mockIndex:0,mockAnswers:[],mockDone:false,mockStartTime:0,mockTimerInterval:null,
-};
+let S={page:'dashboard',gt:'pca',fi:0,ff:false,ft:'all',fm:'all',qt:'pca',qi:0,qa:false,qs:-1,qsc:0,qtl:0,qd:false,me:-1,mi:0,ma:[],md:false,mt:0,mti:null};
 
-function loadProgress(){try{return JSON.parse(localStorage.getItem('mse446_progress'))||{};}catch{return {};}}
-function saveProgress(p){localStorage.setItem('mse446_progress',JSON.stringify(p));}
-function getProgress(){const p=loadProgress();if(!p.quizScores)p.quizScores={};if(!p.fcKnown)p.fcKnown={};if(!p.mockScores)p.mockScores=[];if(!p.lastStudy)p.lastStudy=null;if(!p.streak)p.streak=0;return p;}
-function recordQuizScore(topic,score,total){const p=getProgress();if(!p.quizScores[topic])p.quizScores[topic]=[];p.quizScores[topic].push({score,total,date:Date.now()});p.lastStudy=new Date().toDateString();saveProgress(p);}
-function recordMockScore(ei,score,total,bd){const p=getProgress();p.mockScores.push({exam:ei,score,total,breakdown:bd,date:Date.now()});p.lastStudy=new Date().toDateString();saveProgress(p);}
-function fcKey(c){return c.t+':'+c.q.substring(0,50);}
-function toggleFcKnown(key){const p=getProgress();p.fcKnown[key]=!p.fcKnown[key];p.lastStudy=new Date().toDateString();saveProgress(p);}
-function saveQuizSession(){localStorage.setItem('mse446_quizSession',JSON.stringify({quizTopic:appState.quizTopic,quizIndex:appState.quizIndex,quizScore:appState.quizScore,quizTotal:appState.quizTotal,quizDone:appState.quizDone,quizAnswered:appState.quizAnswered,quizSelected:appState.quizSelected}));}
-function loadQuizSession(){try{return JSON.parse(localStorage.getItem('mse446_quizSession'));}catch{return null;}}
-function clearQuizSession(){localStorage.removeItem('mse446_quizSession');}
-function updateStreak(){const p=getProgress();const today=new Date().toDateString();if(p.lastStudy!==today){const y=new Date(Date.now()-86400000).toDateString();p.streak=p.lastStudy===y?p.streak+1:1;p.lastStudy=today;saveProgress(p);}const el=document.getElementById('streakDisplay');if(el&&p.streak>0)el.textContent=p.streak+' day streak';}
-
-function navigate(page){if(appState.mockTimerInterval){clearInterval(appState.mockTimerInterval);appState.mockTimerInterval=null;}appState.page=page;if(page==='quiz'){const s=loadQuizSession();if(s&&!s.quizDone)Object.assign(appState,s);else{appState.quizIndex=0;appState.quizScore=0;appState.quizTotal=0;appState.quizDone=false;appState.quizAnswered=false;clearQuizSession();}}render();document.querySelectorAll('.nav-item').forEach(el=>{el.classList.toggle('active',el.dataset.page===page);});document.getElementById('main').scrollTop=0;const sb=document.getElementById('sidebar');if(sb.classList.contains('open'))sb.classList.remove('open');updateStreak();}
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
-function toggleTheme(){const h=document.documentElement;const n=h.dataset.theme==='dark'?'light':'dark';h.dataset.theme=n;document.getElementById('themeBtn').textContent=n==='dark'?'\u263E':'\u2600';localStorage.setItem('mse446_theme',n);}
+function lp(){try{return JSON.parse(localStorage.getItem('mse446p'))||{};}catch{return{};}}
+function sp(p){localStorage.setItem('mse446p',JSON.stringify(p));}
+function gp(){const p=lp();p.qs=p.qs||{};p.fk=p.fk||{};p.ms=p.ms||[];p.ls=p.ls||null;p.st=p.st||0;return p;}
+function rqs(t,sc,tl){const p=gp();if(!p.qs[t])p.qs[t]=[];p.qs[t].push({s:sc,t:tl,d:Date.now()});p.ls=new Date().toDateString();sp(p);}
+function rms(e,sc,tl,bd){const p=gp();p.ms.push({e,s:sc,t:tl,b:bd,d:Date.now()});p.ls=new Date().toDateString();sp(p);}
+function fk(c){return c.t+':'+c.q.substring(0,40);}
+function tfk(k){const p=gp();p.fk[k]=!p.fk[k];p.ls=new Date().toDateString();sp(p);}
+function sqz(){localStorage.setItem('mse446qs',JSON.stringify({qt:S.qt,qi:S.qi,qsc:S.qsc,qtl:S.qtl,qd:S.qd,qa:S.qa,qs:S.qs}));}
+function lqz(){try{return JSON.parse(localStorage.getItem('mse446qs'));}catch{return null;}}
+function cqz(){localStorage.removeItem('mse446qs');}
+function us(){const p=gp();const td=new Date().toDateString();if(p.ls!==td){const y=new Date(Date.now()-864e5).toDateString();p.st=p.ls===y?p.st+1:1;p.ls=td;sp(p);}const b=document.getElementById('streakBadge');const t=document.getElementById('streakText');if(b&&t&&p.st>0){b.classList.add('visible');t.textContent=p.st+' day streak';}}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function render(){const c=document.getElementById('content');switch(appState.page){case'dashboard':c.innerHTML=renderDashboard();break;case'guide':c.innerHTML=renderGuide();break;case'flashcards':c.innerHTML=renderFlashcards();break;case'quiz':c.innerHTML=renderQuiz();break;case'mock':c.innerHTML=renderMock();break;}}
+function navigate(pg){if(S.mti){clearInterval(S.mti);S.mti=null;}S.page=pg;if(pg==='quiz'){const sv=lqz();if(sv&&!sv.qd)Object.assign(S,sv);else{S.qi=0;S.qsc=0;S.qtl=0;S.qd=false;S.qa=false;cqz();}}render();document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.page===pg));document.getElementById('main').scrollTop=0;document.getElementById('sidebar').classList.remove('open');us();}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+function toggleTheme(){const h=document.documentElement;const n=h.dataset.theme==='dark'?'light':'dark';h.dataset.theme=n;document.getElementById('themeBtn').textContent=n==='dark'?'\u263E':'\u2600';localStorage.setItem('mse446t',n);}
 
-function renderDashboard(){
-const p=getProgress();const totalFC=FLASHCARDS.length;const knownFC=Object.values(p.fcKnown).filter(Boolean).length;
-let totalQ=0,totalC=0;TOPICS.forEach(t=>{const s=p.quizScores[t.id]||[];if(s.length){const l=s[s.length-1];totalQ+=l.total;totalC+=l.score;}});
-let topicRows='';TOPICS.forEach(t=>{let m=0,parts=0;const s=p.quizScores[t.id]||[];if(s.length){m+=(s[s.length-1].score/s[s.length-1].total)*100;parts++;}const tFC=FLASHCARDS.filter(f=>f.t===t.id);const tK=tFC.filter(f=>p.fcKnown[fcKey(f)]).length;if(tFC.length){m+=(tK/tFC.length)*100;parts++;}const o=parts?Math.round(m/parts):0;const col=o>=80?'var(--green)':o>=50?'var(--orange)':'var(--red)';topicRows+=`<div class="topic-mastery"><span class="label">${t.full}</span><div class="bar"><div class="progress-bar"><div class="fill" style="width:${o}%;background:${col}"></div></div></div><span class="pct" style="color:${col}">${o}%</span></div>`;});
-let weak='',strong='';TOPICS.forEach(t=>{const s=p.quizScores[t.id]||[];if(s.length){const l=s[s.length-1];const pc=Math.round(l.score/l.total*100);if(pc<60)weak+=`<div class="weak-area">${t.full} (${pc}%) — Review this topic</div>`;else if(pc>=90)strong+=`<div class="strong-area">${t.full} (${pc}%) — Strong</div>`;}});
-let mh='';p.mockScores.forEach(m=>{mh+=`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">Mock ${m.exam+1}: ${m.score}/${m.total} (${Math.round(m.score/m.total*100)}%) — ${new Date(m.date).toLocaleDateString()}</div>`;});
-const examDate=new Date('2026-04-15T09:00:00');const diff=examDate-new Date();const dd=Math.max(0,Math.floor(diff/864e5));const hh=Math.max(0,Math.floor((diff%864e5)/36e5));
+function render(){document.getElementById('content').innerHTML={dashboard:rDash,guide:rGuide,flashcards:rFC,quiz:rQuiz,mock:rMock}[S.page]();}
+
+function rDash(){
+const p=gp();const nfc=FC.length;const kfc=Object.values(p.fk).filter(Boolean).length;
+let tq=0,tc=0;T.forEach(t=>{const s=p.qs[t.id]||[];if(s.length){const l=s[s.length-1];tq+=l.t;tc+=l.s;}});
+let rows='';T.forEach(t=>{let m=0,n=0;const s=p.qs[t.id]||[];if(s.length){m+=(s[s.length-1].s/s[s.length-1].t)*100;n++;}const tf=FC.filter(f=>f.t===t.id),tk=tf.filter(f=>p.fk[fk(f)]).length;if(tf.length){m+=(tk/tf.length)*100;n++;}const o=n?Math.round(m/n):0;const c=o>=80?'var(--green)':o>=50?'var(--amber)':'var(--red)';rows+=`<div class="mastery-row"><span class="mastery-label">${t.f}</span><div class="mastery-bar"><div class="progress"><div class="progress-fill" style="width:${o}%;background:${c}"></div></div></div><span class="mastery-pct" style="color:${c}">${o}%</span></div>`;});
+let wk='',st='';T.forEach(t=>{const s=p.qs[t.id]||[];if(s.length){const l=s[s.length-1];const pc=Math.round(l.s/l.t*100);if(pc<60)wk+=`<div class="weak">${t.f} (${pc}%) — needs review</div>`;else if(pc>=90)st+=`<div class="strong">${t.f} (${pc}%) — strong</div>`;}});
+const ed=new Date('2026-04-15T09:00:00');const df=ed-new Date();const dd=Math.max(0,Math.floor(df/864e5));const hh=Math.max(0,Math.floor((df%864e5)/36e5));
 return`<div class="fade-in"><h2 style="margin-bottom:16px">Dashboard</h2>
-<div class="exam-format-banner"><h3>Final Exam — MSE 446/623</h3><p><strong>150 minutes.</strong> Part I: 24 MCQs (conceptual + Python). Part II: 5 long-answer problems (post-midterm topics). No formula sheet — formulas provided in questions.</p>
-<div class="fmt-grid"><div class="fmt-item"><div class="num">${dd}d ${hh}h</div><div class="lbl">Until Exam</div></div><div class="fmt-item"><div class="num">24</div><div class="lbl">MCQs (Part I)</div></div><div class="fmt-item"><div class="num">5</div><div class="lbl">Long Answer (Part II)</div></div><div class="fmt-item"><div class="num">150</div><div class="lbl">Minutes</div></div></div></div>
-<div class="dash-grid"><div class="dash-card"><h4>Flashcards Mastered</h4><div class="big-num">${knownFC}/${totalFC}</div><div class="progress-bar" style="margin-top:8px"><div class="fill" style="width:${totalFC?knownFC/totalFC*100:0}%"></div></div></div>
-<div class="dash-card"><h4>Quiz Accuracy</h4><div class="big-num">${totalQ?Math.round(totalC/totalQ*100):0}%</div></div>
-<div class="dash-card"><h4>Mock Exams</h4><div class="big-num">${p.mockScores.length}</div></div>
-<div class="dash-card"><h4>Study Streak</h4><div class="big-num">${p.streak} day${p.streak!==1?'s':''}</div></div></div>
-<div class="card"><h3>Topic Mastery</h3>${topicRows}</div>
-${weak?`<div class="card"><h3>Areas to Focus On</h3>${weak}</div>`:''}
-${strong?`<div class="card"><h3>Strong Areas</h3>${strong}</div>`:''}
-${mh?`<div class="card"><h3>Mock Exam History</h3>${mh}</div>`:''}
-<div class="card"><h3>Quick Start</h3><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
-<button class="btn btn-primary" onclick="navigate('guide')">Study Guide</button>
-<button class="btn btn-secondary" onclick="navigate('flashcards')">Flashcards</button>
-<button class="btn btn-secondary" onclick="navigate('quiz')">Take a Quiz</button>
-<button class="btn btn-secondary" onclick="navigate('mock')">Mock Exam</button></div></div></div>`;
-}
+<div class="banner"><h3>Final Exam — MSE 446/623</h3><p><strong>150 min.</strong> Part I: 24 MCQs. Part II: 5 long-answer (post-midterm). Formulas provided in questions.</p>
+<div class="banner-grid"><div class="banner-item"><div class="banner-num">${dd}d ${hh}h</div><div class="banner-lbl">Until Exam</div></div><div class="banner-item"><div class="banner-num">24</div><div class="banner-lbl">MCQs</div></div><div class="banner-item"><div class="banner-num">5</div><div class="banner-lbl">Long Answer</div></div><div class="banner-item"><div class="banner-num">150m</div><div class="banner-lbl">Duration</div></div></div></div>
+<div class="stat-grid"><div class="stat-card"><div class="stat-label">Flashcards Mastered</div><div class="stat-value">${kfc}<span style="font-size:16px;color:var(--text-secondary);font-weight:500">/${nfc}</span></div><div class="progress" style="margin-top:10px"><div class="progress-fill" style="width:${nfc?kfc/nfc*100:0}%"></div></div></div>
+<div class="stat-card"><div class="stat-label">Quiz Accuracy</div><div class="stat-value">${tq?Math.round(tc/tq*100):0}%</div></div>
+<div class="stat-card"><div class="stat-label">Mock Exams</div><div class="stat-value">${p.ms.length}</div></div>
+<div class="stat-card"><div class="stat-label">Study Streak</div><div class="stat-value">${p.st}<span style="font-size:14px;color:var(--text-secondary);font-weight:500"> day${p.st!==1?'s':''}</span></div></div></div>
+<div class="card"><h3 style="margin-top:0">Topic Mastery</h3>${rows}</div>
+${wk?`<div class="card"><h3 style="margin-top:0">Focus Areas</h3>${wk}</div>`:''}${st?`<div class="card"><h3 style="margin-top:0">Strong Areas</h3>${st}</div>`:''}
+<div class="card"><h3 style="margin-top:0">Quick Start</h3><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><button class="btn btn-primary" onclick="navigate('guide')">Study Guide</button><button class="btn btn-ghost" onclick="navigate('flashcards')">Flashcards</button><button class="btn btn-ghost" onclick="navigate('quiz')">Quiz</button><button class="btn btn-ghost" onclick="navigate('mock')">Mock Exam</button></div></div></div>`;}
 
-function renderGuide(){const tabs=TOPICS.map(t=>`<button class="tab ${appState.guideTopic===t.id?'active':''}" onclick="appState.guideTopic='${t.id}';render()">${t.full}</button>`).join('');return`<div class="fade-in"><h2 style="margin-bottom:16px">Study Guide</h2><div class="tabs">${tabs}</div><div class="card">${GUIDE[appState.guideTopic]||'<p>Coming soon.</p>'}</div></div>`;}
+function rGuide(){return`<div class="fade-in"><h2 style="margin-bottom:16px">Study Guide</h2><div class="tabs">${T.map(t=>`<button class="tab ${S.gt===t.id?'active':''}" onclick="S.gt='${t.id}';render()">${t.f}</button>`).join('')}</div><div class="card">${G[S.gt]||''}</div></div>`;}
 
-function renderFlashcards(){const p=getProgress();let cards=[...FLASHCARDS];if(appState.fcTopic!=='all')cards=cards.filter(f=>f.t===appState.fcTopic);if(appState.fcMode==='learning')cards=cards.filter(f=>!p.fcKnown[fcKey(f)]);if(!cards.length)return`<div class="fade-in"><h2>Flashcards</h2><div class="card"><p>No cards match. Try changing topic or mode.</p></div></div>`;if(appState.fcIndex>=cards.length)appState.fcIndex=0;const card=cards[appState.fcIndex];const ck=fcKey(card);const known=p.fcKnown[ck];const tn=TOPICS.find(t=>t.id===card.t)?.full||card.t;const chips=`<button class="topic-chip ${appState.fcTopic==='all'?'active':''}" onclick="appState.fcTopic='all';appState.fcIndex=0;appState.fcFlipped=false;render()">All</button>`+TOPICS.map(t=>`<button class="topic-chip ${appState.fcTopic===t.id?'active':''}" onclick="appState.fcTopic='${t.id}';appState.fcIndex=0;appState.fcFlipped=false;render()">${t.name}</button>`).join('');
-return`<div class="fade-in"><h2 style="margin-bottom:16px">Flashcards</h2><div class="topic-selector">${chips}</div><div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"><button class="btn btn-sm ${appState.fcMode==='all'?'btn-primary':'btn-secondary'}" onclick="appState.fcMode='all';appState.fcIndex=0;appState.fcFlipped=false;render()">All Cards</button><button class="btn btn-sm ${appState.fcMode==='learning'?'btn-primary':'btn-secondary'}" onclick="appState.fcMode='learning';appState.fcIndex=0;appState.fcFlipped=false;render()">Still Learning</button><button class="btn btn-sm btn-secondary" onclick="shuffleFC()">Shuffle</button></div>
-<div class="flashcard-container"><div class="flashcard-progress">${appState.fcIndex+1} / ${cards.length}</div><div class="flashcard ${appState.fcFlipped?'flipped':''}" onclick="appState.fcFlipped=!appState.fcFlipped;render()"><div class="flashcard-inner"><div class="flashcard-front"><div class="flashcard-topic">${esc(tn)}</div><p>${esc(card.q)}</p></div><div class="flashcard-back"><div class="flashcard-topic">Answer</div><p>${esc(card.a)}</p></div></div></div>
-<div class="flashcard-controls"><button class="btn btn-secondary" onclick="fcPrev()" ${appState.fcIndex===0?'disabled':''}>Previous</button><button class="btn ${known?'btn-success':'btn-secondary'}" onclick='toggleFcKnown(${JSON.stringify(ck)});render()'>${known?'Known':'Mark Known'}</button><button class="btn btn-primary" onclick="fcNext(${cards.length})">Next</button></div></div></div>`;}
+function rFC(){const p=gp();let cards=[...FC];if(S.ft!=='all')cards=cards.filter(f=>f.t===S.ft);if(S.fm==='learning')cards=cards.filter(f=>!p.fk[fk(f)]);if(!cards.length)return`<div class="fade-in"><h2>Flashcards</h2><div class="card"><p>No cards match. Change topic or mode.</p></div></div>`;if(S.fi>=cards.length)S.fi=0;const c=cards[S.fi],ck=fk(c),kn=p.fk[ck];
+return`<div class="fade-in"><h2 style="margin-bottom:16px">Flashcards</h2>
+<div class="chips"><button class="chip ${S.ft==='all'?'active':''}" onclick="S.ft='all';S.fi=0;S.ff=false;render()">All</button>${T.map(t=>`<button class="chip ${S.ft===t.id?'active':''}" onclick="S.ft='${t.id}';S.fi=0;S.ff=false;render()">${t.s}</button>`).join('')}</div>
+<div style="display:flex;gap:6px;justify-content:center;margin-bottom:16px"><button class="btn btn-sm ${S.fm==='all'?'btn-primary':'btn-ghost'}" onclick="S.fm='all';S.fi=0;S.ff=false;render()">All</button><button class="btn btn-sm ${S.fm==='learning'?'btn-primary':'btn-ghost'}" onclick="S.fm='learning';S.fi=0;S.ff=false;render()">Learning</button><button class="btn btn-sm btn-ghost" onclick="shFC()">Shuffle</button></div>
+<div class="fc-wrap"><div class="fc-count">${S.fi+1} / ${cards.length}</div>
+<div class="fc-card ${S.ff?'flipped':''}" onclick="S.ff=!S.ff;render()"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-topic">${esc(T.find(t=>t.id===c.t)?.f||'')}</div><p class="fc-text">${esc(c.q)}</p></div><div class="fc-face fc-back"><div class="fc-topic">Answer</div><p class="fc-text">${esc(c.a)}</p></div></div></div>
+<div class="fc-controls"><button class="btn btn-ghost btn-sm" onclick="if(S.fi>0){S.fi--;S.ff=false;render();}" ${S.fi===0?'disabled':''}>Prev</button><button class="btn btn-sm ${kn?'btn-success':'btn-ghost'}" onclick='tfk(${JSON.stringify(ck)});render()'>${kn?'Known':'Mark Known'}</button><button class="btn btn-primary btn-sm" onclick="S.fi=(S.fi+1)%${cards.length};S.ff=false;render()">Next</button></div></div></div>`;}
+function shFC(){const a=[...FC];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}FC.length=0;FC.push(...a);S.fi=0;S.ff=false;render();}
 
-function fcNext(t){appState.fcIndex=(appState.fcIndex+1)%t;appState.fcFlipped=false;render();}
-function fcPrev(){if(appState.fcIndex>0){appState.fcIndex--;appState.fcFlipped=false;render();}}
-function shuffleFC(){const a=[...FLASHCARDS];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}FLASHCARDS.length=0;FLASHCARDS.push(...a);appState.fcIndex=0;appState.fcFlipped=false;render();}
+function rQuiz(){const chips=T.map(t=>`<button class="chip ${S.qt===t.id?'active':''}" onclick="stQ('${t.id}')">${t.s}</button>`).join('');const qs=Q[S.qt]||[];if(!qs.length)return`<div class="fade-in"><h2>Quizzes</h2><div class="chips">${chips}</div><div class="card"><p>No questions.</p></div></div>`;
+if(S.qd){const pc=Math.round(S.qsc/S.qtl*100);return`<div class="fade-in"><h2>Quiz Complete</h2><div class="card"><div class="q-score">${pc}%</div><div class="q-score-sub">${S.qsc}/${S.qtl} correct</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="stQ('${S.qt}')">Retry</button> <button class="btn btn-ghost" onclick="navigate('dashboard')">Dashboard</button></div></div></div>`;}
+const qn=qs[S.qi];const opts=qn.o.map((o,i)=>{let cl='q-opt';if(S.qa){if(i===qn.a)cl+=' ok';else if(i===S.qs)cl+=' wrong';}else if(i===S.qs)cl+=' sel';return`<button class="${cl}" onclick="aQ(${i})" ${S.qa?'disabled':''}>${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
+return`<div class="fade-in"><h2 style="margin-bottom:16px">Quizzes</h2><div class="chips">${chips}</div><div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="font-size:12px;color:var(--text-secondary)">Question ${S.qi+1}/${qs.length}</span><span style="font-size:12px;color:var(--text-secondary)">Score: ${S.qsc}</span></div><div class="progress" style="margin-bottom:14px"><div class="progress-fill" style="width:${(S.qi/qs.length)*100}%"></div></div><h3 style="margin:0 0 14px;color:var(--text-primary)">${esc(qn.q)}</h3>${opts}${S.qa?`<div class="q-exp"><strong>${S.qs===qn.a?'Correct!':'Incorrect.'}</strong> ${esc(qn.e)}</div><div style="text-align:right;margin-top:10px"><button class="btn btn-primary btn-sm" onclick="nQ()">Next</button></div>`:''}</div></div>`;}
+function stQ(t){S.qt=t;S.qi=0;S.qsc=0;S.qtl=0;S.qd=false;S.qa=false;S.qs=-1;sqz();render();}
+function aQ(i){if(S.qa)return;S.qs=i;S.qa=true;S.qtl++;if(i===Q[S.qt][S.qi].a)S.qsc++;sqz();render();}
+function nQ(){const qs=Q[S.qt];S.qi++;S.qa=false;S.qs=-1;if(S.qi>=qs.length){S.qd=true;rqs(S.qt,S.qsc,S.qtl);cqz();}else sqz();render();}
 
-function renderQuiz(){const chips=TOPICS.map(t=>`<button class="topic-chip ${appState.quizTopic===t.id?'active':''}" onclick="startQuiz('${t.id}')">${t.name}</button>`).join('');const qs=QUIZZES[appState.quizTopic]||[];if(!qs.length)return`<div class="fade-in"><h2>Quizzes</h2><div class="topic-selector">${chips}</div><div class="card"><p>No questions for this topic.</p></div></div>`;
-if(appState.quizDone){const pc=Math.round(appState.quizScore/appState.quizTotal*100);return`<div class="fade-in"><h2>Quiz Complete!</h2><div class="card"><div class="quiz-score">${pc}%</div><div class="quiz-score-sub">${appState.quizScore} / ${appState.quizTotal} correct</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="startQuiz('${appState.quizTopic}')">Retry</button> <button class="btn btn-secondary" onclick="navigate('dashboard')">Dashboard</button></div></div></div>`;}
-const qn=qs[appState.quizIndex];const opts=qn.o.map((o,i)=>{let cl='quiz-option';if(appState.quizAnswered){if(i===qn.a)cl+=' correct';else if(i===appState.quizSelected)cl+=' incorrect';}else if(i===appState.quizSelected)cl+=' selected';return`<button class="${cl}" onclick="selectQuizAnswer(${i})" ${appState.quizAnswered?'disabled':''}>${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
-return`<div class="fade-in"><h2 style="margin-bottom:16px">Quizzes</h2><div class="topic-selector">${chips}</div><div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="font-size:13px;color:var(--text2)">Question ${appState.quizIndex+1}/${qs.length}</span><span style="font-size:13px;color:var(--text2)">Score: ${appState.quizScore}</span></div><div class="progress-bar" style="margin-bottom:16px"><div class="fill" style="width:${(appState.quizIndex/qs.length)*100}%"></div></div><h3 style="margin-bottom:16px;color:var(--text)">${esc(qn.q)}</h3>${opts}${appState.quizAnswered?`<div class="quiz-explanation"><strong>${appState.quizSelected===qn.a?'Correct!':'Incorrect.'}</strong> ${esc(qn.e)}</div><div style="text-align:right;margin-top:12px"><button class="btn btn-primary" onclick="nextQuizQ()">Next</button></div>`:''}</div></div>`;}
+function rMock(){if(S.me===-1){const p=gp();return`<div class="fade-in"><h2 style="margin-bottom:16px">Mock Exam</h2><div class="banner"><h3>Exam Simulation</h3><p>24 MCQs, timed. Covers all post-midterm topics.</p></div>${ME.map((ex,i)=>{const tk=p.ms.filter(m=>m.e===i);const b=tk.length?Math.max(...tk.map(m=>Math.round(m.s/m.t*100))):null;return`<div class="card" style="cursor:pointer" onclick="stM(${i})"><h3 style="margin:0">Mock Exam ${i+1}</h3><p style="color:var(--text-secondary);margin:4px 0">${ex.length} questions</p>${b!==null?`<p>Best: <strong style="color:var(--accent)">${b}%</strong> (${tk.length} attempt${tk.length>1?'s':''})</p>`:'<p style="color:var(--text-tertiary)">Not attempted</p>'}<button class="btn btn-primary btn-sm" style="margin-top:8px">Start</button></div>`;}).join('')}</div>`;}
+const ex=ME[S.me];
+if(S.md){const sc=S.ma.reduce((s,a,i)=>s+(a===ex[i].a?1:0),0);const pc=Math.round(sc/ex.length*100);const bd={};ex.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(S.ma[i]===q.a)bd[q.t].c++;});
+let bh='';Object.entries(bd).forEach(([tid,v])=>{const tn=T.find(t=>t.id===tid)?.f||tid;const p2=Math.round(v.c/v.t*100);const c=p2>=80?'var(--green)':p2>=50?'var(--amber)':'var(--red)';bh+=`<div class="mastery-row"><span class="mastery-label">${tn}</span><div class="mastery-bar"><div class="progress"><div class="progress-fill" style="width:${p2}%;background:${c}"></div></div></div><span class="mastery-pct" style="color:${c}">${v.c}/${v.t}</span></div>`;});
+let rv='';ex.forEach((q,i)=>{const ok=S.ma[i]===q.a;rv+=`<div style="padding:10px 0;border-bottom:1px solid var(--border)"><p style="font-weight:600;font-size:13.5px;${ok?'':'color:var(--red)'}">${i+1}. ${esc(q.q)}</p><p style="font-size:12.5px;margin-top:3px;color:var(--text-secondary)">Yours: <strong>${esc(q.o[S.ma[i]]||'—')}</strong> ${ok?'✓':'✗ → '+esc(q.o[q.a])}</p></div>`;});
+return`<div class="fade-in"><h2>Exam Complete</h2><div class="card"><div class="q-score">${pc}%</div><div class="q-score-sub">${sc}/${ex.length} correct</div></div><div class="card"><h3 style="margin:0 0 8px">Breakdown</h3>${bh}</div><div class="card"><h3 style="margin:0 0 8px">Review</h3>${rv}</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="S.me=-1;S.md=false;render()">Back</button></div></div>`;}
+const el=Math.floor((Date.now()-S.mt)/1000);const mm=Math.floor(el/60),ss=el%60;const ts=`${mm}:${ss<10?'0':''}${ss}`;const tc=mm>=55?'crit':mm>=45?'warn':'';const qn=ex[S.mi];
+const opts=qn.o.map((o,i)=>{let cl='q-opt';if(S.ma[S.mi]===i)cl+=' sel';return`<button class="${cl}" onclick="S.ma[${S.mi}]=${i};render()">${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
+const dots=ex.map((_,i)=>{const a=S.ma[i];const bg=i===S.mi?'var(--accent)':a!==undefined?'var(--green)':'var(--bg-input)';return`<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${bg};cursor:pointer;margin:2px" onclick="S.mi=${i};render()"></span>`;}).join('');
+return`<div class="fade-in"><div class="timer-bar"><span style="font-size:13px;color:var(--text-secondary)">Q${S.mi+1}/${ex.length}</span><span class="timer-time ${tc}">${ts}</span><button class="btn btn-danger btn-sm" onclick="fM()">Finish</button></div><div class="card"><h3 style="margin:0 0 14px;color:var(--text-primary)">${esc(qn.q)}</h3>${opts}<div style="display:flex;justify-content:space-between;margin-top:14px"><button class="btn btn-ghost btn-sm" onclick="mN(-1)" ${S.mi===0?'disabled':''}>Prev</button><button class="btn btn-primary btn-sm" onclick="mN(1)">${S.mi===ex.length-1?'Finish':'Next'}</button></div></div><div style="text-align:center;margin-top:10px">${dots}</div></div>`;}
+function stM(i){S.me=i;S.mi=0;S.ma=[];S.md=false;S.mt=Date.now();if(S.mti)clearInterval(S.mti);S.mti=setInterval(()=>{const e=document.querySelector('.timer-time');if(!e)return;const s=Math.floor((Date.now()-S.mt)/1000);const m=Math.floor(s/60),r=s%60;e.textContent=`${m}:${r<10?'0':''}${r}`;e.className='timer-time'+(m>=55?' crit':m>=45?' warn':'');},1000);render();}
+function mN(d){const ex=ME[S.me];if(d===1&&S.mi===ex.length-1){fM();return;}S.mi=Math.max(0,Math.min(ex.length-1,S.mi+d));render();}
+function fM(){if(S.mti){clearInterval(S.mti);S.mti=null;}S.md=true;const ex=ME[S.me];const sc=S.ma.reduce((s,a,i)=>s+(a===ex[i].a?1:0),0);const bd={};ex.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(S.ma[i]===q.a)bd[q.t].c++;});rms(S.me,sc,ex.length,bd);render();}
 
-function startQuiz(t){appState.quizTopic=t;appState.quizIndex=0;appState.quizScore=0;appState.quizTotal=0;appState.quizDone=false;appState.quizAnswered=false;appState.quizSelected=-1;saveQuizSession();render();}
-function selectQuizAnswer(i){if(appState.quizAnswered)return;appState.quizSelected=i;appState.quizAnswered=true;const qn=QUIZZES[appState.quizTopic][appState.quizIndex];appState.quizTotal++;if(i===qn.a)appState.quizScore++;saveQuizSession();render();}
-function nextQuizQ(){const qs=QUIZZES[appState.quizTopic];appState.quizIndex++;appState.quizAnswered=false;appState.quizSelected=-1;if(appState.quizIndex>=qs.length){appState.quizDone=true;recordQuizScore(appState.quizTopic,appState.quizScore,appState.quizTotal);clearQuizSession();}else saveQuizSession();render();}
-
-function renderMock(){if(appState.mockExam===-1){const p=getProgress();const cards=MOCK_EXAMS.map((exam,i)=>{const taken=p.mockScores.filter(m=>m.exam===i);const best=taken.length?Math.max(...taken.map(t=>Math.round(t.score/t.total*100))):null;return`<div class="card" style="cursor:pointer" onclick="startMock(${i})"><h3>Mock Exam ${i+1}</h3><p style="color:var(--text2)">${exam.length} questions · Simulates Part I</p>${best!==null?`<p style="margin-top:8px">Best: <strong style="color:var(--accent)">${best}%</strong> (${taken.length} attempt${taken.length>1?'s':''})</p>`:'<p style="margin-top:8px;color:var(--text2)">Not attempted</p>'}<button class="btn btn-primary" style="margin-top:12px">Start Exam</button></div>`;}).join('');
-return`<div class="fade-in"><h2 style="margin-bottom:16px">Mock Exams</h2><div class="exam-format-banner"><h3>Exam Format</h3><p>24 MCQs covering conceptual understanding and Python. Time yourself: ~60 min for Part I. Post-midterm topics: NN, PCA, Clustering, SVM.</p></div>${cards}</div>`;}
-const exam=MOCK_EXAMS[appState.mockExam];
-if(appState.mockDone){const score=appState.mockAnswers.reduce((s,a,i)=>s+(a===exam[i].a?1:0),0);const pct=Math.round(score/exam.length*100);const bd={};exam.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(appState.mockAnswers[i]===q.a)bd[q.t].c++;});
-let bdH='';Object.entries(bd).forEach(([tid,v])=>{const tn=TOPICS.find(t=>t.id===tid)?.full||tid;const p2=Math.round(v.c/v.t*100);const col=p2>=80?'var(--green)':p2>=50?'var(--orange)':'var(--red)';bdH+=`<div class="topic-mastery"><span class="label">${tn}</span><div class="bar"><div class="progress-bar"><div class="fill" style="width:${p2}%;background:${col}"></div></div></div><span class="pct" style="color:${col}">${v.c}/${v.t}</span></div>`;});
-let rH='';exam.forEach((q,i)=>{const ok=appState.mockAnswers[i]===q.a;rH+=`<div style="padding:12px 0;border-bottom:1px solid var(--border)"><p style="font-weight:600;${ok?'':'color:var(--red)'}">${i+1}. ${esc(q.q)}</p><p style="font-size:13px;margin-top:4px">Your answer: <strong>${esc(q.o[appState.mockAnswers[i]]||'(skipped)')}</strong> ${ok?'✓':'✗ Correct: <strong>'+esc(q.o[q.a])+'</strong>'}</p><p style="font-size:13px;color:var(--text2);margin-top:2px">${esc(q.e)}</p></div>`;});
-return`<div class="fade-in"><h2>Exam Complete!</h2><div class="card"><div class="quiz-score">${pct}%</div><div class="quiz-score-sub">${score}/${exam.length} correct</div></div><div class="card"><h3>Topic Breakdown</h3>${bdH}</div><div class="card"><h3>Review All</h3>${rH}</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="appState.mockExam=-1;appState.mockDone=false;render()">Back to Exams</button></div></div>`;}
-const elapsed=Math.floor((Date.now()-appState.mockStartTime)/1000);const mins=Math.floor(elapsed/60),secs=elapsed%60;const timeStr=`${mins}:${secs<10?'0':''}${secs}`;const timeCls=mins>=55?'danger':mins>=45?'warning':'';const qn=exam[appState.mockIndex];
-const opts=qn.o.map((o,i)=>{let cl='quiz-option';if(appState.mockAnswers[appState.mockIndex]===i)cl+=' selected';return`<button class="${cl}" onclick="selectMockAnswer(${i})">${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
-const dots=exam.map((_,i)=>{const a=appState.mockAnswers[i];const cl=i===appState.mockIndex?'background:var(--accent)':a!==undefined?'background:var(--green)':'background:var(--bg4)';return`<span style="display:inline-block;width:10px;height:10px;border-radius:50%;${cl};cursor:pointer;margin:2px" onclick="appState.mockIndex=${i};render()"></span>`;}).join('');
-return`<div class="fade-in"><div class="mock-timer"><span style="font-size:14px">Question ${appState.mockIndex+1}/${exam.length}</span><span class="time ${timeCls}">${timeStr}</span><button class="btn btn-danger btn-sm" onclick="finishMock()">Finish Exam</button></div><div class="card"><h3 style="margin-bottom:16px">${esc(qn.q)}</h3>${opts}<div style="display:flex;justify-content:space-between;margin-top:16px"><button class="btn btn-secondary" onclick="mockNav(-1)" ${appState.mockIndex===0?'disabled':''}>Previous</button><button class="btn btn-primary" onclick="mockNav(1)">${appState.mockIndex===exam.length-1?'Review / Finish':'Next'}</button></div></div><div style="text-align:center;margin-top:12px">${dots}</div></div>`;}
-
-function startMock(i){appState.mockExam=i;appState.mockIndex=0;appState.mockAnswers=[];appState.mockDone=false;appState.mockStartTime=Date.now();if(appState.mockTimerInterval)clearInterval(appState.mockTimerInterval);appState.mockTimerInterval=setInterval(()=>{const el=document.querySelector('.mock-timer .time');if(!el)return;const e=Math.floor((Date.now()-appState.mockStartTime)/1000);const m=Math.floor(e/60),s=e%60;el.textContent=`${m}:${s<10?'0':''}${s}`;el.className='time'+(m>=55?' danger':m>=45?' warning':'');},1000);render();}
-function selectMockAnswer(i){appState.mockAnswers[appState.mockIndex]=i;render();}
-function mockNav(dir){const exam=MOCK_EXAMS[appState.mockExam];if(dir===1&&appState.mockIndex===exam.length-1){finishMock();return;}appState.mockIndex=Math.max(0,Math.min(exam.length-1,appState.mockIndex+dir));render();}
-function finishMock(){if(appState.mockTimerInterval){clearInterval(appState.mockTimerInterval);appState.mockTimerInterval=null;}appState.mockDone=true;const exam=MOCK_EXAMS[appState.mockExam];const score=appState.mockAnswers.reduce((s,a,i)=>s+(a===exam[i].a?1:0),0);const bd={};exam.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(appState.mockAnswers[i]===q.a)bd[q.t].c++;});recordMockScore(appState.mockExam,score,exam.length,bd);render();}
-
-(function init(){const s=localStorage.getItem('mse446_theme');if(s){document.documentElement.dataset.theme=s;document.getElementById('themeBtn').textContent=s==='dark'?'\u263E':'\u2600';}updateStreak();navigate('dashboard');})();
+(function(){const s=localStorage.getItem('mse446t');if(s){document.documentElement.dataset.theme=s;document.getElementById('themeBtn').textContent=s==='dark'?'\u263E':'\u2600';}us();navigate('dashboard');})();
 </script>
 </body>
 </html>
