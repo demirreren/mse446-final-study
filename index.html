@@ -1,566 +1,295 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSE 446 · Final Exam Study</title>
+<title>MSE 446 · Study</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ===== DESIGN TOKENS ===== */
 :root {
-  --bg: #0b0d12; --bg-raised: #12151c; --bg-overlay: #181c26; --bg-input: #1e2230;
-  --text-primary: #e4e7ef; --text-secondary: #7b83a0; --text-tertiary: #515872;
-  --accent: #6e8cff; --accent-hover: #5a75e6; --accent-subtle: rgba(110,140,255,.10); --accent-glow: rgba(110,140,255,.18);
-  --green: #34d399; --green-subtle: rgba(52,211,153,.10);
-  --red: #f87171; --red-subtle: rgba(248,113,113,.10);
-  --amber: #fbbf24; --amber-subtle: rgba(251,191,36,.10);
-  --border: rgba(255,255,255,.07); --border-strong: rgba(255,255,255,.12);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.24); --shadow-md: 0 4px 16px rgba(0,0,0,.28); --shadow-lg: 0 12px 40px rgba(0,0,0,.35);
-  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-full: 9999px;
-  --sidebar-w: 240px; --header-h: 56px;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  --transition: .2s cubic-bezier(.4,0,.2,1);
+  --brand: #4255ff; --brand-hover: #3847e0; --brand-light: #edefff; --brand-glow: rgba(66,85,255,.12);
+  --bg: #f6f7fb; --white: #fff; --card: #fff;
+  --text: #282e3e; --text2: #586380; --text3: #939bb4;
+  --border: #e5e7eb; --border2: #d1d5db;
+  --green: #23b26d; --green-bg: #dbf5e7; --red: #e04040; --red-bg: #fde8e8;
+  --amber: #f0a000; --amber-bg: #fff4d6;
+  --shadow-1: 0 2px 8px rgba(0,0,0,.04); --shadow-2: 0 4px 16px rgba(0,0,0,.07); --shadow-3: 0 8px 30px rgba(0,0,0,.10);
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-full: 999px;
+  --font: 'Nunito', -apple-system, system-ui, sans-serif; --mono: 'JetBrains Mono', monospace;
+  --ease: cubic-bezier(.4,0,.2,1); --nav-h: 64px;
 }
-[data-theme="light"] {
-  --bg: #f5f6fa; --bg-raised: #ffffff; --bg-overlay: #eceef5; --bg-input: #f0f1f7;
-  --text-primary: #1a1d2e; --text-secondary: #5c6380; --text-tertiary: #8b91a8;
-  --accent: #4f63e8; --accent-hover: #3d4fd6; --accent-subtle: rgba(79,99,232,.07); --accent-glow: rgba(79,99,232,.12);
-  --green: #059669; --green-subtle: rgba(5,150,105,.07);
-  --red: #dc2626; --red-subtle: rgba(220,38,38,.07);
-  --amber: #d97706; --amber-subtle: rgba(217,119,6,.07);
-  --border: rgba(0,0,0,.06); --border-strong: rgba(0,0,0,.10);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.06); --shadow-md: 0 4px 12px rgba(0,0,0,.06); --shadow-lg: 0 8px 30px rgba(0,0,0,.08);
+[data-theme="dark"] {
+  --bg: #0f1120; --white: #181b2e; --card: #1c2035;
+  --text: #e4e7f0; --text2: #8b92b0; --text3: #585f7a;
+  --border: rgba(255,255,255,.08); --border2: rgba(255,255,255,.12);
+  --brand-light: rgba(66,85,255,.15); --brand-glow: rgba(66,85,255,.2);
+  --green-bg: rgba(35,178,109,.12); --red-bg: rgba(224,64,64,.12); --amber-bg: rgba(240,160,0,.12);
+  --shadow-1: 0 2px 8px rgba(0,0,0,.2); --shadow-2: 0 4px 16px rgba(0,0,0,.25); --shadow-3: 0 8px 30px rgba(0,0,0,.35);
 }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.65; font-size:15px; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; min-height:100vh; transition:background .3s var(--ease), color .3s var(--ease); }
+::selection { background:var(--brand); color:#fff; }
+::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:8px; } ::-webkit-scrollbar-thumb:hover { background:var(--text3); }
+button { cursor:pointer; font-family:inherit; border:none; background:none; color:inherit; }
+a { color:var(--brand); text-decoration:none; }
+code, pre { font-family:var(--mono); }
+img { display:block; max-width:100%; }
 
-/* ===== RESET & BASE ===== */
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
-html { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; scroll-behavior:smooth; }
-body { font-family:var(--font); background:var(--bg); color:var(--text-primary); line-height:1.65; font-size:14.5px; letter-spacing:-.01em; overflow:hidden; height:100dvh; transition:background var(--transition),color var(--transition); }
-::selection { background:var(--accent); color:#fff; }
-::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--text-tertiary); border-radius:8px; } ::-webkit-scrollbar-thumb:hover { background:var(--text-secondary); }
-button { cursor:pointer; font-family:inherit; border:none; background:none; color:inherit; font-size:inherit; }
-a { color:var(--accent); text-decoration:none; }
-code,pre { font-family:var(--mono); }
+/* NAV */
+.nav { position:sticky; top:0; z-index:100; background:var(--white); border-bottom:1px solid var(--border); backdrop-filter:blur(20px) saturate(1.2); transition:background .3s var(--ease), border-color .3s var(--ease); }
+[data-theme="dark"] .nav { background:rgba(24,27,46,.85); }
+.nav-inner { max-width:1200px; margin:0 auto; height:var(--nav-h); display:flex; align-items:center; justify-content:space-between; padding:0 24px; }
+.nav-logo { font-size:20px; font-weight:800; color:var(--brand); letter-spacing:-.03em; display:flex; align-items:center; gap:6px; }
+.nav-logo .dot { width:8px; height:8px; background:var(--brand); border-radius:50%; display:inline-block; }
+.nav-tabs { display:flex; gap:4px; }
+.nav-tab { padding:8px 16px; font-size:14px; font-weight:600; color:var(--text2); border-radius:var(--r-full); transition:all .2s var(--ease); }
+.nav-tab:hover { background:var(--brand-light); color:var(--brand); }
+.nav-tab.active { background:var(--brand); color:#fff; box-shadow:0 2px 10px rgba(66,85,255,.3); }
+.nav-right { display:flex; align-items:center; gap:8px; }
+.nav-btn { width:38px; height:38px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--text2); transition:all .2s var(--ease); }
+.nav-btn:hover { background:var(--brand-light); color:var(--brand); }
 
-/* ===== HEADER ===== */
-.header { position:fixed; top:0; left:0; right:0; height:var(--header-h); background:var(--bg-raised); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:200; backdrop-filter:blur(20px) saturate(1.2); -webkit-backdrop-filter:blur(20px) saturate(1.2); transition:background var(--transition),border-color var(--transition); }
-[data-theme="dark"] .header { background:rgba(18,21,28,.82); }
-[data-theme="light"] .header { background:rgba(255,255,255,.82); }
-.header-left { display:flex; align-items:center; gap:12px; }
-.logo { font-size:15px; font-weight:700; letter-spacing:-.02em; color:var(--text-primary); }
-.logo span { color:var(--accent); }
-.header-right { display:flex; align-items:center; gap:8px; }
-.streak-badge { font-size:12px; font-weight:600; color:var(--accent); background:var(--accent-subtle); padding:4px 12px; border-radius:var(--radius-full); display:none; }
-.streak-badge.visible { display:inline-flex; align-items:center; gap:5px; }
-.icon-btn { width:36px; height:36px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--text-secondary); transition:all var(--transition); border:1px solid transparent; }
-.icon-btn:hover { background:var(--accent-subtle); color:var(--accent); border-color:var(--border); }
-.menu-btn { display:none; }
+/* LAYOUT */
+.container { max-width:880px; margin:0 auto; padding:32px 24px 80px; }
+.page { display:none; } .page.active { display:block; }
 
-/* ===== SIDEBAR ===== */
-.sidebar { position:fixed; top:var(--header-h); left:0; bottom:0; width:var(--sidebar-w); background:var(--bg-raised); border-right:1px solid var(--border); overflow-y:auto; padding:16px 0; z-index:100; transition:transform .3s cubic-bezier(.4,0,.2,1),background var(--transition),border-color var(--transition); }
-.nav-section { margin-bottom:8px; }
-.nav-section-label { padding:12px 20px 6px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.6px; color:var(--text-tertiary); }
-.nav-item { display:flex; align-items:center; gap:10px; padding:9px 20px; font-size:13.5px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:all var(--transition); border-left:2.5px solid transparent; margin:1px 0; border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
-.nav-item:hover { background:var(--accent-subtle); color:var(--text-primary); }
-.nav-item.active { background:var(--accent-subtle); color:var(--accent); border-left-color:var(--accent); font-weight:600; }
-.nav-icon { width:20px; text-align:center; font-size:15px; opacity:.75; flex-shrink:0; }
-.nav-item.active .nav-icon { opacity:1; }
+/* HEADINGS */
+h1 { font-size:32px; font-weight:800; letter-spacing:-.03em; line-height:1.2; margin-bottom:8px; }
+h2 { font-size:24px; font-weight:800; letter-spacing:-.02em; line-height:1.3; margin-bottom:16px; }
+h3 { font-size:17px; font-weight:700; color:var(--brand); margin:24px 0 8px; }
+h3:first-child { margin-top:0; }
 
-/* ===== MAIN ===== */
-.main { position:fixed; top:var(--header-h); left:var(--sidebar-w); right:0; bottom:0; overflow-y:auto; padding:32px 36px; transition:left .3s cubic-bezier(.4,0,.2,1); }
-.main-inner { max-width:880px; margin:0 auto; }
+/* BUTTONS */
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; font-weight:700; border-radius:var(--r-full); transition:all .2s var(--ease); line-height:1; }
+.btn-lg { padding:14px 32px; font-size:16px; }
+.btn-md { padding:10px 24px; font-size:14px; }
+.btn-sm { padding:7px 16px; font-size:13px; }
+.btn-brand { background:var(--brand); color:#fff; box-shadow:0 2px 10px rgba(66,85,255,.25); }
+.btn-brand:hover { background:var(--brand-hover); transform:translateY(-1px); box-shadow:0 4px 16px rgba(66,85,255,.35); }
+.btn-outline { background:transparent; border:2px solid var(--border2); color:var(--text); }
+.btn-outline:hover { border-color:var(--brand); color:var(--brand); background:var(--brand-light); }
+.btn-ghost { background:var(--bg); color:var(--text2); }
+.btn-ghost:hover { background:var(--brand-light); color:var(--brand); }
+.btn-green { background:var(--green); color:#fff; }
+.btn-red { background:var(--red); color:#fff; }
+.btn:active { transform:translateY(0) scale(.98); }
+.btn:disabled { opacity:.4; pointer-events:none; }
 
-/* ===== CARDS ===== */
-.card { background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px 28px; margin-bottom:20px; box-shadow:var(--shadow-sm); transition:background var(--transition),border-color var(--transition),box-shadow var(--transition); }
-.card h2 { font-size:22px; font-weight:800; letter-spacing:-.03em; line-height:1.3; margin-bottom:16px; color:var(--text-primary); }
-.card h3 { font-size:16px; font-weight:700; color:var(--accent); margin:24px 0 10px; letter-spacing:-.01em; }
-.card h3:first-child { margin-top:0; }
-.card p { margin-bottom:8px; line-height:1.75; color:var(--text-primary); }
-.card ul,.card ol { margin:8px 0 12px; padding-left:22px; }
+/* CARDS */
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--r-xl); padding:28px; box-shadow:var(--shadow-1); transition:all .25s var(--ease); }
+.card:hover { box-shadow:var(--shadow-2); }
+.card p { margin-bottom:8px; line-height:1.75; }
+.card ul, .card ol { margin:8px 0 12px; padding-left:22px; }
 .card li { padding:3px 0; line-height:1.7; }
 .card strong { font-weight:700; }
 
-/* ===== BUTTONS ===== */
-.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:8px 18px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; transition:all var(--transition); border:1px solid transparent; letter-spacing:-.01em; line-height:1; white-space:nowrap; }
-.btn-primary { background:var(--accent); color:#fff; box-shadow:0 1px 8px rgba(110,140,255,.25); }
-.btn-primary:hover { background:var(--accent-hover); transform:translateY(-1px); box-shadow:0 4px 16px rgba(110,140,255,.3); }
-.btn-primary:active { transform:translateY(0); }
-.btn-ghost { background:var(--bg-overlay); color:var(--text-primary); border-color:var(--border-strong); }
-.btn-ghost:hover { background:var(--bg-input); border-color:var(--accent); color:var(--accent); }
-.btn-success { background:var(--green); color:#fff; }
-.btn-success:hover { opacity:.9; }
-.btn-danger { background:var(--red); color:#fff; }
-.btn-sm { padding:5px 12px; font-size:12px; border-radius:6px; }
+/* HOME HERO */
+.hero { text-align:center; padding:48px 0 32px; }
+.hero h1 { font-size:40px; margin-bottom:12px; }
+.hero p { font-size:18px; color:var(--text2); max-width:520px; margin:0 auto 28px; }
+.feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:32px 0; }
+.feature-card { border-radius:var(--r-xl); padding:28px 24px; text-align:left; cursor:pointer; transition:all .25s var(--ease); border:none; position:relative; overflow:hidden; }
+.feature-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-3); }
+.feature-card h3 { color:inherit; margin:0 0 6px; font-size:18px; }
+.feature-card p { font-size:13px; opacity:.8; margin:0; line-height:1.5; }
+.fc-purple { background:linear-gradient(135deg,#4255ff,#6b7aff); color:#fff; }
+.fc-coral { background:linear-gradient(135deg,#ff8a65,#ff6b6b); color:#fff; }
+.fc-teal { background:linear-gradient(135deg,#26c6da,#00bcd4); color:#fff; }
+.fc-amber { background:linear-gradient(135deg,#ffb74d,#ffa726); color:#fff; }
+.fc-green { background:linear-gradient(135deg,#4caf50,#66bb6a); color:#fff; }
 
-/* ===== PROGRESS ===== */
-.progress { height:6px; background:var(--bg-input); border-radius:var(--radius-full); overflow:hidden; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--accent-hover),var(--accent)); border-radius:var(--radius-full); transition:width .5s cubic-bezier(.4,0,.2,1); }
+/* STAT GRID */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin:24px 0; }
+.stat-box { background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); padding:20px; text-align:center; }
+.stat-num { font-size:36px; font-weight:800; color:var(--brand); letter-spacing:-.03em; line-height:1.1; }
+.stat-lbl { font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
 
-/* ===== CODE ===== */
-pre.code { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; overflow-x:auto; font-size:13px; line-height:1.8; margin:12px 0; white-space:pre-wrap; word-break:break-word; color:var(--text-secondary); }
-code.il { background:var(--bg-input); padding:2px 7px; border-radius:5px; font-size:12.5px; border:1px solid var(--border); font-weight:500; color:var(--accent); }
+/* PROGRESS */
+.prog { height:6px; background:var(--bg); border-radius:var(--r-full); overflow:hidden; }
+.prog-fill { height:100%; background:var(--brand); border-radius:var(--r-full); transition:width .5s var(--ease); }
+.mastery { display:flex; align-items:center; gap:12px; padding:10px 0; }
+.mastery-name { flex:1; font-size:14px; font-weight:600; }
+.mastery-bar { flex:2; }
+.mastery-val { width:44px; text-align:right; font-size:14px; font-weight:800; font-variant-numeric:tabular-nums; }
 
-/* ===== CALLOUTS ===== */
-.callout { padding:14px 18px; border-radius:0 var(--radius-md) var(--radius-md) 0; margin:14px 0; font-size:13.5px; line-height:1.7; }
-.callout-label { font-size:10px; font-weight:800; letter-spacing:1.2px; margin-bottom:5px; text-transform:uppercase; }
-.callout-key { background:var(--accent-subtle); border-left:3px solid var(--accent); }
-.callout-key .callout-label { color:var(--accent); }
-.callout-warn { background:var(--red-subtle); border-left:3px solid var(--red); }
+/* CHIPS */
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.chip { padding:8px 18px; border-radius:var(--r-full); font-size:13px; font-weight:700; border:2px solid var(--border); background:var(--card); transition:all .2s var(--ease); }
+.chip:hover { border-color:var(--brand); color:var(--brand); }
+.chip.on { background:var(--brand); color:#fff; border-color:var(--brand); box-shadow:0 2px 10px rgba(66,85,255,.25); }
+
+/* FLASHCARD */
+.fc-area { display:flex; flex-direction:column; align-items:center; padding:20px 0; }
+.fc-counter { font-size:14px; font-weight:600; color:var(--text3); margin-bottom:16px; }
+.fc-card { width:100%; max-width:640px; height:320px; perspective:1200px; cursor:pointer; margin-bottom:20px; }
+.fc-inner { position:relative; width:100%; height:100%; transition:transform .5s var(--ease); transform-style:preserve-3d; }
+.fc-card.flip .fc-inner { transform:rotateY(180deg); }
+.fc-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--r-xl); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px 36px; }
+.fc-front { background:var(--card); border:2px solid var(--border); box-shadow:var(--shadow-2); }
+.fc-back { background:linear-gradient(135deg,#4255ff,#6b7aff); color:#fff; transform:rotateY(180deg); box-shadow:0 8px 32px rgba(66,85,255,.25); }
+.fc-hint { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); margin-bottom:20px; }
+.fc-back .fc-hint { color:rgba(255,255,255,.5); }
+.fc-text { font-size:20px; font-weight:700; line-height:1.5; }
+.fc-back .fc-text { font-size:17px; font-weight:600; }
+.fc-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+
+/* QUIZ */
+.q-card { background:var(--card); border:1px solid var(--border); border-radius:var(--r-xl); padding:32px; margin-bottom:20px; box-shadow:var(--shadow-1); }
+.q-text { font-size:18px; font-weight:700; margin-bottom:20px; line-height:1.5; }
+.q-opt { display:block; width:100%; text-align:left; padding:14px 18px; margin:8px 0; border-radius:var(--r-lg); border:2px solid var(--border); background:var(--card); font-size:15px; font-weight:600; transition:all .2s var(--ease); line-height:1.5; }
+.q-opt:hover { border-color:var(--brand); background:var(--brand-light); transform:translateX(4px); }
+.q-opt.sel { border-color:var(--brand); background:var(--brand-light); }
+.q-opt.ok { border-color:var(--green); background:var(--green-bg); color:var(--green); }
+.q-opt.no { border-color:var(--red); background:var(--red-bg); color:var(--red); }
+.q-exp { margin-top:16px; padding:16px 18px; background:var(--bg); border-radius:var(--r-md); font-size:14px; line-height:1.7; border-left:3px solid var(--brand); }
+.q-big { font-size:64px; font-weight:800; color:var(--brand); text-align:center; letter-spacing:-.04em; }
+.q-sub { text-align:center; color:var(--text2); font-size:16px; margin-bottom:24px; }
+
+/* MOCK TIMER */
+.timer { position:sticky; top:var(--nav-h); z-index:10; background:var(--white); border-bottom:1px solid var(--border); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(16px); }
+[data-theme="dark"] .timer { background:rgba(24,27,46,.92); }
+.timer-clock { font-size:28px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+.timer-clock.warn { color:var(--amber); }
+.timer-clock.crit { color:var(--red); }
+.timer-dots { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; margin-top:12px; }
+.timer-dot { width:10px; height:10px; border-radius:50%; cursor:pointer; transition:all .15s var(--ease); }
+
+/* CODE & CALLOUT */
+pre.code { background:var(--bg); border:1px solid var(--border); border-radius:var(--r-md); padding:18px 20px; overflow-x:auto; font-size:13px; line-height:1.8; margin:12px 0; white-space:pre-wrap; color:var(--text2); }
+[data-theme="dark"] pre.code { background:#0c0e18; }
+.callout { border-radius:0 var(--r-md) var(--r-md) 0; padding:14px 18px; margin:14px 0; font-size:14px; line-height:1.7; }
+.callout-label { font-size:10px; font-weight:800; letter-spacing:1px; margin-bottom:4px; text-transform:uppercase; }
+.callout-info { background:var(--brand-light); border-left:3px solid var(--brand); }
+.callout-info .callout-label { color:var(--brand); }
+.callout-warn { background:var(--red-bg); border-left:3px solid var(--red); }
 .callout-warn .callout-label { color:var(--red); }
 
-/* ===== TABLES ===== */
-.tbl { width:100%; border-collapse:separate; border-spacing:0; margin:12px 0; font-size:13px; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); }
-.tbl th { background:var(--bg-overlay); padding:10px 14px; text-align:left; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); border-bottom:1px solid var(--border); }
-.tbl th+th { border-left:1px solid var(--border); }
-.tbl td { padding:9px 14px; border-bottom:1px solid var(--border); font-size:13px; line-height:1.6; }
-.tbl td+td { border-left:1px solid var(--border); }
+/* TABLE */
+.tbl { width:100%; border-collapse:separate; border-spacing:0; margin:12px 0; font-size:13px; border-radius:var(--r-md); overflow:hidden; border:1px solid var(--border); }
+.tbl th { background:var(--bg); padding:10px 14px; text-align:left; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--text2); border-bottom:1px solid var(--border); }
+.tbl th+th,.tbl td+td { border-left:1px solid var(--border); }
+.tbl td { padding:9px 14px; border-bottom:1px solid var(--border); line-height:1.6; }
 .tbl tr:last-child td { border-bottom:none; }
 
-/* ===== DIAGRAM ===== */
-.diagram { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; overflow-x:auto; font-family:var(--mono); font-size:12.5px; line-height:1.5; margin:12px 0; white-space:pre; color:var(--accent); }
+.diagram { background:var(--bg); border:1px solid var(--border); border-radius:var(--r-md); padding:16px 18px; overflow-x:auto; font-family:var(--mono); font-size:12.5px; line-height:1.5; margin:12px 0; white-space:pre; color:var(--brand); }
+[data-theme="dark"] .diagram { background:#0c0e18; }
 
-/* ===== DASHBOARD ===== */
-.banner { background:var(--accent-subtle); border:1px solid rgba(110,140,255,.12); border-radius:var(--radius-lg); padding:22px 24px; margin-bottom:20px; font-size:13.5px; line-height:1.7; }
-.banner h3 { font-size:15px; color:var(--accent); margin-bottom:6px; font-weight:700; }
-.banner-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:14px; }
-.banner-item { text-align:center; padding:12px 8px; background:var(--bg-raised); border-radius:var(--radius-md); border:1px solid var(--border); }
-.banner-num { font-size:24px; font-weight:800; color:var(--accent); letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
-.banner-lbl { font-size:11px; color:var(--text-secondary); margin-top:2px; }
-.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
-.stat-card { background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 22px; box-shadow:var(--shadow-sm); transition:all var(--transition); }
-.stat-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); }
-.stat-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.6px; color:var(--text-secondary); margin-bottom:8px; }
-.stat-value { font-size:32px; font-weight:800; color:var(--accent); letter-spacing:-.04em; font-variant-numeric:tabular-nums; line-height:1.1; }
-.mastery-row { display:flex; align-items:center; gap:12px; padding:8px 0; }
-.mastery-label { flex:1; font-size:13px; font-weight:500; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mastery-bar { flex:1.8; }
-.mastery-pct { width:42px; text-align:right; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
-.weak { background:var(--red-subtle); border:1px solid rgba(248,113,113,.15); border-radius:var(--radius-sm); padding:10px 14px; margin:6px 0; font-size:13px; }
-.strong { background:var(--green-subtle); border:1px solid rgba(52,211,153,.15); border-radius:var(--radius-sm); padding:10px 14px; margin:6px 0; font-size:13px; }
+/* BANNER */
+.banner { background:var(--brand-light); border:1px solid rgba(66,85,255,.1); border-radius:var(--r-xl); padding:24px; margin-bottom:24px; }
+.banner h3 { color:var(--brand); margin:0 0 6px; font-size:16px; }
+.banner p { font-size:14px; color:var(--text2); margin-bottom:0; }
+.banner-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:16px; }
+.banner-item { text-align:center; padding:14px 8px; background:var(--card); border-radius:var(--r-md); border:1px solid var(--border); }
+.banner-num { font-size:22px; font-weight:800; color:var(--brand); }
+.banner-lbl { font-size:11px; color:var(--text3); margin-top:2px; }
 
-/* ===== TABS ===== */
-.tabs { display:flex; gap:0; border-bottom:1.5px solid var(--border); margin-bottom:20px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; }
-.tabs::-webkit-scrollbar { display:none; }
-.tab { padding:10px 18px; font-size:13px; font-weight:600; color:var(--text-secondary); border-bottom:2px solid transparent; margin-bottom:-1.5px; transition:all var(--transition); white-space:nowrap; }
-.tab:hover { color:var(--text-primary); background:var(--accent-subtle); border-radius:var(--radius-sm) var(--radius-sm) 0 0; }
-.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.fade { animation:fadeUp .3s var(--ease) both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
-/* ===== CHIPS ===== */
-.chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:20px; }
-.chip { padding:6px 14px; border-radius:var(--radius-full); font-size:12.5px; font-weight:600; border:1.5px solid var(--border); background:var(--bg-overlay); transition:all var(--transition); }
-.chip:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-subtle); }
-.chip.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 2px 10px rgba(110,140,255,.25); }
-
-/* ===== FLASHCARDS ===== */
-.fc-wrap { display:flex; flex-direction:column; align-items:center; gap:20px; padding:16px 0; }
-.fc-card { width:100%; max-width:580px; height:280px; perspective:1000px; cursor:pointer; }
-.fc-inner { position:relative; width:100%; height:100%; transition:transform .55s cubic-bezier(.4,0,.2,1); transform-style:preserve-3d; }
-.fc-card.flipped .fc-inner { transform:rotateY(180deg); }
-.fc-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius-lg); padding:32px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
-.fc-front { background:var(--bg-overlay); border:1px solid var(--border-strong); box-shadow:var(--shadow-md); }
-.fc-back { background:linear-gradient(135deg,var(--accent-hover),var(--accent)); color:#fff; transform:rotateY(180deg); box-shadow:0 8px 32px rgba(110,140,255,.3); }
-.fc-topic { font-size:10px; text-transform:uppercase; letter-spacing:1.8px; color:var(--text-tertiary); margin-bottom:16px; font-weight:700; }
-.fc-back .fc-topic { color:rgba(255,255,255,.5); }
-.fc-front .fc-text { font-size:17px; font-weight:600; line-height:1.55; color:var(--text-primary); }
-.fc-back .fc-text { font-size:15px; line-height:1.7; }
-.fc-controls { display:flex; gap:8px; }
-.fc-count { font-size:13px; color:var(--text-secondary); font-weight:500; font-variant-numeric:tabular-nums; }
-
-/* ===== QUIZ ===== */
-.q-opt { display:block; width:100%; text-align:left; padding:12px 16px; margin:6px 0; border-radius:var(--radius-md); border:1.5px solid var(--border); background:var(--bg-overlay); font-size:14px; transition:all var(--transition); font-weight:500; line-height:1.6; }
-.q-opt:hover { border-color:var(--accent); background:var(--accent-subtle); transform:translateX(3px); }
-.q-opt.sel { border-color:var(--accent); background:var(--accent-subtle); }
-.q-opt.ok { border-color:var(--green); background:var(--green-subtle); }
-.q-opt.wrong { border-color:var(--red); background:var(--red-subtle); }
-.q-exp { margin-top:14px; padding:14px 16px; background:var(--bg-overlay); border-radius:var(--radius-md); font-size:13.5px; line-height:1.7; border:1px solid var(--border); }
-.q-score { font-size:52px; font-weight:800; color:var(--accent); text-align:center; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
-.q-score-sub { text-align:center; color:var(--text-secondary); margin-bottom:20px; font-size:15px; }
-
-/* ===== MOCK TIMER ===== */
-.timer-bar { position:sticky; top:0; z-index:10; background:var(--bg-raised); border-bottom:1px solid var(--border); padding:12px 24px; margin:-32px -36px 24px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(16px); transition:background var(--transition); }
-[data-theme="dark"] .timer-bar { background:rgba(18,21,28,.88); }
-[data-theme="light"] .timer-bar { background:rgba(255,255,255,.88); }
-.timer-time { font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
-.timer-time.warn { color:var(--amber); }
-.timer-time.crit { color:var(--red); }
-
-/* ===== ANIMATIONS ===== */
-.fade-in { animation:fadeUp .3s cubic-bezier(.4,0,.2,1) both; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px) {
-  .sidebar { transform:translateX(-100%); } .sidebar.open { transform:translateX(0); box-shadow:var(--shadow-lg); }
-  .main { left:0; padding:24px 16px; } .menu-btn { display:flex; }
-  .timer-bar { margin:-24px -16px 20px; padding:12px 16px; }
-  .card { padding:18px 20px; }
-  .stat-grid { grid-template-columns:1fr 1fr; gap:10px; }
-  .banner-grid { grid-template-columns:repeat(2,1fr); }
+@media(max-width:640px) {
+  h1 { font-size:28px; } .hero h1 { font-size:32px; }
+  .nav-tabs { display:none; } .nav-mobile { display:flex !important; }
+  .feature-grid { grid-template-columns:1fr 1fr; }
+  .stats { grid-template-columns:1fr 1fr; }
+  .fc-card { height:260px; }
+  .container { padding:24px 16px 60px; }
 }
+.nav-mobile { display:none; gap:4px; overflow-x:auto; padding:8px 24px; background:var(--white); border-bottom:1px solid var(--border); }
+[data-theme="dark"] .nav-mobile { background:var(--white); }
+.nav-mobile .nav-tab { white-space:nowrap; font-size:13px; padding:6px 14px; }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-left">
-    <button class="icon-btn menu-btn" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
-    <div class="logo"><span>MSE 446</span> · Study</div>
-  </div>
-  <div class="header-right">
-    <div class="streak-badge" id="streakBadge">&#128293; <span id="streakText"></span></div>
-    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle theme">&#9790;</button>
-  </div>
-</header>
-
-<nav class="sidebar" id="sidebar">
-  <div class="nav-section">
-    <div class="nav-section-label">Overview</div>
-    <div class="nav-item" data-page="dashboard" onclick="navigate('dashboard')"><span class="nav-icon">&#9632;</span>Dashboard</div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-section-label">Study</div>
-    <div class="nav-item" data-page="guide" onclick="navigate('guide')"><span class="nav-icon">&#9998;</span>Study Guide</div>
-    <div class="nav-item" data-page="flashcards" onclick="navigate('flashcards')"><span class="nav-icon">&#9830;</span>Flashcards</div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-section-label">Practice</div>
-    <div class="nav-item" data-page="quiz" onclick="navigate('quiz')"><span class="nav-icon">&#10003;</span>Quizzes</div>
-    <div class="nav-item" data-page="mock" onclick="navigate('mock')"><span class="nav-icon">&#9200;</span>Mock Exam</div>
-  </div>
+<nav class="nav">
+<div class="nav-inner">
+<div class="nav-logo"><span class="dot"></span> MSE 446</div>
+<div class="nav-tabs" id="navTabs"></div>
+<div class="nav-right">
+<span id="streakBadge" style="font-size:13px;font-weight:700;color:var(--brand);display:none"></span>
+<button class="nav-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀</button>
+</div>
+</div>
+<div class="nav-mobile" id="navMobile"></div>
 </nav>
 
-<main class="main" id="main"><div class="main-inner" id="content"></div></main>
+<div class="container" id="app"></div>
 
 <script>
 const T=[{id:'pca',s:'PCA',f:'Principal Component Analysis'},{id:'kmeans',s:'K-Means',f:'K-Means Clustering'},{id:'hierarchical',s:'Hierarchical',f:'Hierarchical Clustering'},{id:'nn',s:'Neural Nets',f:'Neural Networks'},{id:'svm',s:'SVM',f:'Support Vector Machines'}];
 
-const G={
-pca:`<h2>Principal Component Analysis</h2>
-<h3>What is PCA?</h3>
-<p>A <strong>dimensionality reduction</strong> method that finds <strong>linear combinations</strong> of variables with <strong>maximal variance</strong>, mutually uncorrelated. Solved via eigenvalue decomposition of the covariance matrix.</p>
-<div class="callout callout-key"><div class="callout-label">Key Exam Point</div>PCA looks for directions of <strong>maximum variance</strong>. Clustering looks for <strong>homogeneous subgroups</strong>.</div>
-<h3>First Principal Component</h3>
-<pre class="code">Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ
-
-subject to: Σ φⱼ₁² = 1  (normalization)
-
-• Loadings define the direction of maximum variance
-• Scores are projections onto this direction</pre>
-<h3>Further PCs</h3>
-<ul><li>PC2 maximizes variance among all directions <strong>orthogonal to PC1</strong></li><li>Max PCs = <strong>min(n−1, p)</strong></li></ul>
-<div class="diagram">     PC2 (less variance)
-      ↑
-      |     · ·
-      |   ·  ╱  ·       PC1 (most variance)
-      |  · ╱     ·      ──────→
+const G={pca:`<h2>Principal Component Analysis</h2><h3>What is PCA?</h3><p><strong>Dimensionality reduction</strong> that finds <strong>linear combinations</strong> with <strong>maximal variance</strong>, mutually uncorrelated.</p><div class="callout callout-info"><div class="callout-label">Exam Point</div>PCA = max variance directions. Clustering = homogeneous subgroups.</div><h3>First PC</h3><pre class="code">Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ    subject to: Σφⱼ₁² = 1</pre><ul><li>PC2 maximizes variance <strong>orthogonal to PC1</strong></li><li>Max PCs = <strong>min(n−1, p)</strong></li></ul><div class="diagram">     PC2
+      ↑     · ·
+      |   ·  ╱  ·       PC1 ──→
+      |  · ╱     ·
       | ·╱    ·
-      |╱ ·  ·
-──────┼──────────→
-   PCA rotates axes to maximize
-   variance along PC1, then PC2</div>
-<h3>5-Step PCA Process</h3>
-<ol><li><strong>Standardize</strong> — each feature mean=0, std=1</li><li><strong>Covariance matrix</strong> — relationships between variables</li><li><strong>Eigenvalues &amp; eigenvectors</strong> — variance per PC + loading directions</li><li><strong>Choose # PCs</strong> — scree plot, look for elbow</li><li><strong>Project data</strong> — multiply by feature vector</li></ol>
-<h3>Proportion of Variance Explained</h3>
-<pre class="code">PVEₘ = λₘ / Σλⱼ
-
-• Between 0 and 1, all PVEs sum to 1
-• Scree plot: PVE vs component — look for "elbow"</pre>
-<h3>Worked Example</h3>
-<pre class="code">Data: (2,3), (3,4), (4,5)
-
-Center: means X̄₁=3, X̄₂=4
-  Centered: (-1,-1), (0,0), (1,1)
-
-Covariance (1/n):
-  Var(X₁) = 2/3,  Var(X₂) = 2/3,  Cov = 2/3
-  Σ = [[2/3, 2/3], [2/3, 2/3]]
-
-Eigenvalues: λ₁ = 4/3, λ₂ = 0
-  PVE₁ = 100% (perfect correlation)
-
-Eigenvector: φ₁ = (1/√2, 1/√2)
-  PC1 = (1/√2)(X₁ + X₂)</pre>
-<h3>Worked Example: Route Optimization</h3>
-<pre class="code">Z₁ = 0.6X₁ + 0.6X₂ + 0.529X₃
-λ₁=5.5, λ₂=1.2, λ₃=0.3
-
-Total = 7.0
-PVE₁ = 78.6%,  PVE₂ = 17.1%,  PVE₃ = 4.3%
-Cumulative (PC1+PC2) = 95.7% → retain 2</pre>
-<h3>Python</h3>
-<pre class="code">from sklearn.preprocessing import StandardScaler
+──────┼──────────→</div><h3>5 Steps</h3><ol><li><strong>Standardize</strong></li><li><strong>Covariance matrix</strong></li><li><strong>Eigenvalues/vectors</strong></li><li><strong>Choose # PCs</strong> (scree plot elbow)</li><li><strong>Project data</strong></li></ol><h3>PVE</h3><pre class="code">PVEₘ = λₘ / Σλⱼ    (all sum to 1)</pre><h3>Worked Example</h3><pre class="code">Data: (2,3), (3,4), (4,5)
+Center: (-1,-1), (0,0), (1,1)
+Σ = [[2/3, 2/3], [2/3, 2/3]]
+λ₁ = 4/3, λ₂ = 0 → PVE₁ = 100%
+φ₁ = (1/√2, 1/√2)</pre><h3>Example 2</h3><pre class="code">λ₁=5.5, λ₂=1.2, λ₃=0.3 → Total=7.0
+PVE₁=78.6%, PVE₂=17.1%, PVE₃=4.3%
+Cumulative(1+2)=95.7% → retain 2</pre><h3>Python</h3><pre class="code">from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+X_s = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2).fit(X_s)
+pca.explained_variance_ratio_</pre><div class="callout callout-warn"><div class="callout-label">Watch Out</div>Always standardize. Different scales → different PCs.</div>`,
+kmeans:`<h2>K-Means Clustering</h2><h3>Idea</h3><p>Partition n observations into K clusters minimizing <strong>within-cluster variation</strong>.</p><pre class="code">min Σₖ WCV(Cₖ) = Σₖ (1/|Cₖ|) Σ ||xᵢ−xᵢ'||²</pre><h3>Algorithm</h3><ol><li>Randomly assign to K clusters</li><li>Compute centroids (feature means)</li><li>Reassign to nearest centroid</li><li>Repeat until convergence</li></ol><div class="callout callout-info"><div class="callout-label">Exam Point</div>Guaranteed to decrease objective. NOT global minimum. Multiple random starts.</div><h3>Worked Example</h3><pre class="code">A(1,1), B(1.5,2), C(3,4), D(5,7)  K=2
+C₁={A,B} → μ₁=(1.25,1.5)
+C₂={C,D} → μ₂=(4,5.5)
+Reassign: all stay → converged!
+WCV = 0.625 + 6.5 = 7.125</pre>`,
+hierarchical:`<h2>Hierarchical Clustering</h2><h3>Advantage</h3><p><strong>No K needed.</strong> Dendrogram lets you choose after.</p><ol><li>Each obs = cluster</li><li>Merge closest pair</li><li>Repeat</li></ol><div class="diagram">  Height
+  11.31 |     _____|_____
+        |    |           |
+   1.41 |  ___|___   ___|___
+        | |       | |       |
+        | A       B C       D</div><h3>Linkage</h3><table class="tbl"><tr><th>Type</th><th>Measure</th><th>Result</th></tr><tr><td>Single</td><td>Min distance</td><td>Chains</td></tr><tr><td>Complete</td><td>Max distance</td><td>Compact</td></tr><tr><td>Average</td><td>Mean pairs</td><td>Balanced</td></tr><tr><td>Ward</td><td>Min variance↑</td><td>K-means-like</td></tr></table><h3>Worked Example</h3><pre class="code">A(1,1) B(2,2) C(8,8) D(9,9)
+d(A,B)=d(C,D)=√2≈1.41
+Complete: {A,B}↔{C,D} at max=11.31
+Cut h=5 → 2 clusters</pre><h3>vs K-Means</h3><table class="tbl"><tr><th></th><th>K-Means</th><th>Hierarchical</th></tr><tr><td>K</td><td>Required</td><td>Choose after</td></tr><tr><td>Deterministic</td><td>No</td><td>Yes</td></tr><tr><td>Scale</td><td>Good</td><td>O(n²+)</td></tr></table>`,
+nn:`<h2>Neural Networks</h2><div class="diagram">  Input    Hidden     Output
+   x₁ ──╲    h₁ ╲
+          ╲╱      ╲
+   x₂ ────╳── h₂ ──╳── ŷ
+          ╱╲      ╱
+   x₃ ──╱    h₃ ╱
+  Neuron: g(Σwᵢxᵢ + b)</div><h3>Activations</h3><table class="tbl"><tr><th>Function</th><th>Range</th><th>Use</th><th>Issue</th></tr><tr><td><strong>Sigmoid</strong> 1/(1+e⁻ᶻ)</td><td>(0,1)</td><td>Binary out</td><td>Vanishing</td></tr><tr><td><strong>Tanh</strong></td><td>(−1,1)</td><td>Hidden</td><td>Vanishing</td></tr><tr><td><strong>ReLU</strong> max(0,z)</td><td>[0,∞)</td><td>Hidden★</td><td>Dying</td></tr><tr><td><strong>Leaky</strong> max(.1z,z)</td><td>(−∞,∞)</td><td>Hidden</td><td>—</td></tr><tr><td><strong>Softmax</strong></td><td>Σ=1</td><td>Multi-class</td><td>—</td></tr></table><h3>Forward Prop</h3><pre class="code">z = Σwᵢxᵢ + b → output = g(z)</pre><h3>Backprop</h3><pre class="code">∂L/∂w = ∂L/∂ŷ · ∂ŷ/∂z · ∂z/∂w
+w ← w − η · ∂L/∂w</pre><h3>Worked Example</h3><pre class="code">x₁=1, x₂=2  |  w₁₁=.5, w₁₂=−.5, w₂₁=.3, w₂₂=.8
+bₕ=.1, bₒ=.2  |  w₃₁=1, w₃₂=−1
 
-X_scaled = StandardScaler().fit_transform(X)
-pca = PCA(n_components=2).fit(X_scaled)
+z₁ = .5(1)+.3(2)+.1 = 1.2 → σ ≈ .769
+z₂ = −.5(1)+.8(2)+.1 = 1.2 → σ ≈ .769
+zₒ = 1(.769)+(−1)(.769)+.2 = .2 → σ ≈ .550</pre><div class="callout callout-info"><div class="callout-label">Exam Point</div>Know forward prop by hand. All 5 activations. Backprop = chain rule.</div>`,
+svm:`<h2>Support Vector Machines</h2><pre class="code">Hyperplane: β₀ + β₁X₁ + ... + βₚXₚ = 0
+Distance: d = |f(x)| / ||β||</pre><div class="diagram">  Class +1     |margin|     Class −1
+    ∗         |______|          ○
+    ∗ ∗   SV→| plane |←SV    ○ ○
+    ∗     SV→|_______|←SV      ○</div><h3>Soft Margin (Slack ξ)</h3><table class="tbl"><tr><th>ξ</th><th>Where</th><th>Status</th></tr><tr><td>=0</td><td>Outside margin</td><td>Correct</td></tr><tr><td>0–1</td><td>Inside margin</td><td>Correct side</td></tr><tr><td>=1</td><td>Hyperplane</td><td>Boundary</td></tr><tr><td><strong>>1</strong></td><td><strong>Wrong side</strong></td><td><strong>Misclassified</strong></td></tr></table><div class="callout callout-info"><div class="callout-label">Exam Point</div>C: Large→narrow margin (low bias). Small→wide (high bias).</div><h3>Distance Example</h3><pre class="code">3X₁+4X₂−12=0  ||β||=5
+d(2,1)=|6+4−12|/5=0.4  (inside if margin=1)
+d(3,2)=|9+8−12|/5=1.0  (outside)
+d(1,2)=|3+8−12|/5=0.2  (inside)</pre><h3>Kernels</h3><table class="tbl"><tr><th>Kernel</th><th>Formula</th></tr><tr><td>Linear</td><td>x·x'</td></tr><tr><td>Poly</td><td>(1+x·x')ᵈ</td></tr><tr><td>RBF</td><td>exp(−γ||x−x'||²)</td></tr></table><pre class="code">RBF example (γ=0.5):
+K(x₁,x₂) = e^(−.5×8) ≈ 0.018  (far)
+K(x₁,x₃) = e^(−.5×2) ≈ 0.368  (close)
+↑γ → complex boundary → overfit</pre><h3>Multiclass</h3><table class="tbl"><tr><th>Method</th><th>Count</th></tr><tr><td>OVR</td><td>K</td></tr><tr><td>OVO</td><td>K(K−1)/2</td></tr></table>`};
 
-pca.explained_variance_ratio_  # PVE
-pca.components_                # loadings</pre>
-<div class="callout callout-warn"><div class="callout-label">Watch Out</div>Always standardize before PCA unless told otherwise. Different scales → different PCs.</div>`,
+const FC=[{t:'pca',q:'What is PCA?',a:'Dimensionality reduction via linear combinations with maximal variance, mutually uncorrelated.'},{t:'pca',q:'PVE formula',a:'PVEₘ = λₘ / Σλⱼ. All sum to 1.'},{t:'pca',q:'Max # of PCs',a:'min(n−1, p)'},{t:'pca',q:'5 PCA steps',a:'1) Standardize 2) Covariance 3) Eigen 4) Choose # (scree) 5) Project'},{t:'pca',q:'Why standardize?',a:'PCA is variance-sensitive. Large-scale features dominate.'},{t:'pca',q:'PC orthogonality',a:'Each PC perpendicular to all previous. Ensures uncorrelated.'},{t:'kmeans',q:'K-Means objective',a:'Minimize Σ WCV(Cₖ). WCV = sum squared distances to centroid.'},{t:'kmeans',q:'Algorithm',a:'1) Random assign 2a) Centroids 2b) Reassign nearest. Repeat.'},{t:'kmeans',q:'Global minimum?',a:'NO. Local only. Multiple random starts.'},{t:'kmeans',q:'Centroid',a:'Vector of feature means for cluster members.'},{t:'hierarchical',q:'Key advantage',a:'No K needed. Dendrogram → choose after.'},{t:'hierarchical',q:'4 linkages',a:'Single(min), Complete(max), Average(mean), Ward(min var).'},{t:'hierarchical',q:'Reading dendrogram',a:'Height = dissimilarity. Cut at h for clusters.'},{t:'nn',q:'Sigmoid',a:'1/(1+e⁻ᶻ). Range (0,1). Binary output. Vanishing gradient.'},{t:'nn',q:'ReLU',a:'max(0,z). [0,∞). Popular hidden. Fixes vanishing. Dying risk.'},{t:'nn',q:'Leaky ReLU',a:'max(0.1z,z). Fixes dying ReLU.'},{t:'nn',q:'Softmax',a:'eᶻᵏ/Σeᶻʲ. Sum=1. Multi-class output.'},{t:'nn',q:'Forward prop',a:'z=Σwx+b → g(z). Layer by layer.'},{t:'nn',q:'Backprop',a:'Chain rule: ∂L/∂w. Update: w−η·∂L/∂w.'},{t:'nn',q:'Vanishing gradient',a:'Sigmoid/tanh → gradient≈0 deep. ReLU fixes.'},{t:'svm',q:'Margin',a:'Distance from hyperplane to nearest points. SVM maximizes.'},{t:'svm',q:'Support vectors',a:'Points on/within margin defining boundary.'},{t:'svm',q:'Slack ξ>1',a:'MISCLASSIFIED. ξ=0:outside, 0<ξ<1:inside, ξ=1:boundary.'},{t:'svm',q:'C parameter',a:'Large→narrow margin, few violations. Small→wide, more.'},{t:'svm',q:'RBF γ',a:'High→localized,complex,overfit. Low→smooth.'},{t:'svm',q:'OVR/OVO',a:'OVR: K classifiers. OVO: K(K−1)/2.'},{t:'svm',q:'Distance formula',a:'d = |f(x)| / ||β||'},{t:'svm',q:'Kernel trick',a:'Nonlinear boundary without explicit high-dim computation.'}];
 
-kmeans:`<h2>K-Means Clustering</h2>
-<h3>Core Idea</h3>
-<p>Partition n observations into K clusters by minimizing <strong>within-cluster variation</strong>. K must be specified in advance.</p>
-<h3>Formulation</h3>
-<pre class="code">Objective: min Σₖ WCV(Cₖ)
+const QZ={pca:[{q:'First step before PCA?',o:['Compute eigenvalues','Standardize data','Covariance matrix','Choose # PCs'],a:1,e:'PCA is variance-sensitive. Standardize first.'},{q:'λ₁=5.5, λ₂=1.2, λ₃=0.3. PVE₁?',o:['78.6%','17.1%','95.7%','4.3%'],a:0,e:'5.5/7.0 = 78.6%'},{q:'PC2 is orthogonal to:',o:['Nothing','PC1','All features','The mean'],a:1,e:'Orthogonal = uncorrelated.'},{q:'Max PCs for n=50, p=4?',o:['50','4','3','4 = min(49,4)'],a:3,e:'min(n−1,p).'},{q:'Scree plot: choose # PCs by:',o:['Using all','Only PC1','Finding elbow','Lowest PVE'],a:2,e:'Elbow = diminishing returns.'},{q:'Equal eigenvalues means:',o:['Perfect correlation','PCA not useful','No variance','Singular'],a:1,e:'No preferred direction.'},{q:'All positive loadings → PC1 is:',o:['Contrast','Overall magnitude','Noise','Only X₁'],a:1,e:'All positive = increases together.'}],
+kmeans:[{q:'Global minimum guaranteed?',o:['Yes','No, local only','If K=2','With iterations'],a:1,e:'Random init → local minimum.'},{q:'Centroid is:',o:['Median','Mode','Feature means','Closest point'],a:2,e:'Mean per feature.'},{q:'A(1,1) B(2,2) centroid:',o:['(1,1)','(1.5,1.5)','(2,2)','(3,3)'],a:1,e:'((1+2)/2,(1+2)/2).'},{q:'No K needed in:',o:['Random Forest','Hierarchical','Logistic Reg','SVM'],a:1,e:'Dendrogram.'},{q:'Handle local minima:',o:['Gradient descent','Multiple starts','Increase K','Hierarchical'],a:1,e:'Keep lowest WCV.'}],
+hierarchical:[{q:'Complete linkage:',o:['Min distance','Max distance','Average','Centroid'],a:1,e:'Max → compact clusters.'},{q:'Lower height =',o:['More different','More similar','Worse','Random'],a:1,e:'Height = dissimilarity.'},{q:'Higher cut →',o:['More clusters','Fewer clusters','Same','None'],a:1,e:'Fewer, larger.'},{q:'Which chains?',o:['Complete','Average','Single','Ward'],a:2,e:'Min distance → chains.'},{q:'Ward minimizes:',o:['Max dist','Min dist','Within-cluster SS','Average'],a:2,e:'Variance increase.'}],
+nn:[{q:'Range (0,1) activation:',o:['ReLU','Tanh','Sigmoid','Leaky'],a:2,e:'Sigmoid.'},{q:'ReLU(−3) =',o:['3','0','−3','0.3'],a:1,e:'max(0,−3)=0.'},{q:'Dying ReLU:',o:['Exploding','Stuck at 0','Slow','Deep'],a:1,e:'Dead neuron.'},{q:'Softmax outputs:',o:['(0,1)','Sum=1','Binary','Integers'],a:1,e:'Probability distribution.'},{q:'0.5(1)+0.3(2)+0.1 =',o:['0.9','1.2','1.5','0.6'],a:1,e:'0.5+0.6+0.1=1.2.'},{q:'Backprop rule:',o:['Product','Quotient','Chain','Power'],a:2,e:'Chain rule.'},{q:'Vanishing gradient from:',o:['ReLU','Sigmoid/tanh','Leaky','Softmax'],a:1,e:'Saturating functions.'},{q:'Tanh preferred because:',o:['Faster','Zero-centered','Never saturates','Larger grad'],a:1,e:'Better optimization.'}],
+svm:[{q:'Margin is:',o:['Error','Distance to nearest','# SVs','Kernel'],a:1,e:'SVM maximizes this.'},{q:'ξ > 1 means:',o:['Correct','On margin','Misclassified','SV'],a:2,e:'Wrong side.'},{q:'↑C →',o:['Wide margin','Narrow margin','No effect','Better'],a:1,e:'More penalty → narrow.'},{q:'↑γ (RBF) →',o:['Smoother','Complex/overfit','No change','Better'],a:1,e:'Localized → complex.'},{q:'OVR, 5 classes:',o:['5','10','25','4'],a:0,e:'K classifiers.'},{q:'OVO, 5 classes:',o:['5','10','20','25'],a:1,e:'K(K−1)/2=10.'},{q:'f=2X₁+X₂−5 at (1,3):',o:['0','1','2','−1'],a:0,e:'2+3−5=0.'},{q:'Kernel trick:',o:['Speed','Nonlinear implicitly','Fewer SVs','Regression'],a:1,e:'High-dim inner products implicitly.'},{q:'Why ||β||=1?',o:['Well-defined problem','Speed','Classify all','Remove C'],a:0,e:'Otherwise M unbounded.'}]};
 
-WCV(Cₖ) = (1/|Cₖ|) Σᵢ,ᵢ'∈Cₖ Σⱼ (xᵢⱼ − xᵢ'ⱼ)²
-         = 2 Σᵢ∈Cₖ ||xᵢ − x̄ₖ||²
+const MK=[(()=>{const a=[];Object.entries(QZ).forEach(([t,qs])=>qs.forEach(q=>a.push({t,...q})));for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,24);})()];
 
-Properties:
-1. Every obs in exactly one cluster
-2. Clusters non-overlapping</pre>
-<h3>Algorithm</h3>
-<ol><li><strong>Initialize:</strong> randomly assign each obs to cluster 1..K</li><li><strong>Iterate:</strong><br/>(a) Compute centroid (feature means per cluster)<br/>(b) Reassign each obs to nearest centroid</li></ol>
-<div class="callout callout-key"><div class="callout-label">Key Exam Point</div><strong>Guaranteed</strong> to decrease objective each step. <strong>NOT guaranteed</strong> global minimum. Solution: multiple random starts, keep lowest WCV.</div>
-<h3>Worked Example</h3>
-<pre class="code">A(1,1), B(1.5,2), C(3,4), D(5,7)  K=2
+let S={p:'home',gt:'pca',fi:0,ff:false,ft:'all',fm:'all',qt:'pca',qi:0,qa:false,qs:-1,qsc:0,qtl:0,qd:false,me:-1,mi:0,ma:[],md:false,mt:0,mti:null};
+const pages=['home','guide','flashcards','quiz','mock'];
 
-Init: C₁={A,B}, C₂={C,D}
-Centroids: μ₁=(1.25,1.5)  μ₂=(4,5.5)
-
-Distances:
-  d(A,μ₁)=0.56  d(A,μ₂)=5.41 → C₁
-  d(B,μ₁)=0.56  d(B,μ₂)=4.30 → C₁
-  d(C,μ₁)=3.05  d(C,μ₂)=1.80 → C₂
-  d(D,μ₁)=6.66  d(D,μ₂)=1.80 → C₂
-
-No changes → converged!
-Total WCV = 0.625 + 6.5 = 7.125</pre>`,
-
-hierarchical:`<h2>Hierarchical Clustering</h2>
-<h3>Key Advantage</h3>
-<p><strong>No K needed in advance.</strong> Produces a dendrogram — cut at any height for desired clusters.</p>
-<h3>Agglomerative Algorithm</h3>
-<ol><li>Each obs = its own cluster</li><li>Merge two closest clusters</li><li>Repeat until one cluster remains</li></ol>
-<div class="diagram">  Dendrogram:
-
-  Height
-  11.31 |       _____|_____
-        |      |           |
-   1.41 |  ___|___     ___|___
-        | |       |   |       |
-        | A       B   C       D
-
-  Cut at h=5 → {A,B} and {C,D}</div>
-<h3>Linkage Criteria</h3>
-<table class="tbl"><tr><th>Linkage</th><th>Measure</th><th>Character</th></tr>
-<tr><td><strong>Single</strong></td><td>Min pairwise distance</td><td>Can chain; elongated</td></tr>
-<tr><td><strong>Complete</strong></td><td>Max pairwise distance</td><td>Compact, spherical</td></tr>
-<tr><td><strong>Average</strong></td><td>Mean of all pairs</td><td>Compromise</td></tr>
-<tr><td><strong>Ward</strong></td><td>Min variance increase</td><td>K-means-like</td></tr></table>
-<h3>Worked Example (Complete)</h3>
-<pre class="code">A(1,1), B(2,2), C(8,8), D(9,9)
-
-d(A,B)=√2≈1.41   d(C,D)=√2≈1.41
-d(A,C)=7√2≈9.90  d(A,D)=8√2≈11.31
-d(B,C)=6√2≈8.49  d(B,D)=7√2≈9.90
-
-Merge: A&B at 1.41, C&D at 1.41
-Then {A,B}&{C,D} at max=11.31</pre>
-<h3>K-Means vs Hierarchical</h3>
-<table class="tbl"><tr><th></th><th>K-Means</th><th>Hierarchical</th></tr>
-<tr><td>Specify K?</td><td>Yes</td><td>No (dendrogram)</td></tr>
-<tr><td>Deterministic?</td><td>No</td><td>Yes</td></tr>
-<tr><td>Scalability</td><td>Good</td><td>O(n²+)</td></tr></table>`,
-
-nn:`<h2>Neural Networks</h2>
-<h3>Architecture</h3>
-<div class="diagram">  Input       Hidden        Output
-
-   x₁ ─────╲     h₁ ╲
-              ╲ ╱      ╲
-   x₂ ────────╳──── h₂ ──╳──── ŷ
-              ╱ ╲      ╱
-   x₃ ─────╱     h₃ ╱
-
-  Neuron: output = g(Σwᵢxᵢ + b)</div>
-<ul><li><strong>Input:</strong> raw features</li><li><strong>Hidden:</strong> weights + bias + activation</li><li><strong>Output:</strong> prediction</li></ul>
-<h3>Activation Functions</h3>
-<table class="tbl"><tr><th>Function</th><th>Formula</th><th>Range</th><th>Use</th><th>Issue</th></tr>
-<tr><td><strong>Sigmoid</strong></td><td>1/(1+e⁻ᶻ)</td><td>(0,1)</td><td>Binary output</td><td>Vanishing grad</td></tr>
-<tr><td><strong>Tanh</strong></td><td>(eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ)</td><td>(−1,1)</td><td>Hidden</td><td>Vanishing grad</td></tr>
-<tr><td><strong>ReLU</strong></td><td>max(0,z)</td><td>[0,∞)</td><td>Hidden ★</td><td>Dying ReLU</td></tr>
-<tr><td><strong>Leaky ReLU</strong></td><td>max(0.1z,z)</td><td>(−∞,∞)</td><td>Hidden</td><td>—</td></tr>
-<tr><td><strong>Softmax</strong></td><td>eᶻᵏ/Σeᶻʲ</td><td>(0,1) Σ=1</td><td>Multi-class</td><td>—</td></tr></table>
-<div class="callout callout-key"><div class="callout-label">Key Exam Point</div><strong>Vanishing gradient:</strong> sigmoid/tanh squash gradients → near 0 deep. ReLU fixes. <strong>Dying ReLU:</strong> stuck at 0. Leaky ReLU fixes.</div>
-<h3>Forward Propagation</h3>
-<pre class="code">Step 1: z = Σwᵢxᵢ + b   (weighted sum)
-Step 2: output = g(z)    (activation)</pre>
-<h3>Backpropagation</h3>
-<pre class="code">Chain rule:
-  ∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w
-
-Update: w ← w − η · ∂Loss/∂w</pre>
-<h3>Worked Example</h3>
-<pre class="code">2 inputs, 2 hidden (sigmoid), 1 output (sigmoid)
-x₁=1, x₂=2
-
-Weights: w₁₁=0.5, w₁₂=−0.5, w₂₁=0.3, w₂₂=0.8
-Biases: bₕ=0.1, bₒ=0.2
-Hidden→Output: w₃₁=1.0, w₃₂=−1.0
-
-Hidden:
-  z₁ = 0.5(1)+0.3(2)+0.1 = 1.2 → σ(1.2) ≈ 0.769
-  z₂ = −0.5(1)+0.8(2)+0.1 = 1.2 → σ(1.2) ≈ 0.769
-
-Output:
-  z = 1.0(0.769)+(−1.0)(0.769)+0.2 = 0.2
-  ŷ = σ(0.2) ≈ 0.550</pre>`,
-
-svm:`<h2>Support Vector Machines</h2>
-<h3>Core Idea</h3>
-<p>Find the <strong>optimal separating hyperplane</strong> that <strong>maximizes the margin</strong> to nearest points.</p>
-<h3>Hyperplane</h3>
-<pre class="code">β₀ + β₁X₁ + ... + βₚXₚ = 0
-
-• 2D: line   3D: plane   pD: (p−1)-dimensional
-• β = normal vector (perpendicular)
-• Distance: d = |f(x)| / ||β||</pre>
-<div class="diagram">  Maximal Margin:
-
-  Class +1     | margin |     Class −1
-    ∗          |________|          ○
-    ∗ ∗    SV→ | hyper- | ←SV   ○ ○
-    ∗   ∗      | plane  |     ○   ○
-    ∗      SV→ |________| ←SV     ○
-
-  SV = Support Vectors</div>
-<h3>Soft Margin (Slack ξ)</h3>
-<table class="tbl"><tr><th>ξᵢ</th><th>Location</th><th>Status</th></tr>
-<tr><td>= 0</td><td>Outside margin</td><td>Correct</td></tr>
-<tr><td>0 &lt; ξ &lt; 1</td><td>Inside margin</td><td>Correct side</td></tr>
-<tr><td>= 1</td><td>On hyperplane</td><td>Boundary</td></tr>
-<tr><td><strong>&gt; 1</strong></td><td><strong>Wrong side</strong></td><td><strong>Misclassified</strong></td></tr></table>
-<div class="callout callout-key"><div class="callout-label">Key Exam Point</div><strong>C parameter:</strong> Large C → few violations, narrow margin (low bias, high var). Small C → wide margin (high bias, low var).</div>
-<h3>Worked Example: Distance</h3>
-<pre class="code">Hyperplane: 3X₁+4X₂−12=0   ||β||=5
-
-d(2,1) = |6+4−12|/5 = 0.4  (inside margin)
-d(3,2) = |9+8−12|/5 = 1.0  (outside)
-d(1,2) = |3+8−12|/5 = 0.2  (inside)</pre>
-<h3>Kernels</h3>
-<table class="tbl"><tr><th>Kernel</th><th>Formula</th><th>Boundary</th></tr>
-<tr><td>Linear</td><td>x·x'</td><td>Flat</td></tr>
-<tr><td>Polynomial</td><td>(1+x·x')ᵈ</td><td>Curved</td></tr>
-<tr><td>RBF</td><td>exp(−γ||x−x'||²)</td><td>Flexible</td></tr></table>
-<h3>RBF Worked Example</h3>
-<pre class="code">x₁=(1,2), x₂=(3,4), x₃=(2,3), γ=0.5
-
-K(x₁,x₂) = e^(−0.5×8) = e^−4 ≈ 0.018
-K(x₁,x₃) = e^(−0.5×2) = e^−1 ≈ 0.368
-
-↑γ → faster decay → complex boundary → overfit</pre>
-<h3>Multiclass</h3>
-<table class="tbl"><tr><th>Method</th><th>Classifiers</th></tr>
-<tr><td>OVR</td><td>K</td></tr>
-<tr><td>OVO</td><td>K(K−1)/2</td></tr></table>`
-};
-
-const FC=[
-{t:'pca',q:'What is PCA?',a:'Dimensionality reduction that finds linear combinations with maximal variance, mutually uncorrelated. Eigendecomposition of covariance matrix.'},
-{t:'pca',q:'PCA normalization constraint',a:'Σφⱼ₁² = 1. Without it, loadings can be scaled arbitrarily to get arbitrary variance.'},
-{t:'pca',q:'How to compute PVE',a:'PVEₘ = λₘ / Σλⱼ. All PVEs sum to 1.'},
-{t:'pca',q:'Max number of PCs',a:'min(n−1, p)'},
-{t:'pca',q:'5 PCA steps',a:'1. Standardize  2. Covariance matrix  3. Eigenvalues/vectors  4. Choose # PCs (scree)  5. Project'},
-{t:'pca',q:'Why standardize before PCA?',a:'PCA is variance-sensitive. Features with larger scales dominate PCs.'},
-{t:'pca',q:'PC orthogonality',a:'Each PC is uncorrelated (perpendicular) to all previous PCs.'},
-{t:'pca',q:'PCA vs Clustering',a:'PCA: max variance directions. Clustering: homogeneous subgroups.'},
-{t:'kmeans',q:'K-Means objective',a:'Minimize Σₖ WCV(Cₖ). WCV = sum of squared distances to centroid.'},
-{t:'kmeans',q:'K-Means algorithm',a:'1. Random assign  2a. Compute centroids  2b. Reassign nearest  Repeat.'},
-{t:'kmeans',q:'Global minimum?',a:'NO. Local only. Multiple random starts, keep lowest WCV.'},
-{t:'kmeans',q:'Cluster properties',a:'1. Union = all obs  2. Non-overlapping (empty intersection)'},
-{t:'kmeans',q:'What is a centroid?',a:'Vector of feature means for all observations in the cluster.'},
-{t:'hierarchical',q:'Key advantage',a:'No K needed. Dendrogram lets you choose any K after the fact.'},
-{t:'hierarchical',q:'Agglomerative steps',a:'1. Each obs = cluster  2. Merge closest pair  3. Repeat  (bottom-up)'},
-{t:'hierarchical',q:'4 linkage types',a:'Single (min), Complete (max), Average (mean), Ward (min variance)'},
-{t:'hierarchical',q:'Dendrogram reading',a:'Height = dissimilarity. Lower = more similar. Cut at h for clusters.'},
-{t:'hierarchical',q:'Single linkage issue',a:'Chaining: one close pair links distant groups into elongated clusters.'},
-{t:'nn',q:'Sigmoid',a:'g(z) = 1/(1+e⁻ᶻ). Range (0,1). Binary output. Vanishing gradient.'},
-{t:'nn',q:'Tanh',a:'Range (−1,1). Zero-centered. Hidden layers. Vanishing gradient.'},
-{t:'nn',q:'ReLU',a:'max(0,z). Range [0,∞). Most popular hidden. Fixes vanishing. Dying ReLU risk.'},
-{t:'nn',q:'Leaky ReLU',a:'max(0.1z,z). Fixes dying ReLU by allowing small negative gradient.'},
-{t:'nn',q:'Softmax',a:'eᶻᵏ/Σeᶻʲ. Outputs sum to 1. Multi-class output.'},
-{t:'nn',q:'Forward propagation',a:'z = Σwᵢxᵢ + b → output = g(z). Layer by layer.'},
-{t:'nn',q:'Backpropagation',a:'Chain rule: ∂L/∂w = ∂L/∂ŷ · ∂ŷ/∂z · ∂z/∂w. Update: w − η·∂L/∂w'},
-{t:'nn',q:'Vanishing gradient',a:'Sigmoid/tanh gradients → 0 for large |z|. Updates negligible in deep nets. ReLU fixes.'},
-{t:'nn',q:'Dying ReLU',a:'If z always negative, output always 0, gradient 0. Neuron dead. Fix: Leaky ReLU.'},
-{t:'nn',q:'Role of bias',a:'Non-zero output when inputs are zero. Shifts activation function.'},
-{t:'svm',q:'What is the margin?',a:'Distance from hyperplane to nearest points. SVM maximizes it.'},
-{t:'svm',q:'Support vectors',a:'Points on/within margin that define the boundary. Removing them changes it.'},
-{t:'svm',q:'Distance to hyperplane',a:'d = |f(x)| / ||β|| = |β₀+β·x| / √(Σβⱼ²)'},
-{t:'svm',q:'Slack ξ interpretation',a:'0: outside margin. 0<ξ<1: inside (correct). ξ=1: on boundary. ξ>1: MISCLASSIFIED.'},
-{t:'svm',q:'C parameter',a:'Large C → narrow margin, few violations. Small C → wide margin, more violations.'},
-{t:'svm',q:'Three kernels',a:'Linear: x·x′. Poly: (1+x·x′)ᵈ. RBF: exp(−γ||x−x′||²).'},
-{t:'svm',q:'RBF γ effect',a:'High γ → localized, complex, overfit. Low γ → smooth, generalized.'},
-{t:'svm',q:'OVR count',a:'K classifiers (class vs rest). Pick highest confidence.'},
-{t:'svm',q:'OVO count',a:'K(K−1)/2 classifiers (every pair). Majority vote.'},
-{t:'svm',q:'SVM vs LR',a:'SVM: separable data, p>n. LR: need probabilities.'},
-];
-
-const Q={
-pca:[
-{q:'First step before PCA?',o:['Compute eigenvalues','Standardize the data','Covariance matrix','Choose # PCs'],a:1,e:'PCA is variance-sensitive. Standardizing prevents scale-dominated PCs.'},
-{q:'λ₁=5.5, λ₂=1.2, λ₃=0.3. PVE for PC1?',o:['78.6%','17.1%','95.7%','4.3%'],a:0,e:'5.5/7.0 = 78.6%'},
-{q:'PC2 is the direction with max variance that is:',o:['Same as PC1','Orthogonal to PC1','Random','Min variance'],a:1,e:'Orthogonal = uncorrelated with PC1.'},
-{q:'Max PCs for n=50, p=4?',o:['50','4','3','4 (=min(49,4))'],a:3,e:'min(n−1, p) = min(49,4) = 4.'},
-{q:'How to choose # PCs from scree plot?',o:['Use all','Only PC1','Look for elbow','Lowest PVE'],a:2,e:'Elbow = diminishing returns.'},
-{q:'All eigenvalues equal means:',o:['Perfect correlation','PCA not useful for reduction','No variance','Singular matrix'],a:1,e:'Equal variance in all directions → no preferred direction.'},
-{q:'All positive loadings on PC1 means:',o:['Contrast','Overall magnitude','Noise','Only X₁'],a:1,e:'All positive → PC1 increases when ALL features increase.'},
-{q:'Σ=[[4,3],[3,9]], λ²−13λ+27=0. Eigenvalues?',o:['10.4 and 2.6','6.5 and 6.5','4 and 9','13 and 0'],a:0,e:'Quadratic formula: (13±√61)/2 ≈ 10.4, 2.6.'},
-],
-kmeans:[
-{q:'K-means finds global minimum?',o:['True','False — local only','If K=2','With enough iterations'],a:1,e:'Depends on init. Run multiple times.'},
-{q:'Centroid is:',o:['Median','Mode','Vector of feature means','Closest point'],a:2,e:'Mean of all features for cluster members.'},
-{q:'A(1,1), B(2,2) centroid?',o:['(1,1)','(1.5,1.5)','(2,2)','(3,3)'],a:1,e:'((1+2)/2, (1+2)/2) = (1.5,1.5).'},
-{q:'Which method doesn\'t need K?',o:['Random Forest','Hierarchical','Logistic Reg','Linear SVM'],a:1,e:'Dendrogram → choose K after.'},
-{q:'How to handle local minima?',o:['Gradient descent','Multiple random starts','Increase K','Use hierarchical'],a:1,e:'Multiple inits, keep lowest WCV.'},
-{q:'Default distance metric?',o:['Manhattan','Cosine','Euclidean','Mahalanobis'],a:2,e:'Euclidean distance to centroids.'},
-],
-hierarchical:[
-{q:'Complete linkage uses:',o:['Min distance','Max distance','Average','Centroid'],a:1,e:'Max pairwise → compact clusters.'},
-{q:'Lower dendrogram height means:',o:['More different','More similar','Worse','Random'],a:1,e:'Height = dissimilarity.'},
-{q:'Higher cut gives:',o:['More clusters','Fewer clusters','Same','None'],a:1,e:'Higher = fewer, larger clusters.'},
-{q:'Which linkage chains?',o:['Complete','Average','Single','Ward'],a:2,e:'Single uses min distance → chains.'},
-{q:'Ward minimizes:',o:['Max distance','Min distance','Within-cluster SS','Average'],a:2,e:'Within-cluster variance increase.'},
-],
-nn:[
-{q:'Activation with range (0,1)?',o:['ReLU','Tanh','Sigmoid','Leaky ReLU'],a:2,e:'Sigmoid: 1/(1+e⁻ᶻ).'},
-{q:'ReLU of −3?',o:['3','0','−3','0.3'],a:1,e:'max(0,−3) = 0.'},
-{q:'"Dying ReLU" means:',o:['Exploding outputs','Neurons stuck at 0','Too slow','Too deep'],a:1,e:'Always-negative z → output 0 → gradient 0 → dead.'},
-{q:'Leaky ReLU vs ReLU:',o:['Max output','Small gradient for negative z','Always differentiable','No params'],a:1,e:'max(0.1z,z) → negative z has gradient 0.1.'},
-{q:'Which sums to 1?',o:['Sigmoid','ReLU','Tanh','Softmax'],a:3,e:'Softmax: probabilities summing to 1.'},
-{q:'z = 0.5(1)+0.3(2)+0.1 = ?',o:['0.9','1.2','1.5','0.6'],a:1,e:'0.5+0.6+0.1 = 1.2.'},
-{q:'Backprop uses:',o:['Product rule','Quotient rule','Chain rule','Power rule'],a:2,e:'∂L/∂w via chain rule.'},
-{q:'Sigmoid/tanh deep net issue:',o:['Dying','Vanishing gradients','Cost','Overflow'],a:1,e:'Gradients → 0 in early layers.'},
-{q:'Tanh preferred in hidden because:',o:['Faster','Zero-centered','Never saturates','Larger gradients'],a:1,e:'Zero-centered → better optimization.'},
-{q:'Single perceptron solves:',o:['Anything','Linearly separable only','Regression','Non-linear'],a:1,e:'No hidden layers = linear boundary.'},
-],
-svm:[
-{q:'Margin is:',o:['Error rate','Distance to nearest points','# SVs','Kernel param'],a:1,e:'SVM maximizes this distance.'},
-{q:'Support vectors are:',o:['All points','Farthest','On/within margin, define boundary','Outliers'],a:2,e:'Removing them changes the hyperplane.'},
-{q:'ξ > 1 means:',o:['Correct','On margin','Misclassified','Support vector'],a:2,e:'Wrong side of hyperplane.'},
-{q:'Increasing C:',o:['Wider margin','Narrower margin, fewer violations','No effect','Always better'],a:1,e:'Heavier penalty → fewer violations → narrow margin.'},
-{q:'Increasing γ (RBF):',o:['Smoother','More complex, overfit risk','No change','Better'],a:1,e:'Faster decay → localized → complex.'},
-{q:'OVR with 5 classes:',o:['5','10','25','4'],a:0,e:'K classifiers.'},
-{q:'OVO with 5 classes:',o:['5','10','20','25'],a:1,e:'K(K−1)/2 = 10.'},
-{q:'f(x)=2X₁+X₂−5 at (1,3):',o:['0','1','2','−1'],a:0,e:'2+3−5 = 0.'},
-{q:'SVM vs LR — when SVM?',o:['Need probs','Nearly separable','Few features','Time-series'],a:1,e:'SVM excels when separable, p>n.'},
-{q:'Kernel trick allows:',o:['Faster training','Nonlinear boundaries implicitly','Fewer SVs','Regression'],a:1,e:'High-dim inner products without explicit mapping.'},
-{q:'LinearSVC vs SVC(linear):',o:['Identical','Different optimizers, LinearSVC faster','SVC better','LinearSVC has kernels'],a:1,e:'liblinear vs libsvm.'},
-{q:'Why ||β||=1 constraint?',o:['Unique well-defined problem','Speed','Classify all','Remove C'],a:0,e:'Without it, β scales arbitrarily, M unbounded.'},
-]
-};
-
-const ME=[(()=>{const a=[];Object.entries(Q).forEach(([t,qs])=>qs.forEach(q=>a.push({t,...q})));for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,24);})()];
-
-let S={page:'dashboard',gt:'pca',fi:0,ff:false,ft:'all',fm:'all',qt:'pca',qi:0,qa:false,qs:-1,qsc:0,qtl:0,qd:false,me:-1,mi:0,ma:[],md:false,mt:0,mti:null};
-
-function lp(){try{return JSON.parse(localStorage.getItem('mse446p'))||{};}catch{return{};}}
-function sp(p){localStorage.setItem('mse446p',JSON.stringify(p));}
+function lp(){try{return JSON.parse(localStorage.getItem('mse446p'))||{};}catch{return{};}}function sp(p){localStorage.setItem('mse446p',JSON.stringify(p));}
 function gp(){const p=lp();p.qs=p.qs||{};p.fk=p.fk||{};p.ms=p.ms||[];p.ls=p.ls||null;p.st=p.st||0;return p;}
 function rqs(t,sc,tl){const p=gp();if(!p.qs[t])p.qs[t]=[];p.qs[t].push({s:sc,t:tl,d:Date.now()});p.ls=new Date().toDateString();sp(p);}
 function rms(e,sc,tl,bd){const p=gp();p.ms.push({e,s:sc,t:tl,b:bd,d:Date.now()});p.ls=new Date().toDateString();sp(p);}
@@ -569,66 +298,54 @@ function tfk(k){const p=gp();p.fk[k]=!p.fk[k];p.ls=new Date().toDateString();sp(
 function sqz(){localStorage.setItem('mse446qs',JSON.stringify({qt:S.qt,qi:S.qi,qsc:S.qsc,qtl:S.qtl,qd:S.qd,qa:S.qa,qs:S.qs}));}
 function lqz(){try{return JSON.parse(localStorage.getItem('mse446qs'));}catch{return null;}}
 function cqz(){localStorage.removeItem('mse446qs');}
-function us(){const p=gp();const td=new Date().toDateString();if(p.ls!==td){const y=new Date(Date.now()-864e5).toDateString();p.st=p.ls===y?p.st+1:1;p.ls=td;sp(p);}const b=document.getElementById('streakBadge');const t=document.getElementById('streakText');if(b&&t&&p.st>0){b.classList.add('visible');t.textContent=p.st+' day streak';}}
+function us(){const p=gp();const td=new Date().toDateString();if(p.ls!==td){const y=new Date(Date.now()-864e5).toDateString();p.st=p.ls===y?p.st+1:1;p.ls=td;sp(p);}const el=document.getElementById('streakBadge');if(el&&p.st>0){el.style.display='inline';el.textContent='🔥 '+p.st+' day streak';}}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function navigate(pg){if(S.mti){clearInterval(S.mti);S.mti=null;}S.page=pg;if(pg==='quiz'){const sv=lqz();if(sv&&!sv.qd)Object.assign(S,sv);else{S.qi=0;S.qsc=0;S.qtl=0;S.qd=false;S.qa=false;cqz();}}render();document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.page===pg));document.getElementById('main').scrollTop=0;document.getElementById('sidebar').classList.remove('open');us();}
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
-function toggleTheme(){const h=document.documentElement;const n=h.dataset.theme==='dark'?'light':'dark';h.dataset.theme=n;document.getElementById('themeBtn').textContent=n==='dark'?'\u263E':'\u2600';localStorage.setItem('mse446t',n);}
+function nav(pg){if(S.mti){clearInterval(S.mti);S.mti=null;}S.p=pg;if(pg==='quiz'){const sv=lqz();if(sv&&!sv.qd)Object.assign(S,sv);else{S.qi=0;S.qsc=0;S.qtl=0;S.qd=false;S.qa=false;cqz();}}render();window.scrollTo(0,0);us();}
 
-function render(){document.getElementById('content').innerHTML={dashboard:rDash,guide:rGuide,flashcards:rFC,quiz:rQuiz,mock:rMock}[S.page]();}
+function buildNav(){const tabs=pages.map(p=>{const labels={home:'Home',guide:'Study Guide',flashcards:'Flashcards',quiz:'Quizzes',mock:'Mock Exam'};return`<button class="nav-tab ${S.p===p?'active':''}" onclick="nav('${p}')">${labels[p]}</button>`;}).join('');document.getElementById('navTabs').innerHTML=tabs;document.getElementById('navMobile').innerHTML=tabs;}
 
-function rDash(){
-const p=gp();const nfc=FC.length;const kfc=Object.values(p.fk).filter(Boolean).length;
-let tq=0,tc=0;T.forEach(t=>{const s=p.qs[t.id]||[];if(s.length){const l=s[s.length-1];tq+=l.t;tc+=l.s;}});
-let rows='';T.forEach(t=>{let m=0,n=0;const s=p.qs[t.id]||[];if(s.length){m+=(s[s.length-1].s/s[s.length-1].t)*100;n++;}const tf=FC.filter(f=>f.t===t.id),tk=tf.filter(f=>p.fk[fk(f)]).length;if(tf.length){m+=(tk/tf.length)*100;n++;}const o=n?Math.round(m/n):0;const c=o>=80?'var(--green)':o>=50?'var(--amber)':'var(--red)';rows+=`<div class="mastery-row"><span class="mastery-label">${t.f}</span><div class="mastery-bar"><div class="progress"><div class="progress-fill" style="width:${o}%;background:${c}"></div></div></div><span class="mastery-pct" style="color:${c}">${o}%</span></div>`;});
-let wk='',st='';T.forEach(t=>{const s=p.qs[t.id]||[];if(s.length){const l=s[s.length-1];const pc=Math.round(l.s/l.t*100);if(pc<60)wk+=`<div class="weak">${t.f} (${pc}%) — needs review</div>`;else if(pc>=90)st+=`<div class="strong">${t.f} (${pc}%) — strong</div>`;}});
-const ed=new Date('2026-04-15T09:00:00');const df=ed-new Date();const dd=Math.max(0,Math.floor(df/864e5));const hh=Math.max(0,Math.floor((df%864e5)/36e5));
-return`<div class="fade-in"><h2 style="margin-bottom:16px">Dashboard</h2>
-<div class="banner"><h3>Final Exam — MSE 446/623</h3><p><strong>150 min.</strong> Part I: 24 MCQs. Part II: 5 long-answer (post-midterm). Formulas provided in questions.</p>
-<div class="banner-grid"><div class="banner-item"><div class="banner-num">${dd}d ${hh}h</div><div class="banner-lbl">Until Exam</div></div><div class="banner-item"><div class="banner-num">24</div><div class="banner-lbl">MCQs</div></div><div class="banner-item"><div class="banner-num">5</div><div class="banner-lbl">Long Answer</div></div><div class="banner-item"><div class="banner-num">150m</div><div class="banner-lbl">Duration</div></div></div></div>
-<div class="stat-grid"><div class="stat-card"><div class="stat-label">Flashcards Mastered</div><div class="stat-value">${kfc}<span style="font-size:16px;color:var(--text-secondary);font-weight:500">/${nfc}</span></div><div class="progress" style="margin-top:10px"><div class="progress-fill" style="width:${nfc?kfc/nfc*100:0}%"></div></div></div>
-<div class="stat-card"><div class="stat-label">Quiz Accuracy</div><div class="stat-value">${tq?Math.round(tc/tq*100):0}%</div></div>
-<div class="stat-card"><div class="stat-label">Mock Exams</div><div class="stat-value">${p.ms.length}</div></div>
-<div class="stat-card"><div class="stat-label">Study Streak</div><div class="stat-value">${p.st}<span style="font-size:14px;color:var(--text-secondary);font-weight:500"> day${p.st!==1?'s':''}</span></div></div></div>
-<div class="card"><h3 style="margin-top:0">Topic Mastery</h3>${rows}</div>
-${wk?`<div class="card"><h3 style="margin-top:0">Focus Areas</h3>${wk}</div>`:''}${st?`<div class="card"><h3 style="margin-top:0">Strong Areas</h3>${st}</div>`:''}
-<div class="card"><h3 style="margin-top:0">Quick Start</h3><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><button class="btn btn-primary" onclick="navigate('guide')">Study Guide</button><button class="btn btn-ghost" onclick="navigate('flashcards')">Flashcards</button><button class="btn btn-ghost" onclick="navigate('quiz')">Quiz</button><button class="btn btn-ghost" onclick="navigate('mock')">Mock Exam</button></div></div></div>`;}
+function render(){buildNav();const el=document.getElementById('app');el.innerHTML={home:rHome,guide:rGuide,flashcards:rFC,quiz:rQuiz,mock:rMock}[S.p]();}
 
-function rGuide(){return`<div class="fade-in"><h2 style="margin-bottom:16px">Study Guide</h2><div class="tabs">${T.map(t=>`<button class="tab ${S.gt===t.id?'active':''}" onclick="S.gt='${t.id}';render()">${t.f}</button>`).join('')}</div><div class="card">${G[S.gt]||''}</div></div>`;}
+function toggleTheme(){const d=document.documentElement;const n=d.dataset.theme==='dark'?undefined:'dark';if(n)d.dataset.theme='dark';else d.removeAttribute('data-theme');document.getElementById('themeBtn').textContent=n?'☀':'☾';localStorage.setItem('mse446t',n||'light');}
 
-function rFC(){const p=gp();let cards=[...FC];if(S.ft!=='all')cards=cards.filter(f=>f.t===S.ft);if(S.fm==='learning')cards=cards.filter(f=>!p.fk[fk(f)]);if(!cards.length)return`<div class="fade-in"><h2>Flashcards</h2><div class="card"><p>No cards match. Change topic or mode.</p></div></div>`;if(S.fi>=cards.length)S.fi=0;const c=cards[S.fi],ck=fk(c),kn=p.fk[ck];
-return`<div class="fade-in"><h2 style="margin-bottom:16px">Flashcards</h2>
-<div class="chips"><button class="chip ${S.ft==='all'?'active':''}" onclick="S.ft='all';S.fi=0;S.ff=false;render()">All</button>${T.map(t=>`<button class="chip ${S.ft===t.id?'active':''}" onclick="S.ft='${t.id}';S.fi=0;S.ff=false;render()">${t.s}</button>`).join('')}</div>
-<div style="display:flex;gap:6px;justify-content:center;margin-bottom:16px"><button class="btn btn-sm ${S.fm==='all'?'btn-primary':'btn-ghost'}" onclick="S.fm='all';S.fi=0;S.ff=false;render()">All</button><button class="btn btn-sm ${S.fm==='learning'?'btn-primary':'btn-ghost'}" onclick="S.fm='learning';S.fi=0;S.ff=false;render()">Learning</button><button class="btn btn-sm btn-ghost" onclick="shFC()">Shuffle</button></div>
-<div class="fc-wrap"><div class="fc-count">${S.fi+1} / ${cards.length}</div>
-<div class="fc-card ${S.ff?'flipped':''}" onclick="S.ff=!S.ff;render()"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-topic">${esc(T.find(t=>t.id===c.t)?.f||'')}</div><p class="fc-text">${esc(c.q)}</p></div><div class="fc-face fc-back"><div class="fc-topic">Answer</div><p class="fc-text">${esc(c.a)}</p></div></div></div>
-<div class="fc-controls"><button class="btn btn-ghost btn-sm" onclick="if(S.fi>0){S.fi--;S.ff=false;render();}" ${S.fi===0?'disabled':''}>Prev</button><button class="btn btn-sm ${kn?'btn-success':'btn-ghost'}" onclick='tfk(${JSON.stringify(ck)});render()'>${kn?'Known':'Mark Known'}</button><button class="btn btn-primary btn-sm" onclick="S.fi=(S.fi+1)%${cards.length};S.ff=false;render()">Next</button></div></div></div>`;}
+function rHome(){const p=gp(),nfc=FC.length,kfc=Object.values(p.fk).filter(Boolean).length;let tq=0,tc=0;T.forEach(t=>{const s=p.qs[t.id]||[];if(s.length){const l=s[s.length-1];tq+=l.t;tc+=l.s;}});const ed=new Date('2026-04-15T09:00:00'),df=ed-new Date(),dd=Math.max(0,Math.floor(df/864e5)),hh=Math.max(0,Math.floor((df%864e5)/36e5));
+let rows='';T.forEach(t=>{let m=0,n=0;const s=p.qs[t.id]||[];if(s.length){m+=(s[s.length-1].s/s[s.length-1].t)*100;n++;}const tf=FC.filter(f=>f.t===t.id),tk=tf.filter(f=>p.fk[fk(f)]).length;if(tf.length){m+=(tk/tf.length)*100;n++;}const o=n?Math.round(m/n):0;const c=o>=80?'var(--green)':o>=50?'var(--amber)':'var(--red)';rows+=`<div class="mastery"><span class="mastery-name">${t.f}</span><div class="mastery-bar"><div class="prog"><div class="prog-fill" style="width:${o}%;background:${c}"></div></div></div><span class="mastery-val" style="color:${c}">${o}%</span></div>`;});
+return`<div class="fade"><div class="hero"><h1>MSE 446 Final Exam</h1><p>Master Neural Networks, PCA, Clustering, and SVMs with interactive study tools.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-brand btn-lg" onclick="nav('guide')">Start Studying</button><button class="btn btn-outline btn-lg" onclick="nav('mock')">Mock Exam</button></div></div>
+<div class="feature-grid"><div class="feature-card fc-purple" onclick="nav('guide')"><h3>📖 Study Guide</h3><p>Complete notes for all 5 topics</p></div><div class="feature-card fc-coral" onclick="nav('flashcards')"><h3>🃏 Flashcards</h3><p>${nfc} cards with spaced review</p></div><div class="feature-card fc-teal" onclick="nav('quiz')"><h3>✓ Quizzes</h3><p>Topic-specific practice MCQs</p></div><div class="feature-card fc-amber" onclick="nav('mock')"><h3>⏱ Mock Exam</h3><p>24 questions, timed simulation</p></div></div>
+<div class="banner"><h3>Exam Info</h3><p>150 min · 24 MCQs + 5 Long Answer · Post-midterm focus · Formulas provided</p><div class="banner-grid"><div class="banner-item"><div class="banner-num">${dd}d ${hh}h</div><div class="banner-lbl">Until Exam</div></div><div class="banner-item"><div class="banner-num">${kfc}/${nfc}</div><div class="banner-lbl">Cards Known</div></div><div class="banner-item"><div class="banner-num">${tq?Math.round(tc/tq*100):0}%</div><div class="banner-lbl">Quiz Accuracy</div></div><div class="banner-item"><div class="banner-num">${p.st}</div><div class="banner-lbl">Day Streak</div></div></div></div>
+<div class="card"><h3 style="margin-top:0">Topic Mastery</h3>${rows}</div></div>`;}
+
+function rGuide(){return`<div class="fade"><h2>Study Guide</h2><div class="chips">${T.map(t=>`<button class="chip ${S.gt===t.id?'on':''}" onclick="S.gt='${t.id}';render()">${t.f}</button>`).join('')}</div><div class="card">${G[S.gt]||''}</div></div>`;}
+
+function rFC(){const p=gp();let cards=[...FC];if(S.ft!=='all')cards=cards.filter(f=>f.t===S.ft);if(S.fm==='learning')cards=cards.filter(f=>!p.fk[fk(f)]);if(!cards.length)return`<div class="fade"><h2>Flashcards</h2><div class="card"><p>No cards match. Change filter.</p></div></div>`;if(S.fi>=cards.length)S.fi=0;const c=cards[S.fi],ck=fk(c),kn=p.fk[ck];
+return`<div class="fade"><h2>Flashcards</h2><div class="chips"><button class="chip ${S.ft==='all'?'on':''}" onclick="S.ft='all';S.fi=0;S.ff=false;render()">All</button>${T.map(t=>`<button class="chip ${S.ft===t.id?'on':''}" onclick="S.ft='${t.id}';S.fi=0;S.ff=false;render()">${t.s}</button>`).join('')}</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"><button class="btn btn-sm ${S.fm==='all'?'btn-brand':'btn-ghost'}" onclick="S.fm='all';S.fi=0;S.ff=false;render()">All</button><button class="btn btn-sm ${S.fm==='learning'?'btn-brand':'btn-ghost'}" onclick="S.fm='learning';S.fi=0;S.ff=false;render()">Learning</button><button class="btn btn-sm btn-ghost" onclick="shFC()">Shuffle</button></div>
+<div class="fc-area"><div class="fc-counter">${S.fi+1} / ${cards.length}</div><div class="fc-card ${S.ff?'flip':''}" onclick="S.ff=!S.ff;render()"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-hint">${esc(T.find(t=>t.id===c.t)?.f||'')}</div><p class="fc-text">${esc(c.q)}</p></div><div class="fc-face fc-back"><div class="fc-hint">Answer</div><p class="fc-text">${esc(c.a)}</p></div></div></div>
+<div class="fc-btns"><button class="btn btn-outline btn-md" onclick="if(S.fi>0){S.fi--;S.ff=false;render();}" ${S.fi===0?'disabled':''}>← Prev</button><button class="btn btn-md ${kn?'btn-green':'btn-outline'}" onclick='tfk(${JSON.stringify(ck)});render()'>${kn?'✓ Known':'Mark Known'}</button><button class="btn btn-brand btn-md" onclick="S.fi=(S.fi+1)%${cards.length};S.ff=false;render()">Next →</button></div></div></div>`;}
 function shFC(){const a=[...FC];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}FC.length=0;FC.push(...a);S.fi=0;S.ff=false;render();}
 
-function rQuiz(){const chips=T.map(t=>`<button class="chip ${S.qt===t.id?'active':''}" onclick="stQ('${t.id}')">${t.s}</button>`).join('');const qs=Q[S.qt]||[];if(!qs.length)return`<div class="fade-in"><h2>Quizzes</h2><div class="chips">${chips}</div><div class="card"><p>No questions.</p></div></div>`;
-if(S.qd){const pc=Math.round(S.qsc/S.qtl*100);return`<div class="fade-in"><h2>Quiz Complete</h2><div class="card"><div class="q-score">${pc}%</div><div class="q-score-sub">${S.qsc}/${S.qtl} correct</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="stQ('${S.qt}')">Retry</button> <button class="btn btn-ghost" onclick="navigate('dashboard')">Dashboard</button></div></div></div>`;}
-const qn=qs[S.qi];const opts=qn.o.map((o,i)=>{let cl='q-opt';if(S.qa){if(i===qn.a)cl+=' ok';else if(i===S.qs)cl+=' wrong';}else if(i===S.qs)cl+=' sel';return`<button class="${cl}" onclick="aQ(${i})" ${S.qa?'disabled':''}>${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
-return`<div class="fade-in"><h2 style="margin-bottom:16px">Quizzes</h2><div class="chips">${chips}</div><div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="font-size:12px;color:var(--text-secondary)">Question ${S.qi+1}/${qs.length}</span><span style="font-size:12px;color:var(--text-secondary)">Score: ${S.qsc}</span></div><div class="progress" style="margin-bottom:14px"><div class="progress-fill" style="width:${(S.qi/qs.length)*100}%"></div></div><h3 style="margin:0 0 14px;color:var(--text-primary)">${esc(qn.q)}</h3>${opts}${S.qa?`<div class="q-exp"><strong>${S.qs===qn.a?'Correct!':'Incorrect.'}</strong> ${esc(qn.e)}</div><div style="text-align:right;margin-top:10px"><button class="btn btn-primary btn-sm" onclick="nQ()">Next</button></div>`:''}</div></div>`;}
+function rQuiz(){const chips=T.map(t=>`<button class="chip ${S.qt===t.id?'on':''}" onclick="stQ('${t.id}')">${t.s}</button>`).join('');const qs=QZ[S.qt]||[];if(!qs.length)return`<div class="fade"><h2>Quizzes</h2><div class="chips">${chips}</div></div>`;
+if(S.qd){const pc=Math.round(S.qsc/S.qtl*100);return`<div class="fade"><div class="q-card"><div class="q-big">${pc}%</div><div class="q-sub">${S.qsc}/${S.qtl} correct</div><div style="text-align:center"><button class="btn btn-brand btn-md" onclick="stQ('${S.qt}')">Retry</button> <button class="btn btn-outline btn-md" onclick="nav('home')">Home</button></div></div></div>`;}
+const qn=qs[S.qi];const opts=qn.o.map((o,i)=>{let cl='q-opt';if(S.qa){if(i===qn.a)cl+=' ok';else if(i===S.qs)cl+=' no';}else if(i===S.qs)cl+=' sel';return`<button class="${cl}" onclick="aQ(${i})" ${S.qa?'disabled':''}>${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
+return`<div class="fade"><h2>Quizzes</h2><div class="chips">${chips}</div><div class="q-card"><div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px;color:var(--text3);font-weight:600"><span>Question ${S.qi+1}/${qs.length}</span><span>Score: ${S.qsc}</span></div><div class="prog" style="margin-bottom:16px"><div class="prog-fill" style="width:${(S.qi/qs.length)*100}%"></div></div><div class="q-text">${esc(qn.q)}</div>${opts}${S.qa?`<div class="q-exp"><strong>${S.qs===qn.a?'✓ Correct':'✗ Incorrect'}.</strong> ${esc(qn.e)}</div><div style="text-align:right;margin-top:12px"><button class="btn btn-brand btn-sm" onclick="nQ()">Next →</button></div>`:''}</div></div>`;}
 function stQ(t){S.qt=t;S.qi=0;S.qsc=0;S.qtl=0;S.qd=false;S.qa=false;S.qs=-1;sqz();render();}
-function aQ(i){if(S.qa)return;S.qs=i;S.qa=true;S.qtl++;if(i===Q[S.qt][S.qi].a)S.qsc++;sqz();render();}
-function nQ(){const qs=Q[S.qt];S.qi++;S.qa=false;S.qs=-1;if(S.qi>=qs.length){S.qd=true;rqs(S.qt,S.qsc,S.qtl);cqz();}else sqz();render();}
+function aQ(i){if(S.qa)return;S.qs=i;S.qa=true;S.qtl++;if(i===QZ[S.qt][S.qi].a)S.qsc++;sqz();render();}
+function nQ(){S.qi++;S.qa=false;S.qs=-1;if(S.qi>=QZ[S.qt].length){S.qd=true;rqs(S.qt,S.qsc,S.qtl);cqz();}else sqz();render();}
 
-function rMock(){if(S.me===-1){const p=gp();return`<div class="fade-in"><h2 style="margin-bottom:16px">Mock Exam</h2><div class="banner"><h3>Exam Simulation</h3><p>24 MCQs, timed. Covers all post-midterm topics.</p></div>${ME.map((ex,i)=>{const tk=p.ms.filter(m=>m.e===i);const b=tk.length?Math.max(...tk.map(m=>Math.round(m.s/m.t*100))):null;return`<div class="card" style="cursor:pointer" onclick="stM(${i})"><h3 style="margin:0">Mock Exam ${i+1}</h3><p style="color:var(--text-secondary);margin:4px 0">${ex.length} questions</p>${b!==null?`<p>Best: <strong style="color:var(--accent)">${b}%</strong> (${tk.length} attempt${tk.length>1?'s':''})</p>`:'<p style="color:var(--text-tertiary)">Not attempted</p>'}<button class="btn btn-primary btn-sm" style="margin-top:8px">Start</button></div>`;}).join('')}</div>`;}
-const ex=ME[S.me];
-if(S.md){const sc=S.ma.reduce((s,a,i)=>s+(a===ex[i].a?1:0),0);const pc=Math.round(sc/ex.length*100);const bd={};ex.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(S.ma[i]===q.a)bd[q.t].c++;});
-let bh='';Object.entries(bd).forEach(([tid,v])=>{const tn=T.find(t=>t.id===tid)?.f||tid;const p2=Math.round(v.c/v.t*100);const c=p2>=80?'var(--green)':p2>=50?'var(--amber)':'var(--red)';bh+=`<div class="mastery-row"><span class="mastery-label">${tn}</span><div class="mastery-bar"><div class="progress"><div class="progress-fill" style="width:${p2}%;background:${c}"></div></div></div><span class="mastery-pct" style="color:${c}">${v.c}/${v.t}</span></div>`;});
-let rv='';ex.forEach((q,i)=>{const ok=S.ma[i]===q.a;rv+=`<div style="padding:10px 0;border-bottom:1px solid var(--border)"><p style="font-weight:600;font-size:13.5px;${ok?'':'color:var(--red)'}">${i+1}. ${esc(q.q)}</p><p style="font-size:12.5px;margin-top:3px;color:var(--text-secondary)">Yours: <strong>${esc(q.o[S.ma[i]]||'—')}</strong> ${ok?'✓':'✗ → '+esc(q.o[q.a])}</p></div>`;});
-return`<div class="fade-in"><h2>Exam Complete</h2><div class="card"><div class="q-score">${pc}%</div><div class="q-score-sub">${sc}/${ex.length} correct</div></div><div class="card"><h3 style="margin:0 0 8px">Breakdown</h3>${bh}</div><div class="card"><h3 style="margin:0 0 8px">Review</h3>${rv}</div><div style="text-align:center;margin-top:16px"><button class="btn btn-primary" onclick="S.me=-1;S.md=false;render()">Back</button></div></div>`;}
-const el=Math.floor((Date.now()-S.mt)/1000);const mm=Math.floor(el/60),ss=el%60;const ts=`${mm}:${ss<10?'0':''}${ss}`;const tc=mm>=55?'crit':mm>=45?'warn':'';const qn=ex[S.mi];
-const opts=qn.o.map((o,i)=>{let cl='q-opt';if(S.ma[S.mi]===i)cl+=' sel';return`<button class="${cl}" onclick="S.ma[${S.mi}]=${i};render()">${String.fromCharCode(65+i)}) ${esc(o)}</button>`;}).join('');
-const dots=ex.map((_,i)=>{const a=S.ma[i];const bg=i===S.mi?'var(--accent)':a!==undefined?'var(--green)':'var(--bg-input)';return`<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${bg};cursor:pointer;margin:2px" onclick="S.mi=${i};render()"></span>`;}).join('');
-return`<div class="fade-in"><div class="timer-bar"><span style="font-size:13px;color:var(--text-secondary)">Q${S.mi+1}/${ex.length}</span><span class="timer-time ${tc}">${ts}</span><button class="btn btn-danger btn-sm" onclick="fM()">Finish</button></div><div class="card"><h3 style="margin:0 0 14px;color:var(--text-primary)">${esc(qn.q)}</h3>${opts}<div style="display:flex;justify-content:space-between;margin-top:14px"><button class="btn btn-ghost btn-sm" onclick="mN(-1)" ${S.mi===0?'disabled':''}>Prev</button><button class="btn btn-primary btn-sm" onclick="mN(1)">${S.mi===ex.length-1?'Finish':'Next'}</button></div></div><div style="text-align:center;margin-top:10px">${dots}</div></div>`;}
-function stM(i){S.me=i;S.mi=0;S.ma=[];S.md=false;S.mt=Date.now();if(S.mti)clearInterval(S.mti);S.mti=setInterval(()=>{const e=document.querySelector('.timer-time');if(!e)return;const s=Math.floor((Date.now()-S.mt)/1000);const m=Math.floor(s/60),r=s%60;e.textContent=`${m}:${r<10?'0':''}${r}`;e.className='timer-time'+(m>=55?' crit':m>=45?' warn':'');},1000);render();}
-function mN(d){const ex=ME[S.me];if(d===1&&S.mi===ex.length-1){fM();return;}S.mi=Math.max(0,Math.min(ex.length-1,S.mi+d));render();}
-function fM(){if(S.mti){clearInterval(S.mti);S.mti=null;}S.md=true;const ex=ME[S.me];const sc=S.ma.reduce((s,a,i)=>s+(a===ex[i].a?1:0),0);const bd={};ex.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(S.ma[i]===q.a)bd[q.t].c++;});rms(S.me,sc,ex.length,bd);render();}
+function rMock(){if(S.me===-1){const p=gp();return`<div class="fade"><h2>Mock Exam</h2><div class="banner"><h3>Timed Simulation</h3><p>24 MCQs from all topics. Matches Part I format.</p></div>${MK.map((ex,i)=>{const tk=p.ms.filter(m=>m.e===i);const b=tk.length?Math.max(...tk.map(m=>Math.round(m.s/m.t*100))):null;return`<div class="card" style="cursor:pointer" onclick="stM(${i})"><div style="display:flex;justify-content:space-between;align-items:center"><div><h3 style="margin:0">Mock Exam ${i+1}</h3><p style="color:var(--text3);margin:4px 0 0">${ex.length} questions</p></div><div style="text-align:right">${b!==null?`<div style="font-size:28px;font-weight:800;color:var(--brand)">${b}%</div><div style="font-size:12px;color:var(--text3)">${tk.length} attempt${tk.length>1?'s':''}</div>`:'<button class="btn btn-brand btn-sm">Start</button>'}</div></div></div>`;}).join('')}</div>`;}
+const ex=MK[S.me];if(S.md){const sc=S.ma.reduce((s,a,i)=>s+(a===ex[i].a?1:0),0);const pc=Math.round(sc/ex.length*100);const bd={};ex.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(S.ma[i]===q.a)bd[q.t].c++;});let bh='';Object.entries(bd).forEach(([tid,v])=>{const tn=T.find(t=>t.id===tid)?.f||tid;const p2=Math.round(v.c/v.t*100);const c=p2>=80?'var(--green)':p2>=50?'var(--amber)':'var(--red)';bh+=`<div class="mastery"><span class="mastery-name">${tn}</span><div class="mastery-bar"><div class="prog"><div class="prog-fill" style="width:${p2}%;background:${c}"></div></div></div><span class="mastery-val" style="color:${c}">${v.c}/${v.t}</span></div>`;});
+let rv='';ex.forEach((q,i)=>{const ok=S.ma[i]===q.a;rv+=`<div style="padding:10px 0;border-bottom:1px solid var(--border)"><p style="font-weight:700;font-size:14px;${ok?'':'color:var(--red)'}">${i+1}. ${esc(q.q)}</p><p style="font-size:13px;color:var(--text2);margin-top:3px">You: <strong>${esc(q.o[S.ma[i]]||'—')}</strong> ${ok?'✓':'✗ → <strong>'+esc(q.o[q.a])+'</strong>'}</p></div>`;});
+return`<div class="fade"><div class="q-card"><div class="q-big">${pc}%</div><div class="q-sub">${sc}/${ex.length} correct</div></div><div class="card"><h3 style="margin:0 0 8px">Breakdown</h3>${bh}</div><div class="card"><h3 style="margin:0 0 8px">Review</h3>${rv}</div><div style="text-align:center;margin-top:20px"><button class="btn btn-brand btn-md" onclick="S.me=-1;S.md=false;render()">← Back</button></div></div>`;}
+const el=Math.floor((Date.now()-S.mt)/1000),mm=Math.floor(el/60),ss=el%60,ts=`${mm}:${ss<10?'0':''}${ss}`,tc=mm>=55?'crit':mm>=45?'warn':'',qn=ex[S.mi];
+const opts=qn.o.map((o,i)=>`<button class="q-opt ${S.ma[S.mi]===i?'sel':''}" onclick="S.ma[${S.mi}]=${i};render()">${String.fromCharCode(65+i)}) ${esc(o)}</button>`).join('');
+const dots=ex.map((_,i)=>`<span class="timer-dot" style="background:${i===S.mi?'var(--brand)':S.ma[i]!==undefined?'var(--green)':'var(--border2)'}" onclick="S.mi=${i};render()"></span>`).join('');
+return`<div class="fade"><div class="timer"><span style="font-size:14px;font-weight:600;color:var(--text2)">Q${S.mi+1}/${ex.length}</span><span class="timer-clock ${tc}">${ts}</span><button class="btn btn-red btn-sm" onclick="fM()">Finish</button></div><div class="q-card"><div class="q-text">${esc(qn.q)}</div>${opts}<div style="display:flex;justify-content:space-between;margin-top:16px"><button class="btn btn-outline btn-sm" onclick="mN(-1)" ${S.mi===0?'disabled':''}>← Prev</button><button class="btn btn-brand btn-sm" onclick="mN(1)">${S.mi===ex.length-1?'Finish':'Next →'}</button></div></div><div class="timer-dots">${dots}</div></div>`;}
+function stM(i){S.me=i;S.mi=0;S.ma=[];S.md=false;S.mt=Date.now();if(S.mti)clearInterval(S.mti);S.mti=setInterval(()=>{const e=document.querySelector('.timer-clock');if(!e)return;const s=Math.floor((Date.now()-S.mt)/1000),m=Math.floor(s/60),r=s%60;e.textContent=`${m}:${r<10?'0':''}${r}`;e.className='timer-clock'+(m>=55?' crit':m>=45?' warn':'');},1000);render();}
+function mN(d){if(d===1&&S.mi===MK[S.me].length-1){fM();return;}S.mi=Math.max(0,Math.min(MK[S.me].length-1,S.mi+d));render();}
+function fM(){if(S.mti){clearInterval(S.mti);S.mti=null;}S.md=true;const ex=MK[S.me],sc=S.ma.reduce((s,a,i)=>s+(a===ex[i].a?1:0),0),bd={};ex.forEach((q,i)=>{if(!bd[q.t])bd[q.t]={c:0,t:0};bd[q.t].t++;if(S.ma[i]===q.a)bd[q.t].c++;});rms(S.me,sc,ex.length,bd);render();}
 
-(function(){const s=localStorage.getItem('mse446t');if(s){document.documentElement.dataset.theme=s;document.getElementById('themeBtn').textContent=s==='dark'?'\u263E':'\u2600';}us();navigate('dashboard');})();
+(function(){const t=localStorage.getItem('mse446t');if(t==='dark'){document.documentElement.dataset.theme='dark';document.getElementById('themeBtn').textContent='☀';}us();nav('home');})();
 </script>
 </body>
 </html>
