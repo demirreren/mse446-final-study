@@ -222,60 +222,882 @@ pre.code { background:var(--bg); border:1px solid var(--border); border-radius:v
 <script>
 const T=[{id:'pca',s:'PCA',f:'Principal Component Analysis'},{id:'kmeans',s:'K-Means',f:'K-Means Clustering'},{id:'hierarchical',s:'Hierarchical',f:'Hierarchical Clustering'},{id:'nn',s:'Neural Nets',f:'Neural Networks'},{id:'svm',s:'SVM',f:'Support Vector Machines'}];
 
-const G={pca:`<h2>Principal Component Analysis</h2><h3>What is PCA?</h3><p><strong>Dimensionality reduction</strong> that finds <strong>linear combinations</strong> with <strong>maximal variance</strong>, mutually uncorrelated.</p><div class="callout callout-info"><div class="callout-label">Exam Point</div>PCA = max variance directions. Clustering = homogeneous subgroups.</div><h3>First PC</h3><pre class="code">Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ    subject to: Σφⱼ₁² = 1</pre><ul><li>PC2 maximizes variance <strong>orthogonal to PC1</strong></li><li>Max PCs = <strong>min(n−1, p)</strong></li></ul><div class="diagram">     PC2
-      ↑     · ·
-      |   ·  ╱  ·       PC1 ──→
-      |  · ╱     ·
-      | ·╱    ·
-──────┼──────────→</div><h3>5 Steps</h3><ol><li><strong>Standardize</strong></li><li><strong>Covariance matrix</strong></li><li><strong>Eigenvalues/vectors</strong></li><li><strong>Choose # PCs</strong> (scree plot elbow)</li><li><strong>Project data</strong></li></ol><h3>PVE</h3><pre class="code">PVEₘ = λₘ / Σλⱼ    (all sum to 1)</pre><h3>Worked Example</h3><pre class="code">Data: (2,3), (3,4), (4,5)
-Center: (-1,-1), (0,0), (1,1)
-Σ = [[2/3, 2/3], [2/3, 2/3]]
-λ₁ = 4/3, λ₂ = 0 → PVE₁ = 100%
-φ₁ = (1/√2, 1/√2)</pre><h3>Example 2</h3><pre class="code">λ₁=5.5, λ₂=1.2, λ₃=0.3 → Total=7.0
-PVE₁=78.6%, PVE₂=17.1%, PVE₃=4.3%
-Cumulative(1+2)=95.7% → retain 2</pre><h3>Python</h3><pre class="code">from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-X_s = StandardScaler().fit_transform(X)
-pca = PCA(n_components=2).fit(X_s)
-pca.explained_variance_ratio_</pre><div class="callout callout-warn"><div class="callout-label">Watch Out</div>Always standardize. Different scales → different PCs.</div>`,
-kmeans:`<h2>K-Means Clustering</h2><h3>Idea</h3><p>Partition n observations into K clusters minimizing <strong>within-cluster variation</strong>.</p><pre class="code">min Σₖ WCV(Cₖ) = Σₖ (1/|Cₖ|) Σ ||xᵢ−xᵢ'||²</pre><h3>Algorithm</h3><ol><li>Randomly assign to K clusters</li><li>Compute centroids (feature means)</li><li>Reassign to nearest centroid</li><li>Repeat until convergence</li></ol><div class="callout callout-info"><div class="callout-label">Exam Point</div>Guaranteed to decrease objective. NOT global minimum. Multiple random starts.</div><h3>Worked Example</h3><pre class="code">A(1,1), B(1.5,2), C(3,4), D(5,7)  K=2
-C₁={A,B} → μ₁=(1.25,1.5)
-C₂={C,D} → μ₂=(4,5.5)
-Reassign: all stay → converged!
-WCV = 0.625 + 6.5 = 7.125</pre>`,
-hierarchical:`<h2>Hierarchical Clustering</h2><h3>Advantage</h3><p><strong>No K needed.</strong> Dendrogram lets you choose after.</p><ol><li>Each obs = cluster</li><li>Merge closest pair</li><li>Repeat</li></ol><div class="diagram">  Height
-  11.31 |     _____|_____
-        |    |           |
-   1.41 |  ___|___   ___|___
-        | |       | |       |
-        | A       B C       D</div><h3>Linkage</h3><table class="tbl"><tr><th>Type</th><th>Measure</th><th>Result</th></tr><tr><td>Single</td><td>Min distance</td><td>Chains</td></tr><tr><td>Complete</td><td>Max distance</td><td>Compact</td></tr><tr><td>Average</td><td>Mean pairs</td><td>Balanced</td></tr><tr><td>Ward</td><td>Min variance↑</td><td>K-means-like</td></tr></table><h3>Worked Example</h3><pre class="code">A(1,1) B(2,2) C(8,8) D(9,9)
-d(A,B)=d(C,D)=√2≈1.41
-Complete: {A,B}↔{C,D} at max=11.31
-Cut h=5 → 2 clusters</pre><h3>vs K-Means</h3><table class="tbl"><tr><th></th><th>K-Means</th><th>Hierarchical</th></tr><tr><td>K</td><td>Required</td><td>Choose after</td></tr><tr><td>Deterministic</td><td>No</td><td>Yes</td></tr><tr><td>Scale</td><td>Good</td><td>O(n²+)</td></tr></table>`,
-nn:`<h2>Neural Networks</h2><div class="diagram">  Input    Hidden     Output
-   x₁ ──╲    h₁ ╲
-          ╲╱      ╲
-   x₂ ────╳── h₂ ──╳── ŷ
-          ╱╲      ╱
-   x₃ ──╱    h₃ ╱
-  Neuron: g(Σwᵢxᵢ + b)</div><h3>Activations</h3><table class="tbl"><tr><th>Function</th><th>Range</th><th>Use</th><th>Issue</th></tr><tr><td><strong>Sigmoid</strong> 1/(1+e⁻ᶻ)</td><td>(0,1)</td><td>Binary out</td><td>Vanishing</td></tr><tr><td><strong>Tanh</strong></td><td>(−1,1)</td><td>Hidden</td><td>Vanishing</td></tr><tr><td><strong>ReLU</strong> max(0,z)</td><td>[0,∞)</td><td>Hidden★</td><td>Dying</td></tr><tr><td><strong>Leaky</strong> max(.1z,z)</td><td>(−∞,∞)</td><td>Hidden</td><td>—</td></tr><tr><td><strong>Softmax</strong></td><td>Σ=1</td><td>Multi-class</td><td>—</td></tr></table><h3>Forward Prop</h3><pre class="code">z = Σwᵢxᵢ + b → output = g(z)</pre><h3>Backprop</h3><pre class="code">∂L/∂w = ∂L/∂ŷ · ∂ŷ/∂z · ∂z/∂w
-w ← w − η · ∂L/∂w</pre><h3>Worked Example</h3><pre class="code">x₁=1, x₂=2  |  w₁₁=.5, w₁₂=−.5, w₂₁=.3, w₂₂=.8
-bₕ=.1, bₒ=.2  |  w₃₁=1, w₃₂=−1
+const G={pca:`<h2>Principal Component Analysis (PCA)</h2>
+<h3>Unsupervised Learning Context</h3>
+<p>In <strong>supervised learning</strong>, we observe features X₁,...,Xₚ and a response Y, and the goal is prediction. In <strong>unsupervised learning</strong>, we only observe features — no response Y. PCA is an unsupervised method for <strong>data visualization</strong> and <strong>dimensionality reduction</strong>.</p>
+<p>Two unsupervised methods in this course: (1) <strong>PCA</strong> — finds directions of maximum variance, and (2) <strong>Clustering</strong> — finds homogeneous subgroups.</p>
+<div class="callout callout-info"><div class="callout-label">Exam Point</div>PCA looks for a low-dimensional representation that explains a good fraction of the <strong>variance</strong>. Clustering looks for <strong>homogeneous subgroups</strong>. Know the difference.</div>
 
-z₁ = .5(1)+.3(2)+.1 = 1.2 → σ ≈ .769
-z₂ = −.5(1)+.8(2)+.1 = 1.2 → σ ≈ .769
-zₒ = 1(.769)+(−1)(.769)+.2 = .2 → σ ≈ .550</pre><div class="callout callout-info"><div class="callout-label">Exam Point</div>Know forward prop by hand. All 5 activations. Backprop = chain rule.</div>`,
-svm:`<h2>Support Vector Machines</h2><pre class="code">Hyperplane: β₀ + β₁X₁ + ... + βₚXₚ = 0
-Distance: d = |f(x)| / ||β||</pre><div class="diagram">  Class +1     |margin|     Class −1
-    ∗         |______|          ○
-    ∗ ∗   SV→| plane |←SV    ○ ○
-    ∗     SV→|_______|←SV      ○</div><h3>Soft Margin (Slack ξ)</h3><table class="tbl"><tr><th>ξ</th><th>Where</th><th>Status</th></tr><tr><td>=0</td><td>Outside margin</td><td>Correct</td></tr><tr><td>0–1</td><td>Inside margin</td><td>Correct side</td></tr><tr><td>=1</td><td>Hyperplane</td><td>Boundary</td></tr><tr><td><strong>>1</strong></td><td><strong>Wrong side</strong></td><td><strong>Misclassified</strong></td></tr></table><div class="callout callout-info"><div class="callout-label">Exam Point</div>C: Large→narrow margin (low bias). Small→wide (high bias).</div><h3>Distance Example</h3><pre class="code">3X₁+4X₂−12=0  ||β||=5
-d(2,1)=|6+4−12|/5=0.4  (inside if margin=1)
-d(3,2)=|9+8−12|/5=1.0  (outside)
-d(1,2)=|3+8−12|/5=0.2  (inside)</pre><h3>Kernels</h3><table class="tbl"><tr><th>Kernel</th><th>Formula</th></tr><tr><td>Linear</td><td>x·x'</td></tr><tr><td>Poly</td><td>(1+x·x')ᵈ</td></tr><tr><td>RBF</td><td>exp(−γ||x−x'||²)</td></tr></table><pre class="code">RBF example (γ=0.5):
-K(x₁,x₂) = e^(−.5×8) ≈ 0.018  (far)
-K(x₁,x₃) = e^(−.5×2) ≈ 0.368  (close)
-↑γ → complex boundary → overfit</pre><h3>Multiclass</h3><table class="tbl"><tr><th>Method</th><th>Count</th></tr><tr><td>OVR</td><td>K</td></tr><tr><td>OVO</td><td>K(K−1)/2</td></tr></table>`};
+<h3>What PCA Does</h3>
+<p>PCA produces a low-dimensional representation of a dataset. It finds a sequence of <strong>linear combinations</strong> of the variables that have <strong>maximal variance</strong> and are <strong>mutually uncorrelated</strong>. When there are more than 3 features, we cannot visualize the data in all dimensions. PCA lets us choose 1, 2, or 3 dimensions that capture the most important information.</p>
+<p>The idea: create new axes by linearly combining features. The more variance the new axis captures, the more separation of data is observed. PCA uses optimization to find the best linear combinations (called <strong>principal components</strong>) and projects the data onto them.</p>
+
+<h3>First Principal Component — The Math</h3>
+<pre class="code">The first PC of features X₁, X₂, ..., Xₚ is the normalized linear combination:
+
+  Z₁ = φ₁₁X₁ + φ₂₁X₂ + ... + φₚ₁Xₚ
+
+that has the LARGEST VARIANCE, subject to:
+
+  Σⱼ₌₁ᵖ φⱼ₁² = 1    (normalization constraint)
+
+• φ₁₁, ..., φₚ₁ are the LOADINGS of the first PC
+• The loading vector is: φ₁ = (φ₁₁, φ₂₁, ..., φₚ₁)ᵀ
+• Without the constraint, we could make variance
+  arbitrarily large by scaling loadings up</pre>
+
+<h3>Geometry of PCA</h3>
+<p>The loading vector φ₁ defines a <strong>direction in feature space</strong> along which the data vary the most. If we project the n data points onto this direction, the projected values are the <strong>principal component scores</strong> z₁₁, ..., zₙ₁.</p>
+<div class="diagram">     PC2 (less variance)
+      ↑
+      |     · ·
+      |   ·  ╱  ·        PC1 direction (most variance)
+      |  · ╱     ·       ──────→
+      | ·╱    ·
+      |╱ ·  ·
+──────┼──────────→ X₁
+      |
+   The green line = PC1 direction
+   The blue line = PC2 direction (perpendicular to PC1)
+   Red dots = projections of data onto PC1</div>
+
+<h3>Optimization Problem</h3>
+<pre class="code">Assume data X is centered (column means = 0).
+
+The first PC loading vector solves:
+
+  max          (1/n) Σᵢ₌₁ⁿ (Σⱼ₌₁ᵖ φⱼ₁ xᵢⱼ)²
+φ₁₁,...,φₚ₁
+
+  subject to:  Σⱼ₌₁ᵖ φⱼ₁² = 1
+
+Since each xᵢⱼ has mean zero, so does zᵢ₁.
+The sample variance of zᵢ₁ is: (1/n) Σᵢ₌₁ⁿ zᵢ₁²
+
+This is solved via singular-value decomposition (SVD)
+of the matrix X — a standard linear algebra technique.</pre>
+
+<h3>Further Principal Components</h3>
+<p>The <strong>second PC</strong> is the linear combination of X₁,...,Xₚ that has maximal variance among all combinations <strong>uncorrelated with Z₁</strong>.</p>
+<pre class="code">z_i2 = φ₁₂x_i1 + φ₂₂x_i2 + ... + φₚ₂x_ip
+
+Key insight: constraining Z₂ to be uncorrelated with Z₁
+is EQUIVALENT to constraining φ₂ to be ORTHOGONAL
+(perpendicular) to φ₁.
+
+For the mth PC, we add constraints ensuring
+orthogonality with all previous m−1 PCs.
+
+Maximum number of PCs = min(n−1, p)</pre>
+
+<h3>Step-by-Step PCA Process</h3>
+<p><strong>Step 1: Standardization.</strong> PCA is sensitive to the variance among datapoints. We don't want variables with large ranges to dominate. Standardize so each feature has mean=0 and std=1. If variables are in the same units, you might not scale; if different units, you must.</p>
+<p><strong>Step 2: Covariance Matrix.</strong> Compute the covariance matrix to find relationships between variables. We don't want redundant information — the covariance matrix reveals which variables move together.</p>
+<p><strong>Step 3: Principal Components Identification.</strong> Compute eigenvalues and eigenvectors of the covariance matrix. There can be as many PCs as variables. The first PC carries the largest variance. It is the line through the origin where projected points are most spread out — the line that maximizes the average squared distance from projected points to the origin.</p>
+<p><strong>Step 4: Feature Vector.</strong> After obtaining all PCs, decide which to keep. Calculate what percentage of variance each PC captures. The first PC carries the most, decreasing for subsequent PCs. The chosen PCs form the <strong>feature vector</strong>.</p>
+<p><strong>Step 5: Data Revision.</strong> Recast the initial data onto the PCs by multiplying the original (centered) data by the feature vector.</p>
+
+<h3>Proportion of Variance Explained (PVE)</h3>
+<pre class="code">Total variance (centered data):
+  Σⱼ₌₁ᵖ Var(Xⱼ) = Σⱼ₌₁ᵖ (1/n) Σᵢ₌₁ⁿ xᵢⱼ²
+
+Variance explained by mth PC:
+  Var(Zₘ) = (1/n) Σᵢ₌₁ⁿ zᵢₘ²
+
+Key identity:
+  Σⱼ₌₁ᵖ Var(Xⱼ) = Σₘ₌₁ᴹ Var(Zₘ)
+  where M = min(n−1, p)
+
+PVE of mth PC:
+  PVEₘ = Σᵢ zᵢₘ² / Σⱼ Σᵢ xᵢⱼ²
+
+• PVE is between 0 and 1
+• All PVEs sum to 1
+• Cumulative PVE = sum of first m PVEs</pre>
+
+<h3>How Many PCs to Use?</h3>
+<p>Use the <strong>scree plot</strong>: plot PVE vs component number. Look for an <strong>"elbow"</strong> — the point where adding more components yields diminishing returns. Retain components before the elbow.</p>
+
+<h3>Scaling Matters</h3>
+<p>If variables are in <strong>different units</strong>, scaling each to std=1 is recommended. If in the same units, you might or might not scale. Unscaled PCA on mixed-unit data will be dominated by high-variance (large-scale) variables.</p>
+
+<h3>Biplot</h3>
+<p>A biplot displays both PC <strong>scores</strong> (observation positions) and <strong>loadings</strong> (variable contributions) on the same plot. Variable arrows show the direction and magnitude of each feature's contribution to the PCs.</p>
+
+<h3>Worked Example 1: Basic PCA</h3>
+<pre class="code">Data: 3 observations, 2 features
+  (2,3), (3,4), (4,5)
+
+Step 1: Center (means: X̄₁=3, X̄₂=4)
+  Centered: (-1,-1), (0,0), (1,1)
+
+Step 2: Covariance matrix (using 1/n, n=3)
+  Var(X₁) = (1+0+1)/3 = 2/3
+  Var(X₂) = (1+0+1)/3 = 2/3
+  Cov(X₁,X₂) = ((-1)(-1)+0·0+1·1)/3 = 2/3
+  Σ = [[2/3, 2/3],
+       [2/3, 2/3]]
+
+Step 3: Eigenvalues
+  det(Σ − λI) = (2/3−λ)² − (2/3)² = 0
+  λ² − (4/3)λ = 0 → λ(λ − 4/3) = 0
+  λ₁ = 4/3,  λ₂ = 0
+
+Step 4: PVE
+  PVE₁ = (4/3)/(4/3+0) = 100%
+  PVE₂ = 0% → only 1 PC needed!
+
+Step 5: Eigenvector for λ₁
+  φ₁ = (1/√2, 1/√2)
+  PC1 = (1/√2)(X₁ + X₂)</pre>
+
+<h3>Worked Example 2: Cold Chain Logistics (Tutorial 9)</h3>
+<pre class="code">Data: Temperature deviation and Delay
+  (-2,1), (-1,2), (1,3), (2,4)
+
+Step 1: Center (means: X̄₁=0, X̄₂=2.5)
+  Centered: (-2,-1.5), (-1,-0.5), (1,0.5), (2,1.5)
+
+Step 2: Covariance (1/n, n=4)
+  Var(X₁) = (4+1+1+4)/4 = 2.5
+  Var(X₂) = (2.25+0.25+0.25+2.25)/4 = 1.25
+  Cov = (3+0.5+0.5+3)/4 = 1.75
+  Σ = [[2.5, 1.75],
+       [1.75, 1.25]]
+
+Step 3: Eigenvalues
+  λ² − 3.75λ + 0.0625 = 0
+  λ₁ ≈ 3.733,  λ₂ ≈ 0.017
+
+Step 4: PVE
+  PVE₁ = 3.733/3.75 ≈ 99.5% ← nearly all variance!
+  Eigenvector: φ₁ ≈ (1/√2, 1/√2)
+
+Step 5: Projections onto PC1
+  z₁ = (-2-1.5)/√2 ≈ -2.475
+  z₂ = (-1-0.5)/√2 ≈ -1.061
+  z₃ = (1+0.5)/√2 ≈ 1.061
+  z₄ = (2+1.5)/√2 ≈ 2.475
+
+Interpretation: PC1 combines temp deviation and
+delay with equal weights — a single underlying
+factor affects shipment quality.</pre>
+
+<h3>Worked Example 3: Customer Behavior (Tutorial 9)</h3>
+<pre class="code">Covariance matrix:
+  Σ = [[4, 3],     (using the problem's given Σ)
+       [3, 9]]
+
+Eigenvalues: λ² − 13λ + 27 = 0
+  λ = (13 ± √(169−108))/2 = (13 ± √61)/2
+  λ₁ ≈ 10.405,  λ₂ ≈ 2.595
+
+PVE₁ = 10.405/13 ≈ 80.0%
+PVE₂ = 2.595/13 ≈ 20.0%
+
+Eigenvector for λ₁: (0.991, 0.134)ᵀ
+  → PC1 is dominated by X₁ (visits)</pre>
+
+<h3>Worked Example 4: Route Optimization (Tutorial 9)</h3>
+<pre class="code">Z₁ = 0.6X₁ + 0.6X₂ + 0.529X₃
+Eigenvalues: λ₁=5.5, λ₂=1.2, λ₃=0.3
+
+Total variance = 5.5 + 1.2 + 0.3 = 7.0
+PVE₁ = 5.5/7.0 = 78.6%
+PVE₂ = 1.2/7.0 = 17.1%
+PVE₃ = 0.3/7.0 = 4.3%
+Cumulative (PC1+PC2) = 95.7% → retain 2
+
+All loadings positive on PC1 → represents
+"overall logistics effort" (distance, time, cost
+all increase together).</pre>
+
+<h3>USArrests Example (Lecture)</h3>
+<p>The USArrests dataset contains arrests per 100,000 residents for Assault, Murder, and Rape, plus UrbanPop for 50 states. With n=50 and p=4, PCA was performed after standardizing. The biplot shows state scores and variable loading arrows. States like Florida and California score high on PC1 (high crime), while states like North Dakota score low.</p>
+
+<h3>Python Implementation</h3>
+<pre class="code">from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Step 1: Standardize
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Steps 2-5: Fit PCA
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# Results
+pca.explained_variance_ratio_  # PVE per component
+pca.components_                # loading vectors
+pca.explained_variance_        # eigenvalues
+
+# Cumulative PVE
+import numpy as np
+np.cumsum(pca.explained_variance_ratio_)</pre>
+
+<div class="callout callout-warn"><div class="callout-label">Watch Out</div>Always standardize before PCA unless told otherwise. PCA is variance-sensitive — features with larger scales will dominate the PCs. The intercept/mean has no role in PCA (data is centered).</div>`,
+
+kmeans:`<h2>K-Means Clustering</h2>
+<h3>What is Clustering?</h3>
+<p>Clustering refers to a broad set of techniques for finding <strong>subgroups (clusters)</strong> in a dataset. We seek a partition where observations within each group are quite <strong>similar</strong> to each other, while observations in different groups are <strong>different</strong>. What "similar" means is domain-specific.</p>
+
+<h3>PCA vs Clustering</h3>
+<p>PCA looks for a low-dimensional representation that explains variance. Clustering looks for homogeneous subgroups among observations. These are complementary — you might use PCA to reduce dimensions, then cluster in the reduced space.</p>
+
+<h3>Use Cases</h3>
+<ul>
+<li><strong>Market segmentation:</strong> group shoppers by browsing/purchase history</li>
+<li><strong>Genomics:</strong> cluster breast cancer patients by gene expression</li>
+<li><strong>Healthcare:</strong> personalized communication for cancer screening, vaccination</li>
+<li><strong>Anomaly detection:</strong> detecting medical errors in cancer treatment</li>
+</ul>
+
+<h3>K-Means: The Idea</h3>
+<p>K-means is a <strong>centroid-based</strong> algorithm that minimizes the distance of data points to their cluster centroid. The user specifies K (number of clusters). Each cluster's center is obtained by averaging all points in the cluster — hence "K-<em>means</em>."</p>
+
+<h3>Formal Definition</h3>
+<pre class="code">Let C₁, ..., Cₖ denote sets of observation indices in each cluster.
+
+Two properties:
+1. C₁ ∪ C₂ ∪ ... ∪ Cₖ = {1,...,n}  (every obs in a cluster)
+2. Cₖ ∩ Cₖ' = ∅ for k ≠ k'       (non-overlapping)
+
+Objective: minimize total within-cluster variation
+
+  min     Σₖ₌₁ᴷ WCV(Cₖ)
+C₁,...,Cₖ
+
+Within-cluster variation (Euclidean):
+
+  WCV(Cₖ) = (1/|Cₖ|) Σᵢ,ᵢ'∈Cₖ Σⱼ₌₁ᵖ (xᵢⱼ − xᵢ'ⱼ)²
+
+Equivalent form (key identity):
+
+  (1/|Cₖ|) Σᵢ,ᵢ' ||xᵢ − xᵢ'||² = 2 Σᵢ∈Cₖ ||xᵢ − x̄ₖ||²
+
+  where x̄ₖⱼ = (1/|Cₖ|) Σᵢ∈Cₖ xᵢⱼ  (centroid)</pre>
+<div class="callout callout-info"><div class="callout-label">Exam Point</div>The pairwise distance formula equals twice the sum of squared distances to the centroid. This identity is why minimizing pairwise distances is the same as minimizing distances to centroids.</div>
+
+<h3>K-Means Algorithm</h3>
+<ol>
+<li><strong>Step 1:</strong> Randomly assign each observation a number from 1 to K (initial cluster assignments)</li>
+<li><strong>Step 2:</strong> Iterate until convergence:
+<br/><strong>(2a)</strong> For each cluster, compute the <strong>centroid</strong> = vector of the p feature means for observations in that cluster
+<br/><strong>(2b)</strong> Assign each observation to the cluster whose centroid is <strong>closest</strong> (Euclidean distance)</li>
+</ol>
+<div class="diagram">  K-Means with K=3:
+
+  Step 1:           Step 2a:          Step 2b:
+  Random assign     Compute centroids Reassign
+
+  ● ○ △ ○           ● ○ △ ○           ● ● ○ ○
+  △ ● ○ △    →      [★][◆][▲]   →    ● ● ○ △
+  ○ △ ● ○           (centroids)       ○ △ △ △
+
+  Repeat 2a → 2b until no assignments change</div>
+
+<h3>Properties of the Algorithm</h3>
+<ul>
+<li>Algorithm is <strong>guaranteed to decrease</strong> the objective at each step — because (2a) minimizes WCV for fixed assignments, and (2b) minimizes assignments for fixed centroids</li>
+<li>However, it is <strong>NOT guaranteed to find the global minimum</strong> — the result depends on the random initialization</li>
+<li><strong>Solution:</strong> Run K-means multiple times (e.g., 10-20 times) with different random starts, keep the result with the <strong>lowest total WCV</strong></li>
+</ul>
+
+<h3>Why Not Global Minimum?</h3>
+<p>Different starting values can lead to different local optima. The lecture shows K=3 clustering performed 6 times with different initializations — three different local optima were obtained, with the best having objective value 235.8.</p>
+
+<h3>Worked Example (Lecture + Tutorial 9)</h3>
+<pre class="code">Points: A(1,1), B(1.5,2), C(3,4), D(5,7).  K=2.
+
+Step 1: Initial clusters: C₁={A,B}, C₂={C,D}
+
+Step 2a: Compute centroids
+  μ₁ = ((1+1.5)/2, (1+2)/2) = (1.25, 1.5)
+  μ₂ = ((3+5)/2, (4+7)/2)   = (4, 5.5)
+
+Step 2b: Reassign (Euclidean distances)
+  Point A(1,1):
+    d(A,μ₁) = √((1−1.25)²+(1−1.5)²) = √0.3125 ≈ 0.559
+    d(A,μ₂) = √((1−4)²+(1−5.5)²)    = √29.25  ≈ 5.408
+    → A stays in C₁ ✓
+
+  Point B(1.5,2):
+    d(B,μ₁) = √0.3125 ≈ 0.559
+    d(B,μ₂) = √18.5   ≈ 4.301
+    → B stays in C₁ ✓
+
+  Point C(3,4):
+    d(C,μ₁) = √9.3125 ≈ 3.051
+    d(C,μ₂) = √3.25   ≈ 1.803
+    → C stays in C₂ ✓
+
+  Point D(5,7):
+    d(D,μ₁) = √44.3125 ≈ 6.657
+    d(D,μ₂) = √3.25    ≈ 1.803
+    → D stays in C₂ ✓
+
+No assignments changed → CONVERGED!
+
+Final WCV:
+  Cluster 1: ||A−μ₁||²+||B−μ₁||² = 0.3125+0.3125 = 0.625
+  Cluster 2: ||C−μ₂||²+||D−μ₂||² = 3.25+3.25 = 6.5
+  Total WCV = 0.625 + 6.5 = 7.125</pre>
+
+<h3>Python Implementation</h3>
+<pre class="code">from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)
+kmeans.fit(X)
+
+labels = kmeans.labels_           # cluster assignment
+centroids = kmeans.cluster_centers_  # centroid positions
+inertia = kmeans.inertia_         # total WCV</pre>`,
+
+hierarchical:`<h2>Hierarchical Clustering</h2>
+<h3>Key Advantage Over K-Means</h3>
+<p>K-means requires pre-specifying K. Hierarchical clustering does <strong>NOT</strong> — instead, it produces a tree-like representation called a <strong>dendrogram</strong> that shows all possible clusterings from 1 to n clusters. You choose K after the fact by cutting the dendrogram at a chosen height.</p>
+
+<h3>Agglomerative (Bottom-Up) Algorithm</h3>
+<p>The most common type. The dendrogram is built starting from the <strong>leaves</strong> (individual observations) and combines clusters up to the <strong>trunk</strong>.</p>
+<ol>
+<li>Assign each observation to its own cluster (n initial clusters)</li>
+<li>Find the two most similar (closest) clusters and <strong>merge</strong> them into one</li>
+<li>Repeat step 2</li>
+<li>End when all points are in a single cluster</li>
+</ol>
+
+<h3>Reading a Dendrogram</h3>
+<div class="diagram">  Dendrogram Example:
+
+  Height
+  11.31 |         _____|_____
+        |        |           |
+        |        |           |
+   1.41 |    ___|___     ___|___
+        |   |       |   |       |
+        |   A       B   C       D
+
+  • Height of fusion = how different the merged clusters are
+  • Lower height = more similar observations
+  • Cut at height 9 → 2 clusters: {A,B} and {C,D}
+  • Cut at height 5 → still 2 clusters (same)
+  • Cut at height 1 → 4 clusters (no merges yet)</div>
+
+<h3>Similarity and Linkage Criteria</h3>
+<p>To measure similarity between clusters (when one or both contain multiple observations), we need <strong>linkage criteria</strong>. The distance between individual observations is typically <strong>Euclidean distance</strong>.</p>
+
+<table class="tbl">
+<tr><th>Linkage</th><th>Formula</th><th>Properties</th></tr>
+<tr><td><strong>Single</strong></td><td>Minimum distance between closest pair in two clusters</td><td>Can produce long, chain-like clusters (chaining effect)</td></tr>
+<tr><td><strong>Complete</strong></td><td>Maximum distance between farthest pair in two clusters</td><td>Produces compact, roughly spherical clusters</td></tr>
+<tr><td><strong>Average</strong></td><td>Average of all pairwise distances between two clusters</td><td>Compromise between single and complete</td></tr>
+<tr><td><strong>Centroid</strong></td><td>Distance between cluster centroids</td><td>Less common, can have inversions</td></tr>
+<tr><td><strong>Ward</strong></td><td>Minimizes total within-cluster sum of squares after merge</td><td>Similar philosophy to K-means, produces even-sized clusters</td></tr>
+</table>
+
+<div class="diagram">  Linkage Illustrations:
+
+  Single:              Complete:            Average:
+  Cluster A  Cluster B  Cluster A  Cluster B  Cluster A  Cluster B
+
+   ∗  ∗       ○  ○      ∗  ∗       ○  ○      ∗  ∗       ○  ○
+   ∗  ∗  ←→   ○  ○      ∗  ∗  ←══→ ○  ○      ∗──∗──+──+──○──○
+   ∗  ∗   ↑   ○  ○      ∗  ∗   ↑   ○  ○      ∗  ∗  avg  ○  ○
+        min dist             max dist           all pairs</div>
+
+<h3>Worked Example: Complete Linkage (Tutorial 9)</h3>
+<pre class="code">Points: A(1,1), B(2,2), C(8,8), D(9,9)
+
+Step 1: Compute all pairwise Euclidean distances
+  d(A,B) = √((1−2)²+(1−2)²) = √2 ≈ 1.41
+  d(C,D) = √((8−9)²+(8−9)²) = √2 ≈ 1.41
+  d(A,C) = √((1−8)²+(1−8)²) = √98 = 7√2 ≈ 9.90
+  d(A,D) = √((1−9)²+(1−9)²) = √128 = 8√2 ≈ 11.31
+  d(B,C) = √((2−8)²+(2−8)²) = √72 = 6√2 ≈ 8.49
+  d(B,D) = √((2−9)²+(2−9)²) = √98 = 7√2 ≈ 9.90
+
+Distance matrix:
+       A     B     C     D
+  A    0    1.41  9.90  11.31
+  B         0    8.49   9.90
+  C              0      1.41
+  D                     0
+
+Step 2: First merge
+  Smallest distances: d(A,B) = d(C,D) = √2 ≈ 1.41
+  Merge A&B at height 1.41
+  Merge C&D at height 1.41
+
+Step 3: Next merge (complete linkage)
+  d_complete({A,B}, {C,D}) = max(d(A,C), d(A,D), d(B,C), d(B,D))
+                            = max(9.90, 11.31, 8.49, 9.90)
+                            = 11.31
+
+  Merge {A,B} and {C,D} at height 11.31
+
+Cutting the dendrogram:
+  Any height h with √2 < h < 8√2 → 2 clusters: {A,B}, {C,D}
+  Within each group: d = √2 (very close)
+  Between groups: d ≥ 6√2 (very far) → well-separated!</pre>
+
+<h3>K-Means vs Hierarchical: Comparison</h3>
+<table class="tbl">
+<tr><th>Property</th><th>K-Means</th><th>Hierarchical</th></tr>
+<tr><td>Specify K?</td><td>Yes, in advance</td><td>No (choose after via dendrogram)</td></tr>
+<tr><td>Deterministic?</td><td>No (random initialization)</td><td>Yes (for same linkage/distance)</td></tr>
+<tr><td>Scalability</td><td>Good for large n</td><td>O(n²) memory, O(n³) time</td></tr>
+<tr><td>Cluster shape</td><td>Spherical/convex</td><td>Arbitrary (depends on linkage)</td></tr>
+<tr><td>Re-assignment?</td><td>Yes (iterative)</td><td>No (once merged, stays merged)</td></tr>
+</table>
+
+<h3>Python Implementation</h3>
+<pre class="code">from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+import matplotlib.pyplot as plt
+
+# Compute linkage matrix
+Z = linkage(X, method='complete')  # or 'single', 'average', 'ward'
+
+# Plot dendrogram
+dendrogram(Z)
+plt.show()
+
+# Cut into k clusters
+clusters = fcluster(Z, t=2, criterion='maxclust')</pre>`,
+
+nn:`<h2>Neural Networks</h2>
+<h3>What is a Neural Network?</h3>
+<p>NNs are advanced computational models designed to recognize patterns and relationships in data. They mimic the human brain's structure, enabling machines to perform tasks like image recognition, speech processing, and complex decision-making.</p>
+
+<h3>Why Neural Networks?</h3>
+<p>Traditional ML methods (regression, trees, SVM) can struggle with complex datasets with many features (e.g., images). Neural networks are uniquely equipped to extract meaningful patterns from such data. Examples: image classification (cat vs dog), handwritten digit recognition (0-9), facial recognition.</p>
+
+<h3>AI → ML → Neural Networks → Deep Learning</h3>
+<ul>
+<li><strong>AI:</strong> broadest field — systems that mimic human intelligence</li>
+<li><strong>ML:</strong> subset of AI — systems learn from data without explicit programming</li>
+<li><strong>Neural Networks:</strong> subset of ML — algorithms with layered nodes</li>
+<li><strong>Deep Learning:</strong> neural networks with many hidden layers, trained on large datasets</li>
+</ul>
+
+<h3>Biological Inspiration</h3>
+<p>A human neuron has <strong>dendrites</strong> (receptors collecting input), a <strong>nucleus</strong> (activated based on input), and an <strong>axon</strong> (transfers output to other neurons). Artificial neurons mirror this: inputs → weighted sum → activation → output.</p>
+
+<h3>Architecture</h3>
+<div class="diagram">  Neural Network Architecture:
+
+    Input Layer       Hidden Layer(s)      Output Layer
+
+     x₁ ─────────╲       h₁  ╲
+                    ╲   ╱       ╲
+     x₂ ──────────── ╳ ──── h₂ ───╳────── ŷ
+                    ╱   ╲       ╱
+     x₃ ─────────╱       h₃  ╱
+
+  • Each connection has a weight w
+  • Each neuron computes: output = g(Σwᵢxᵢ + b)
+  • g() is the activation function
+  • b is the bias term</div>
+
+<ul>
+<li><strong>Input Layer:</strong> holds the raw data (features). No computation — just passes values forward.</li>
+<li><strong>Hidden Layer(s):</strong> process information using weights, biases, and activation functions. This is where "learning" happens. Deep networks have many hidden layers.</li>
+<li><strong>Output Layer:</strong> produces the final prediction/classification result.</li>
+</ul>
+
+<h3>Perceptrons: The Building Blocks</h3>
+<p><strong>Single-layer perceptron:</strong> all inputs connected directly to output. Can only handle <strong>linearly separable</strong> problems.</p>
+<p><strong>Multi-layer perceptron (MLP):</strong> multiple layers including hidden layers. Can learn <strong>non-linear</strong> relationships. The more layers, the more complex patterns can be captured.</p>
+
+<h3>The Role of Bias</h3>
+<p>Bias fine-tunes how a perceptron makes decisions. It allows the neuron to produce a meaningful output even when <strong>all inputs are zero</strong>. Without bias, the output would always be zero when inputs are zero.</p>
+<pre class="code">Output = g(Bias + Σ(Inputs × Weights))
+       = g(b + w₁x₁ + w₂x₂ + ... + wₙxₙ)</pre>
+
+<h3>Forward Propagation — Step by Step</h3>
+<p>Data flows through the network layer by layer:</p>
+<ol>
+<li>Input features enter the input layer</li>
+<li>For each hidden neuron: compute <strong>z = Σwᵢxᵢ + b</strong> (weighted sum + bias)</li>
+<li>Apply activation function: <strong>h = g(z)</strong></li>
+<li>Hidden outputs become inputs to the next layer</li>
+<li>Output layer produces the final prediction</li>
+</ol>
+
+<h3>Common Activation Functions — KNOW ALL 5</h3>
+<table class="tbl">
+<tr><th>Function</th><th>Formula</th><th>Range</th><th>Use Case</th><th>Advantages</th><th>Challenges</th></tr>
+<tr><td><strong>Sigmoid</strong></td><td>g(z) = 1/(1+e⁻ᶻ)</td><td>(0, 1)</td><td>Binary classification output</td><td>Smooth gradient, outputs probabilities</td><td>Vanishing gradients, non-zero-centered</td></tr>
+<tr><td><strong>Tanh</strong></td><td>g(z) = (eᶻ−e⁻ᶻ)/(eᶻ+e⁻ᶻ)</td><td>(−1, 1)</td><td>Hidden layers</td><td>Zero-centered, smooth gradient</td><td>Vanishing gradients</td></tr>
+<tr><td><strong>ReLU</strong></td><td>g(z) = max(0, z)</td><td>[0, ∞)</td><td>Hidden layers (most popular)</td><td>Simple, mitigates vanishing gradients</td><td>"Dying ReLU" + exploding gradients</td></tr>
+<tr><td><strong>Leaky ReLU</strong></td><td>g(z) = max(0.1z, z)</td><td>(−∞, ∞)</td><td>Hidden layers</td><td>Fixes "dying ReLU"</td><td>Slightly more complex</td></tr>
+<tr><td><strong>Softmax</strong></td><td>g(zₖ) = eᶻᵏ/Σeᶻʲ</td><td>(0,1), sum=1</td><td>Multi-class output</td><td>Converts to probabilities</td><td>Computationally intensive</td></tr>
+</table>
+
+<div class="diagram">  Activation Function Shapes:
+
+  Sigmoid:        Tanh:           ReLU:         Leaky ReLU:
+       ___            ___           ╱              ╱
+      ╱               ╱            ╱              ╱
+  ___╱            ___╱         ___╱           ___╱
+  0 to 1          -1 to 1      0 if z&lt;0       0.1z if z&lt;0
+  S-shaped        S-shaped     ramp            ramp w/ leak</div>
+
+<h3>Key Comparisons</h3>
+<p><strong>Sigmoid vs Tanh:</strong> Both are S-shaped. Tanh is preferred in hidden layers because it's <strong>zero-centered</strong>, making optimization more efficient.</p>
+<p><strong>ReLU vs Leaky ReLU:</strong> ReLU is simple and effective but can "die" (neuron stuck at 0 permanently). Leaky ReLU fixes this by allowing a small gradient (0.1) for negative inputs.</p>
+<p><strong>Softmax:</strong> Converts raw scores into probabilities that sum to 1. Used exclusively in the output layer for multi-class classification.</p>
+
+<h3>Practical Considerations</h3>
+<ul>
+<li><strong>Vanishing Gradients:</strong> Sigmoid and tanh can lead to very small gradients in deep networks, making training extremely slow. ReLU and variants help mitigate this.</li>
+<li><strong>Dying ReLU:</strong> If a neuron always receives negative weighted sums, ReLU always outputs 0 and gradient is 0 — the neuron is permanently "dead." Leaky ReLU prevents this.</li>
+<li><strong>Exploding Gradients:</strong> Gradients become too large, causing unstable training. Proper initialization and batch normalization help.</li>
+</ul>
+
+<h3>Backpropagation — The Learning Phase</h3>
+<p>After forward propagation, the network compares its prediction to the actual answer using a <strong>loss function</strong>. Backpropagation sends the error signal backward through the network, adjusting weights and biases using the <strong>chain rule</strong>.</p>
+<pre class="code">Chain rule for backpropagation:
+
+  ∂Loss/∂w = ∂Loss/∂ŷ · ∂ŷ/∂z · ∂z/∂w
+
+This chain allows computing gradients for weights
+in ANY layer, no matter how deep the network.
+
+Weight update rule:
+  w ← w − η · ∂Loss/∂w
+
+where η is the learning rate.
+
+Cycle: forward prop → compute loss → backprop → update → repeat
+Each cycle makes the network slightly better at its task.</pre>
+
+<h3>Loss Functions</h3>
+<ul>
+<li><strong>MSE (regression):</strong> L = (1/n) Σ(yᵢ − ŷᵢ)²</li>
+<li><strong>Cross-entropy (classification):</strong> L = −Σ[yᵢ log(ŷᵢ) + (1−yᵢ)log(1−ŷᵢ)]</li>
+</ul>
+
+<h3>Worked Example: Forward Propagation (Lecture)</h3>
+<pre class="code">Network: 2 inputs, 2 hidden neurons (sigmoid), 1 output (sigmoid)
+
+Given:
+  Inputs: x₁ = 1, x₂ = 2
+  Weights (input→hidden):
+    w₁₁ = 0.5,  w₁₂ = −0.5
+    w₂₁ = 0.3,  w₂₂ = 0.8
+  Hidden bias: b_hidden = 0.1
+  Weights (hidden→output):
+    w₃₁ = 1.0,  w₃₂ = −1.0
+  Output bias: b_output = 0.2
+
+Hidden Layer Computation:
+  z_h1 = w₁₁·x₁ + w₂₁·x₂ + b_h
+       = 0.5(1) + 0.3(2) + 0.1 = 0.5 + 0.6 + 0.1 = 1.2
+  h₁ = sigmoid(1.2) = 1/(1+e⁻¹·²) ≈ 0.769
+
+  z_h2 = w₁₂·x₁ + w₂₂·x₂ + b_h
+       = −0.5(1) + 0.8(2) + 0.1 = −0.5 + 1.6 + 0.1 = 1.2
+  h₂ = sigmoid(1.2) ≈ 0.769
+
+Output Layer Computation:
+  z_o = w₃₁·h₁ + w₃₂·h₂ + b_o
+      = 1.0(0.769) + (−1.0)(0.769) + 0.2
+      = 0.769 − 0.769 + 0.2 = 0.2
+  ŷ = sigmoid(0.2) = 1/(1+e⁻⁰·²) ≈ 0.550
+
+Final output: ŷ ≈ 0.550</pre>
+
+<h3>Regularization in Neural Networks</h3>
+<p>To prevent overfitting, several techniques are used:</p>
+<ul>
+<li><strong>Dropout:</strong> randomly deactivate neurons during training</li>
+<li><strong>Early stopping:</strong> stop training when validation error starts increasing</li>
+<li><strong>Weight decay (L2 regularization):</strong> penalize large weights</li>
+</ul>
+
+<h3>Key Terminology</h3>
+<table class="tbl">
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td>Perceptron</td><td>Single neuron — basic building block</td></tr>
+<tr><td>MLP</td><td>Multi-Layer Perceptron — multiple hidden layers</td></tr>
+<tr><td>Epoch</td><td>One complete pass through the training data</td></tr>
+<tr><td>Batch size</td><td>Number of samples processed before updating weights</td></tr>
+<tr><td>Learning rate (η)</td><td>Step size for weight updates (too high: unstable; too low: slow)</td></tr>
+<tr><td>Black box</td><td>NN internals are hard to interpret — input/output visible but inner workings hidden</td></tr>
+</table>
+
+<div class="callout callout-info"><div class="callout-label">Exam Point</div>Be able to perform <strong>forward propagation by hand</strong>. Know all 5 activation functions and their properties (range, use case, issue). Understand backpropagation conceptually (chain rule) — you likely won't compute full backprop derivatives, but know the concept.</div>`,
+
+svm:`<h2>Support Vector Machines (SVM)</h2>
+<h3>A Geometric Approach to Classification</h3>
+<p>SVM takes a <strong>geometric perspective</strong> to solve classification: draw the best possible separating boundary between two classes. "Best" means the boundary is as <strong>far as possible</strong> from the closest data points of both classes — this distance is the <strong>margin</strong>.</p>
+<p>SVM was initially developed as a linear classifier, resembling logistic regression. However, SVM's advantage is its <strong>non-statistical approach</strong> — it performs well even when the number of features <strong>exceeds</strong> the number of observations (p > n), such as in gene expression classification.</p>
+
+<h3>What is a Hyperplane?</h3>
+<pre class="code">General equation: β₀ + β₁X₁ + β₂X₂ + ... + βₚXₚ = 0
+
+Compact form: β₀ + βᵀx = 0,  where β = (β₁, β₂, ..., βₚ)
+
+• In p = 2 dimensions → hyperplane is a LINE
+• In p = 3 dimensions → hyperplane is a PLANE
+• In general → (p−1)-dimensional subspace
+
+• β = (β₁,...,βₚ) is the NORMAL VECTOR
+  (perpendicular to the hyperplane surface)
+• If β₀ = 0, the hyperplane passes through the origin</pre>
+
+<h3>Separating Hyperplanes</h3>
+<pre class="code">If f(X) = β₀ + β₁X₁ + ... + βₚXₚ, then:
+  • f(X) > 0 for points on one side
+  • f(X) < 0 for points on the other side
+
+If we code classes as yᵢ = +1 and yᵢ = −1, then:
+  yᵢ · f(Xᵢ) > 0 for all i  ⟹  f(X) = 0 is a
+  separating hyperplane (all points correctly classified)
+
+Perpendicular distance from point x to hyperplane:
+  d = |f(x)| / ||β|| = |β₀ + βᵀx| / √(Σβⱼ²)</pre>
+
+<div class="diagram">  Separating Hyperplane in 2D:
+
+         f(x) > 0 side          f(x) < 0 side
+    (class +1)                  (class −1)
+
+    ∗   ∗                            ○  ○
+    ∗     ∗   ┃ ← hyperplane   ○       ○
+    ∗       ∗ ┃              ○   ○
+              ┃                    ○
+    β is perpendicular to the line (normal vector)</div>
+
+<h3>Maximal Margin Classifier</h3>
+<p>Among all separating hyperplanes, find the one with the <strong>biggest margin</strong> (gap between the two classes).</p>
+<pre class="code">Optimization problem:
+
+  maximize M
+  over β₀, β₁, ..., βₚ
+
+  subject to:
+    Σⱼ₌₁ᵖ βⱼ² = 1  (normalize β)
+    yᵢ(β₀ + β₁xᵢ₁ + ... + βₚxᵢₚ) ≥ M  for all i = 1,...,n
+
+This is a convex quadratic program, solvable efficiently.
+M is the margin — the distance from the hyperplane
+to the closest data point on either side.</pre>
+
+<h3>Margin Classifier: Bias-Variance</h3>
+<p>A classifier with <strong>narrow margins</strong> (edges very close together) has:</p>
+<ul>
+<li><strong>High variance</strong> — very sensitive to new observations</li>
+<li><strong>Low bias</strong> — produces low training errors but high test errors</li>
+</ul>
+<p>To avoid this, we use <strong>soft margins</strong> allowing some misclassification.</p>
+
+<h3>Support Vector Classifier (Soft Margin)</h3>
+<p>When data isn't perfectly separable (or is noisy), we allow some violations using <strong>slack variables ξᵢ</strong>:</p>
+<pre class="code">maximize M
+over β₀, β₁, ..., βₚ, ξ₁, ..., ξₙ
+
+subject to:
+  Σⱼ βⱼ² = 1
+  yᵢ(β₀ + β₁xᵢ₁ + ... + βₚxᵢₚ) ≥ M(1 − ξᵢ)
+  ξᵢ ≥ 0
+  Σᵢ₌₁ⁿ ξᵢ ≤ C    (budget constraint)</pre>
+
+<h3>Slack Variable Interpretation</h3>
+<table class="tbl">
+<tr><th>ξᵢ value</th><th>Where is the point?</th><th>Status</th></tr>
+<tr><td>ξᵢ = 0</td><td>On or outside the margin</td><td>Correctly classified</td></tr>
+<tr><td>0 < ξᵢ < 1</td><td>Inside the margin (margin violator)</td><td>Correct side, but within margin</td></tr>
+<tr><td>ξᵢ = 1</td><td>Exactly on the hyperplane</td><td>On the decision boundary</td></tr>
+<tr><td><strong>ξᵢ > 1</strong></td><td><strong>Wrong side of hyperplane</strong></td><td><strong>MISCLASSIFIED</strong></td></tr>
+</table>
+
+<div class="callout callout-info"><div class="callout-label">Exam Point</div><strong>C is a regularization parameter (budget):</strong><br/>
+• <strong>Large C:</strong> Few violations allowed → narrow margin → low bias, high variance<br/>
+• <strong>Small C:</strong> Many violations allowed → wide margin → high bias, low variance<br/>
+C controls the bias-variance tradeoff, like λ in regularization.</div>
+
+<h3>Worked Example: Hyperplane Geometry (Tutorial 8)</h3>
+<pre class="code">Classifier: f(x) = 2X₁ + X₂ − 5
+
+Observations:
+  Obs 1: (1,3), y=+1 → f = 2(1)+3−5 = 0  (on boundary!)
+  Obs 2: (2,2), y=+1 → f = 2(2)+2−5 = 1  (predicted +1 ✓)
+  Obs 3: (3,1), y=−1 → f = 2(3)+1−5 = 2  (predicted +1 ✗)
+  Obs 4: (4,3), y=−1 → f = 2(4)+3−5 = 6  (predicted +1 ✗)
+
+Perpendicular distances: ||β|| = √(2²+1²) = √5
+  d₁ = |0|/√5 = 0
+  d₂ = |1|/√5 ≈ 0.447  ← closest (potential SV)
+  d₃ = |2|/√5 ≈ 0.894
+  d₄ = |6|/√5 ≈ 2.683</pre>
+
+<h3>Worked Example: Margin Calculation (Tutorial 8)</h3>
+<pre class="code">Hyperplane: 3X₁ + 4X₂ − 12 = 0
+  ||β|| = √(9+16) = √25 = 5
+
+Distances:
+  d(2,1) = |6+4−12|/5 = 2/5 = 0.4
+  d(3,2) = |9+8−12|/5 = 5/5 = 1.0
+  d(1,2) = |3+8−12|/5 = 1/5 = 0.2
+
+If margin width = 1, half-margin = 0.5:
+  (2,1): 0.4 < 0.5 → INSIDE margin
+  (3,2): 1.0 > 0.5 → outside margin
+  (1,2): 0.2 < 0.5 → INSIDE margin
+
+Scaling invariance: replacing β with cβ doesn't change
+the geometric hyperplane or distances. The constraint
+||β|| = 1 makes the problem well-defined.</pre>
+
+<h3>Worked Example: Soft Margin (Tutorial 8)</h3>
+<pre class="code">Trained SVM output values:
+  Obs 1: y=+1, f(x)=1.8 → y·f(x)=1.8 > 1 → outside margin (ξ=0)
+  Obs 2: y=+1, f(x)=0.6 → y·f(x)=0.6     → inside margin  (ξ=0.4)
+  Obs 3: y=+1, f(x)=−0.4→ y·f(x)=−0.4 < 0 → MISCLASSIFIED  (ξ=1.4)
+  Obs 4: y=−1, f(x)=−1.5→ y·f(x)=1.5 > 1 → outside margin (ξ=0)
+  Obs 5: y=−1, f(x)=−0.7→ y·f(x)=0.7     → inside margin  (ξ=0.3)
+
+Effect of increasing C:
+  Larger C → heavier penalty for violations → fewer ξᵢ > 0
+  → narrower margin, fewer support vectors
+  → pushes toward hard-margin solution</pre>
+
+<h3>When Linear Boundaries Fail → Feature Expansion</h3>
+<p>Sometimes a linear boundary won't work regardless of C. Solution: <strong>enlarge the feature space</strong> with transformations.</p>
+<pre class="code">Example: Instead of (X₁, X₂), use (X₁, X₂, X₁², X₂², X₁X₂)
+
+Decision boundary becomes:
+  β₀ + β₁X₁ + β₂X₂ + β₃X₁² + β₄X₂² + β₅X₁X₂ = 0
+
+This is linear in the ENLARGED space but produces
+nonlinear (quadratic) boundaries in the ORIGINAL space.
+
+Cubic expansion: from 2 variables to 9:
+  β₀ + β₁X₁ + β₂X₂ + β₃X₁² + β₄X₂² + β₅X₁X₂
+  + β₆X₁³ + β₇X₂³ + β₈X₁²X₂ + β₉X₁X₂² = 0</pre>
+
+<h3>Kernel Functions</h3>
+<p>Instead of explicitly computing the transformation, SVM uses a <strong>kernel function</strong> to compute inner products in the high-dimensional space implicitly. Three kernel types:</p>
+
+<table class="tbl">
+<tr><th>Kernel</th><th>Formula</th><th>Properties</th></tr>
+<tr><td><strong>Linear</strong></td><td>K(x,x') = xᵀx'</td><td>Flat hyperplane, fast, for linearly separable data</td></tr>
+<tr><td><strong>Polynomial</strong></td><td>K(x,x') = (1 + xᵀx')ᵈ</td><td>d = degree. d=1 → linear. Higher d → more complex curves</td></tr>
+<tr><td><strong>RBF (Radial)</strong></td><td>K(xᵢ,xᵢ') = exp(−γΣⱼ(xᵢⱼ−xᵢ'ⱼ)²)</td><td>Infinite-dimensional. Distance-based. Most flexible.</td></tr>
+</table>
+
+<div class="diagram">  Kernel Trick Visualization:
+
+  Original 1D (not separable):     Projected to 2D (separable!):
+
+  ○ ○ ○ ∗ ∗ ∗ ○ ○ ○                ○     ○  ○
+  ←─────────────────→                 ○  ∗  ∗  ∗ ○
+  Can't draw a single point           ▔▔╱  ∗  ∗  ╲▔▔
+  to separate!                         Line separates!
+
+  Transformation: y = x²
+  Linear in 2D = nonlinear (parabolic) in 1D</div>
+
+<h3>Worked Example: RBF Kernel (Tutorial 8)</h3>
+<pre class="code">Points: x₁=(1,2), x₂=(3,4), x₃=(2,3), γ=0.5
+
+Squared distances:
+  ||x₁−x₂||² = (1−3)²+(2−4)² = 4+4 = 8
+  ||x₁−x₃||² = (1−2)²+(2−3)² = 1+1 = 2
+
+Kernel values:
+  K(x₁,x₂) = e^(−0.5×8) = e^(−4) ≈ 0.0183  (very low similarity)
+  K(x₁,x₃) = e^(−0.5×2) = e^(−1) ≈ 0.3679  (higher similarity)
+
+Interpretation:
+  K = 1 → identical points
+  K → 0 → far apart
+  Higher γ → faster decay → more localized influence
+              → more complex boundary → OVERFIT risk
+  Lower γ → broader influence → smoother boundary</pre>
+
+<h3>Worked Example: Feature Expansion (Tutorial 8)</h3>
+<pre class="code">Transform: Z₁ = X₁², Z₂ = X₂²
+
+Linear boundary in Z-space: Z₁ + Z₂ = 4
+Substituting back: X₁² + X₂² = 4
+
+This is a CIRCLE of radius 2 in the original space!
+  • X₁² + X₂² > 4 → classified +1 (outside circle)
+  • X₁² + X₂² < 4 → classified −1 (inside circle)
+
+Linear in transformed = nonlinear in original.</pre>
+
+<h3>Multiclass SVM</h3>
+<p>SVM is inherently binary (K=2). For K > 2 classes, two strategies:</p>
+
+<table class="tbl">
+<tr><th>Method</th><th># Classifiers</th><th>How It Works</th><th>When to Use</th></tr>
+<tr><td><strong>OVR</strong> (One-vs-Rest)</td><td>K</td><td>Each class vs all others. Pick highest confidence.</td><td>Many classes, default choice</td></tr>
+<tr><td><strong>OVO</strong> (One-vs-One)</td><td>K(K−1)/2</td><td>Every pair. Majority vote.</td><td>K not too large, SVMs typically use OVO</td></tr>
+</table>
+
+<h3>Worked Example: Fruit Classification (Lecture)</h3>
+<pre class="code">Classes: Apple (A), Banana (B), Orange (C)
+
+OVR (3 classifiers):
+  Model 1: Apple vs (Banana+Orange) → score 0.80
+  Model 2: Banana vs (Apple+Orange) → score 0.10
+  Model 3: Orange vs (Apple+Banana) → score 0.20
+  Predict: Apple (highest score)
+
+OVO (3 classifiers = C(3,2)):
+  A vs B → Apple       A vs C → Apple       B vs C → Banana
+  Votes: Apple=2, Banana=1, Orange=0
+  Predict: Apple (most votes)</pre>
+
+<h3>SVM vs Logistic Regression</h3>
+<ul>
+<li>Classes (nearly) <strong>separable</strong> → SVM does better than LR</li>
+<li>When not → LR (with ridge penalty) and SVM very similar</li>
+<li>Need <strong>probability estimates</strong> → LR is the choice</li>
+<li><strong>Nonlinear boundaries</strong> → kernel SVMs are popular</li>
+<li><strong>p > n</strong> (more features than observations) → SVM works well</li>
+</ul>
+
+<h3>SVM for Regression</h3>
+<p>SVMs can also solve regression problems using <code class="il">sklearn.svm.SVR</code> or <code class="il">LinearSVR</code>. The implementation is similar to classification.</p>
+
+<h3>Python Implementation</h3>
+<pre class="code">from sklearn.svm import SVC, LinearSVC
+from sklearn import metrics
+
+# Linear SVM (two options, different optimizers)
+model = LinearSVC()               # liblinear, fast
+model = SVC(kernel='linear')      # libsvm, slower
+
+# Polynomial kernel
+model = SVC(kernel='poly', degree=3)
+
+# RBF kernel
+model = SVC(kernel='rbf', gamma=0.5, C=1.0)
+
+model.fit(X_train, y_train)
+pred = model.predict(X_test)
+print(metrics.accuracy_score(y_test, pred))
+print(metrics.confusion_matrix(y_test, pred))
+
+# Multiclass
+from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier
+ovr = OneVsRestClassifier(SVC(kernel='linear'))
+ovo = OneVsOneClassifier(SVC(kernel='linear'))
+
+# Regression
+from sklearn.svm import SVR
+svr = SVR(kernel='linear')
+svr.fit(X_train, y_train)</pre>
+
+<h3>Gene Data Example (Lecture)</h3>
+<p>Khan gene data: 2308 features, 63 observations, 4 tumor types. Results showed LinearSVC achieved <strong>100% accuracy</strong> while Logistic Regression got 90% and Naive Bayes only 45%. SVM excels when p >> n.</p>
+
+<div class="callout callout-info"><div class="callout-label">Exam Point</div>Know how to: (1) compute f(x) and classify points, (2) compute distance to hyperplane, (3) interpret ξ values, (4) compute RBF kernel values, (5) determine OVR/OVO classifier count, (6) explain the effect of C and γ on bias-variance.</div>`};
 
 const FC=[{t:'pca',q:'What is PCA?',a:'Dimensionality reduction via linear combinations with maximal variance, mutually uncorrelated.'},{t:'pca',q:'PVE formula',a:'PVEₘ = λₘ / Σλⱼ. All sum to 1.'},{t:'pca',q:'Max # of PCs',a:'min(n−1, p)'},{t:'pca',q:'5 PCA steps',a:'1) Standardize 2) Covariance 3) Eigen 4) Choose # (scree) 5) Project'},{t:'pca',q:'Why standardize?',a:'PCA is variance-sensitive. Large-scale features dominate.'},{t:'pca',q:'PC orthogonality',a:'Each PC perpendicular to all previous. Ensures uncorrelated.'},{t:'kmeans',q:'K-Means objective',a:'Minimize Σ WCV(Cₖ). WCV = sum squared distances to centroid.'},{t:'kmeans',q:'Algorithm',a:'1) Random assign 2a) Centroids 2b) Reassign nearest. Repeat.'},{t:'kmeans',q:'Global minimum?',a:'NO. Local only. Multiple random starts.'},{t:'kmeans',q:'Centroid',a:'Vector of feature means for cluster members.'},{t:'hierarchical',q:'Key advantage',a:'No K needed. Dendrogram → choose after.'},{t:'hierarchical',q:'4 linkages',a:'Single(min), Complete(max), Average(mean), Ward(min var).'},{t:'hierarchical',q:'Reading dendrogram',a:'Height = dissimilarity. Cut at h for clusters.'},{t:'nn',q:'Sigmoid',a:'1/(1+e⁻ᶻ). Range (0,1). Binary output. Vanishing gradient.'},{t:'nn',q:'ReLU',a:'max(0,z). [0,∞). Popular hidden. Fixes vanishing. Dying risk.'},{t:'nn',q:'Leaky ReLU',a:'max(0.1z,z). Fixes dying ReLU.'},{t:'nn',q:'Softmax',a:'eᶻᵏ/Σeᶻʲ. Sum=1. Multi-class output.'},{t:'nn',q:'Forward prop',a:'z=Σwx+b → g(z). Layer by layer.'},{t:'nn',q:'Backprop',a:'Chain rule: ∂L/∂w. Update: w−η·∂L/∂w.'},{t:'nn',q:'Vanishing gradient',a:'Sigmoid/tanh → gradient≈0 deep. ReLU fixes.'},{t:'svm',q:'Margin',a:'Distance from hyperplane to nearest points. SVM maximizes.'},{t:'svm',q:'Support vectors',a:'Points on/within margin defining boundary.'},{t:'svm',q:'Slack ξ>1',a:'MISCLASSIFIED. ξ=0:outside, 0<ξ<1:inside, ξ=1:boundary.'},{t:'svm',q:'C parameter',a:'Large→narrow margin, few violations. Small→wide, more.'},{t:'svm',q:'RBF γ',a:'High→localized,complex,overfit. Low→smooth.'},{t:'svm',q:'OVR/OVO',a:'OVR: K classifiers. OVO: K(K−1)/2.'},{t:'svm',q:'Distance formula',a:'d = |f(x)| / ||β||'},{t:'svm',q:'Kernel trick',a:'Nonlinear boundary without explicit high-dim computation.'}];
 
